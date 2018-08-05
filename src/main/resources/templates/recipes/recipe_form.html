@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Platillo Godin - Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/navbar.css" th:href="@{/css/navbar.css}" rel="stylesheet">
+
+</head>
+<body>
+<div class="container-fluid">
+
+    <nav class="site-header sticky-top py-1">
+        <div class="container d-flex flex-column flex-md-row justify-content-between">
+
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Dashboard</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Planear Menus</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/recipes'}">Recetas</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Ingredientes</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Catalogos</a>
+        </div>
+    </nav>
+    <br>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 th:if="${recipe.id} == null">Nueva receta</h4>
+            <h4 th:if="${recipe.id} != null">Editar receta</h4>
+        </div>
+        <div class="card-body">
+            <form th:object="${recipe}" th:action="@{/recipe}" method="post">
+
+                <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:field="*{ingredientList}"/>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="inputName">Nombre</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="Pozole"
+                               th:field="*{name}">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="inputCategory">Categoria</label>
+                        <select id="inputCategory" class="form-control" th:field="*{recipeCategory}">
+                            <option th:each="cat : ${recipeCategories}"
+                                    th:value="${cat.id}"
+                                    th:text="${cat.name}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        <label for="inputServings">Porciones</label>
+                        <input type="number" class="form-control" id="inputServings" placeholder="5"
+                               th:field="*{servings}">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="inputPrepTime">Tiempo de preparacion</label>
+                        <div class="input-group mb-2">
+                            <input type="number" class="form-control" id="inputPrepTime" placeholder="15"
+                                   th:field="*{prepTime}">
+                            <div class="input-group-text">min</div>
+                        </div>
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="inputCookTime">Tiempo de coccion</label>
+                        <div class="input-group mb-2">
+                            <input type="number" class="form-control" id="inputCookTime" placeholder="20"
+                                   th:field="*{cookTime}">
+                            <div class="input-group-text">min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-11">
+                                        <h5>Ingredientes</h5>
+                                    </div>
+                                    <div class="col-1">
+                                        <a class="btn btn-default" href="#"
+                                           th:href="@{'/recipes/' + ${recipe.id} + '/ingredients/edit'}">
+                                            <i class="fas fa-edit  fa-2x"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li th:remove="all">150 gr de Pollo</li>
+                                    <li th:remove="all">250 ml de Leche</li>
+                                    <li th:each="ingredient : ${recipe.ingredientList}"
+                                        th:text="${ingredient.quantity + ' ' + ingredient.ingredient.uom.name().toLowerCase() +' de '+ ingredient.ingredient.name}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="form-row" th:each="recipeIngredient, iStat : *{ingredients}">
+                    <div class="form-group col-md-4">
+                        <label for="inputIngredient">Ingrediente</label>
+                        <select id="inputIngredient" class="form-control">
+                            <option th:each="ingredientItem : ${ingredientList}"
+                                    th:value="${ingredientItem}"
+                                    th:text="${ingredientItem.name}"
+                                    th:selected="${ingredientItem == recipeIngredient.ingredient}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        <label for="inputCity">Cantidad</label>
+                        <input type="number" class="form-control" id="inputCity"
+                               th:field="*{ingredients[__${iStat.index }__].quantity}">
+                    </div>
+                </div>
+                <button type="submit" name="addIngredient">Agregar Ingrediente</button>-->
+
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

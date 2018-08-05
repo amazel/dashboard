@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Platillo Godin - Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/navbar.css" th:href="@{/css/navbar.css}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">-->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#recipeTable').DataTable({
+                "lengthMenu": [5, 10, 25, 50],
+                "pageLength": 5
+            });
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+
+    <nav class="site-header sticky-top py-1">
+        <div class="container d-flex flex-column flex-md-row justify-content-between">
+
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Dashboard</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Planear Menus</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/recipes'}">Recetas</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Ingredientes</a>
+            <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Catalogos</a>
+        </div>
+    </nav>
+    <br>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-11">
+                            <h5>Recetas</h5>
+                        </div>
+                        <div class="col-1">
+                            <a class="btn btn-default" href="#"
+                               th:href="@{'/recipes/new'}" data-toggle="tooltip" data-placement="left"
+                               title="Nueva receta">
+                                <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="table-responsive">
+                                <table class="table" id="recipeTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Receta</th>
+                                        <th>Categoria</th>
+                                        <th>Tiempo de Preparacion</th>
+                                        <th>Tiempo de coccion</th>
+                                        <th>Porciones</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="recipeItem : ${recipeList}">
+                                        <td><a href="#" th:text="${recipeItem.name}"
+                                               th:href="@{'/recipes/'+${recipeItem.id}+'/show'}">Tacos
+                                        </a></td>
+                                        <td th:text="${recipeItem.recipeCategory.name}"></td>
+                                        <td th:text="${recipeItem.prepTime}"></td>
+                                        <td th:text="${recipeItem.cookTime}"></td>
+                                        <td th:text="${recipeItem.servings}"></td>
+                                        <td>
+                                            <div class="row justify-content-center">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <a href="#" class="badge badge-primary"
+                                                           th:href="@{'/recipes/'+${recipeItem.id}+'/edit'}">
+                                                            <i class="fas fa-pencil-alt" data-toggle="tooltip"
+                                                               data-placement="bottom" title="Editar receta"></i></a>
+                                                    </div>
+                                                    <div class="col"></div>
+                                                    <div class="col"><a href="#" class="badge badge-danger"
+                                                                        data-toggle="modal"
+                                                                        data-target="#myModal">
+                                                        <i class="fas fa-trash-alt" data-toggle="tooltip"
+                                                           data-placement="bottom"
+                                                           title="Eliminar receta"></i>
+                                                    </a></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <!-- The Modal -->
+                                        <div class="modal fade" id="myModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title"
+                                                            th:text="${'Eliminar '+ recipeItem.name +'?'}"></h4>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger"
+                                                                data-dismiss="modal">Cancelar
+                                                        </button>
+                                                        <a th:href="@{'/recipes/'+${recipeItem.id}+'/delete'}">
+                                                            <button
+                                                                    type="button" class="btn btn-success">Aceptar
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
