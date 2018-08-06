@@ -25,21 +25,20 @@
 </head>
 <body>
 
-    <div th:replace="general.html :: navbar"></div>
-
-    <div class="container-fluid">
+<div th:replace="general.html :: navbar"></div>
+<div class="container-fluid">
     <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-11">
-                            <h5>Recetas</h5>
+                            <h5>Categorias de Recetas</h5>
                         </div>
                         <div class="col-1">
                             <a class="btn btn-default" href="#"
-                               th:href="@{'/recipes/new'}" data-toggle="tooltip" data-placement="left"
-                               title="Nueva receta">
+                               th:href="@{'/categories/recipes/new'}" data-toggle="tooltip" data-placement="left"
+                               title="Nueva Categoria de Receta">
                                 <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
                             </a>
                         </div>
@@ -48,49 +47,52 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
+
+                            <div th:if="${deleteError}" class="alert alert-danger">
+                                <p th:text="${deleteError}">...</p>
+                            </div>
+
                             <div class="table-responsive">
                                 <table class="table" id="recipeTable">
                                     <thead>
                                     <tr>
-                                        <th>Receta</th>
                                         <th>Categoria</th>
-                                        <!--<th>Tiempo de Preparacion</th>-->
-                                        <!--<th>Tiempo de coccion</th>-->
-                                        <th>Porciones</th>
-                                        <th>Acciones</th>
+                                        <th>Descripcion</th>
+                                        <th>Editar</th>
+                                        <th>Eliminar</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="recipeItem : ${recipeList}">
-                                        <td><a href="#" th:text="${recipeItem.name}"
-                                               th:href="@{'/recipes/'+${recipeItem.id}+'/show'}">Tacos
-                                        </a></td>
-                                        <td th:text="${recipeItem.recipeCategory.name}"></td>
-                                        <!--<td th:text="${recipeItem.prepTime}"></td>-->
-                                        <!--<td th:text="${recipeItem.cookTime}"></td>-->
-                                        <td th:text="${recipeItem.servings}"></td>
+                                    <tr th:each="item : ${recipeCategoryList}">
+                                        <td>
+                                            <a href="#" th:text="${item.name}"
+                                               th:href="@{'/categories/recipes/'+${item.id}+'/show'}">Tacos
+                                            </a>
+                                        </td>
+                                        <td th:text="${item.description}"></td>
                                         <td style="text-align: center;">
                                             <a href="#" class="badge badge-primary"
-                                               th:href="@{'/recipes/'+${recipeItem.id}+'/edit'}">
+                                               th:href="@{'/categories/recipes/'+${item.id}+'/edit'}">
                                                 <i class="fas fa-pencil-alt fa-lg" data-toggle="tooltip"
-                                                   data-placement="bottom" title="Editar receta"></i></a>
+                                                   data-placement="bottom" title="Editar..."></i></a>
+                                        </td>
+                                        <td style="text-align: center;">
                                             <a href="#" class="badge badge-danger"
                                                data-toggle="modal"
                                                data-target="#myModal">
                                                 <i class="fas fa-trash-alt fa-lg" data-toggle="tooltip"
                                                    data-placement="bottom"
-                                                   title="Eliminar receta"></i>
+                                                   title="Eliminar..."></i>
                                             </a>
                                         </td>
 
                                         <div class="modal fade" id="myModal">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
                                                         <h4 class="modal-title"
-                                                            th:text="${'Eliminar '+ recipeItem.name +'?'}"></h4>
+                                                            th:text="${'Eliminar '+ item.name +'?'}"></h4>
                                                         <button type="button" class="close" data-dismiss="modal">
                                                             &times;
                                                         </button>
@@ -101,7 +103,7 @@
                                                         <button type="button" class="btn btn-danger"
                                                                 data-dismiss="modal">Cancelar
                                                         </button>
-                                                        <a th:href="@{'/recipes/'+${recipeItem.id}+'/delete'}">
+                                                        <a th:href="@{'/categories/recipes/'+${item.id}+'/delete'}">
                                                             <button
                                                                     type="button" class="btn btn-success">Aceptar
                                                             </button>

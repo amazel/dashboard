@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+</head>
+<body>
+
+<div th:replace="general.html :: navbar"></div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+
+            <div class="row align-items-center">
+                <div class="col-11">
+                    <h4 th:text="${recipeCategory.name}">GORDIN-E </h4>
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-default" href="#"
+                       th:href="@{'/categories/recipes/' + ${recipeCategory.id} + '/edit'}">
+                        <i class="fas fa-edit  fa-2x"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8 html-editor-align-left">
+                    <h5>Descripcion</h5>
+                </div>
+                <div class="col-4">
+                    <p th:text="${recipeCategory.description}">Recetas del Menu GORDIN-E</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

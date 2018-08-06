@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+</head>
+<body>
+
+<div th:replace="general.html :: navbar"></div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h4 th:if="${recipeCategory.id} == null">Nueva Categoria de Receta</h4>
+            <h4 th:if="${recipeCategory.id} != null">Editar Categoria de Receta</h4>
+        </div>
+        <div class="card-body">
+            <form th:object="${recipeCategory}" th:action="@{/categories/recipe}" method="post">
+
+                <input type="hidden" th:field="*{id}"/>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="inputName">Nombre</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="Pozole"
+                               th:field="*{name}">
+                    </div>
+                    <div class="form-group col-6">
+
+                        <label for="inputDescription">Descripción</label>
+                        <input type="text" class="form-control" id="inputDescription" placeholder="Rico Pozolito"
+                               th:field="*{description}">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,7 +1,10 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.RecipeCategory;
+import com.platillogodin.dashboard.exceptions.ExistingReferencesException;
+import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.RecipeCategoryRepository;
+import com.platillogodin.dashboard.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,14 +15,36 @@ import java.util.List;
 @Service
 public class RecipeCategoryServiceImpl implements RecipeCategoryService {
 
-    private RecipeCategoryRepository recipeCategoryRepository;
+    private final RecipeCategoryRepository recipeCategoryRepository;
+    private final RecipeRepository recipeRepository;
 
-    public RecipeCategoryServiceImpl(RecipeCategoryRepository recipeCategoryRepository) {
+    public RecipeCategoryServiceImpl(RecipeCategoryRepository recipeCategoryRepository, RecipeRepository recipeRepository) {
         this.recipeCategoryRepository = recipeCategoryRepository;
+        this.recipeRepository = recipeRepository;
     }
 
     @Override
     public List<RecipeCategory> findAll() {
         return recipeCategoryRepository.findAll();
+    }
+
+    @Override
+    public RecipeCategory findById(Long id) {
+        return recipeCategoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("La categoria de receta "+id+" no existe"));
+    }
+
+    @Override
+    public RecipeCategory saveRecipeCategory(RecipeCategory recipeCategory) {
+        return recipeCategoryRepository.save(recipeCategory);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        Integer count = recipeRepository.countAllByRecipeCategory(this.findById(id));
+        if(count > 0){
+            throw new ExistingReferencesException();
+        }
+        recipeCategoryRepository.deleteById(id);
     }
 }

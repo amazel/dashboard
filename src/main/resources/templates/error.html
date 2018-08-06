@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+</head>
+<body>
+<div class="container-fluid">
+<div th:replace="general.html :: navbar"></div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <h1>Ups... Algo salió  mal</h1>
+            <h3>Nuestros ingenieros ya están tratando arduamente para solucionar este problema.</h3>
+            <div class="alert alert-danger">
+                <p th:text="${exception.getMessage()}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

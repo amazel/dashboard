@@ -1,33 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Platillo Godin - Dashboard</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
-    <!-- Custom styles for this template -->
-    <link href="../static/css/navbar.css" th:href="@{/css/navbar.css}" rel="stylesheet">
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 </head>
 <body>
-<nav class="site-header sticky-top py-1">
-    <div class="container d-flex flex-column flex-md-row justify-content-between">
-
-        <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Dashboard</a>
-        <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Planear Menus</a>
-        <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/recipes'}">Recetas</a>
-        <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Ingredientes</a>
-        <a class="py-2 d-none d-md-inline-block" href="#" th:href="@{'/'}">Catalogos</a>
-    </div>
-</nav>
-
+<div th:replace="general.html :: navbar"></div>
 </body>
 </html>
