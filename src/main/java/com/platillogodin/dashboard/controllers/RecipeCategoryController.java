@@ -27,36 +27,27 @@ public class RecipeCategoryController {
         this.recipeCategoryService = recipeCategoryService;
     }
 
-    public static final String RECIPE_FORM_URL = "categories/recipes/recipe_category_form";
-    public static final String RECIPE_SHOW_URL = "categories/recipes/show";
-    public static final String RECIPES_LIST_URL = "categories/recipes/list";
+    public static final String FORM_URL = "categories/recipes/recipe_category_form";
+    public static final String LIST_URL = "categories/recipes/list";
 
     @GetMapping("/categories/recipes")
     public String listRecipeCategories(Model model) {
         List<RecipeCategory> recipeCategoryList = recipeCategoryService.findAll();
         model.addAttribute("recipeCategoryList", recipeCategoryList);
-        return RECIPES_LIST_URL;
+        return LIST_URL;
     }
 
     @GetMapping("/categories/recipes/new")
     public String newRecipeCategory(Model model) {
         model.addAttribute("recipeCategory", new RecipeCategory());
-        return RECIPE_FORM_URL;
-    }
-
-    @GetMapping("/categories/recipes/{id}/show")
-    public String showCategoryRecipe(Model model, @PathVariable Long id) {
-        RecipeCategory recipeCategory = recipeCategoryService.findById(id);
-        log.info(recipeCategory.toString());
-        model.addAttribute("recipeCategory", recipeCategory);
-        return RECIPE_SHOW_URL;
+        return FORM_URL;
     }
 
     @GetMapping("/categories/recipes/{id}/edit")
     public String updateCategoryRecipe(@PathVariable Long id, Model model) {
         RecipeCategory recipeCategory = recipeCategoryService.findById(id);
         model.addAttribute("recipeCategory", recipeCategory);
-        return RECIPE_FORM_URL;
+        return FORM_URL;
     }
 
     @GetMapping("/categories/recipes/{id}/delete")
@@ -68,7 +59,7 @@ public class RecipeCategoryController {
             model.addAttribute("deleteError",
                     "Error al eliminar " + rc.getName() + ", existen recetas asociadas a esta categoría.");
             model.addAttribute("recipeCategoryList", recipeCategoryService.findAll());
-            return RECIPES_LIST_URL;
+            return LIST_URL;
         }
         return "redirect:/categories/recipes";
     }
@@ -77,6 +68,6 @@ public class RecipeCategoryController {
     public String saveOrUpdateRecipeCategory(@ModelAttribute("recipeCategory") RecipeCategory recipeCategory, BindingResult bindingResult) {
         log.info("Saving recipeCategory");
         RecipeCategory saved = recipeCategoryService.saveRecipeCategory(recipeCategory);
-        return "redirect:/categories/recipes/" + saved.getId() + "/show";
+        return "redirect:/categories/recipes/";
     }
 }

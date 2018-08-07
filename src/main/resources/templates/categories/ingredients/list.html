@@ -12,7 +12,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#recipeTable').DataTable({
+            $('#ingredientTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
                 "pageLength": 5
             });
@@ -37,7 +37,7 @@
                         </div>
                         <div class="col-1">
                             <a class="btn btn-default" href="#"
-                               th:href="@{'/categories/recipes/new'}" data-toggle="tooltip" data-placement="left"
+                               th:href="@{'/categories/ingredients/new'}" data-toggle="tooltip" data-placement="left"
                                title="Nueva Categoria de Receta">
                                 <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
                             </a>
@@ -53,7 +53,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table" id="recipeTable">
+                                <table class="table" id="ingredientTable">
                                     <thead>
                                     <tr>
                                         <th>Categoria</th>
@@ -63,16 +63,16 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="item : ${recipeCategoryList}">
+                                    <tr th:each="item : ${ingredientCategoryList}">
                                         <td>
                                             <a href="#" th:text="${item.name}"
-                                               th:href="@{'/categories/recipes/'+${item.id}+'/edit'}">Tacos
+                                               th:href="@{'/categories/ingredients/'+${item.id}+'/edit'}">Tacos
                                             </a>
                                         </td>
                                         <td th:text="${item.description}"></td>
                                         <td style="text-align: center;">
                                             <a href="#" class="badge badge-primary"
-                                               th:href="@{'/categories/recipes/'+${item.id}+'/edit'}"
+                                               th:href="@{'/categories/ingredients/'+${item.id}+'/edit'}"
                                                data-toggle="tooltip" data-placement="bottom" title="Editar...">
                                                 <i class="fas fa-pencil-alt fa-lg"></i>
                                             </a>
@@ -104,7 +104,7 @@
                                                         <button type="button" class="btn btn-danger"
                                                                 data-dismiss="modal">Cancelar
                                                         </button>
-                                                        <a th:href="@{'/categories/recipes/'+${item.id}+'/delete'}">
+                                                        <a th:href="@{'/categories/ingredients/'+${item.id}+'/delete'}">
                                                             <button
                                                                     type="button" class="btn btn-success">Aceptar
                                                             </button>

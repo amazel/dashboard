@@ -1,8 +1,10 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.IngredientCategory;
+import com.platillogodin.dashboard.exceptions.ExistingReferencesException;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.IngredientCategoryRepository;
+import com.platillogodin.dashboard.repositories.IngredientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +17,11 @@ import java.util.List;
 public class IngredientCategoryServiceImpl implements IngredientCategoryService {
 
     private final IngredientCategoryRepository ingredientCategoryRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public IngredientCategoryServiceImpl(IngredientCategoryRepository ingredientCategoryRepository) {
+    public IngredientCategoryServiceImpl(IngredientCategoryRepository ingredientCategoryRepository, IngredientRepository ingredientRepository) {
         this.ingredientCategoryRepository = ingredientCategoryRepository;
+        this.ingredientRepository = ingredientRepository;
     }
 
     @Override
@@ -38,6 +42,10 @@ public class IngredientCategoryServiceImpl implements IngredientCategoryService 
 
     @Override
     public void deleteById(Long id) {
-        ingredientCategoryRepository.deleteById(id);
+
+        Integer count = ingredientRepository.countAllByCategory(this.findById(id));
+        if(count > 0){
+            throw new ExistingReferencesException();
+        }ingredientCategoryRepository.deleteById(id);
     }
 }

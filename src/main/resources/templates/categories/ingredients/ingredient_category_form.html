@@ -9,11 +9,11 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <h4 th:if="${recipeCategory.id} == null">Nueva Categoria de Receta</h4>
-            <h4 th:if="${recipeCategory.id} != null">Editar Categoria de Receta</h4>
+            <h4 th:if="${ingredientCategory.id} == null">Nueva Categoria de Ingrediente</h4>
+            <h4 th:if="${ingredientCategory.id} != null">Editar Categoria de Ingrediente</h4>
         </div>
         <div class="card-body">
-            <form th:object="${recipeCategory}" th:action="@{/categories/recipe}" method="post">
+            <form th:object="${ingredientCategory}" th:action="@{/categories/ingredient}" method="post">
 
                 <input type="hidden" th:field="*{id}"/>
                 <div class="form-row">
