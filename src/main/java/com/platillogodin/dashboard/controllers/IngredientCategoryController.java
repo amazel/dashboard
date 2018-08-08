@@ -21,14 +21,14 @@ import java.util.List;
 @Controller
 public class IngredientCategoryController {
 
+    public static final String FORM_URL = "categories/ingredients/ingredient_category_form";
+    public static final String LIST_URL = "categories/ingredients/list";
+
     private final IngredientCategoryService ingredientCategoryService;
 
     public IngredientCategoryController(IngredientCategoryService ingredientCategoryService) {
         this.ingredientCategoryService = ingredientCategoryService;
     }
-
-    public static final String FORM_URL = "categories/ingredients/ingredient_category_form";
-    public static final String LIST_URL = "categories/ingredients/list";
 
     @GetMapping("/categories/ingredients")
     public String listIngredientCategories(Model model) {
