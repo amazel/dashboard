@@ -4,16 +4,9 @@
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <script>
-        $(document).ready(function () {
-            $('#ingredientTable').DataTable({
-                "lengthMenu": [5, 10, 25, 50],
-                "pageLength": 5
-            });
-        });
-
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
@@ -47,20 +40,24 @@
                         <input type="hidden" th:field="*{id}"/>
                         <input type="hidden" th:field="*{ingredient}"/>
                         <!--<input type="hidden" th:field="*{recipe}"/>-->
-                        <div class="form-row">
-                            <div class="form-group col-6">
+                        <div class="form-row align-items-center">
+                            <div class="form-group col-6" >
                                 <label for="inputIngredient">Ingredient</label>
-                                <div class="input-group mb-2">
-                                    <input type="text" class="form-control" id="inputIngredient"
-                                           th:field="*{ingredient.name}" th:disabled="disabled"/>
-                                    <a href="#" class="badge badge-info"
-                                       data-toggle="modal"
-                                       data-target="#searchIngredient">
-                                        <i class="fas fa-search fa-2x"></i>
-                                    </a>
-                                </div>
+
+                                <input type="text" class="form-control" id="inputIngredient"
+                                       th:field="*{ingredient.name}" th:disabled="disabled"/>
                             </div>
-                            <div class="form-group col-4">
+                            <div class="col-1">
+                                <a href="#" data-toggle="modal" id="search"
+                                   data-target="#searchIngredient">
+                                    <i class="fas fa-search fa-2x"></i>
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-3">
                                 <label for="inputQuantity">Cantidad</label>
                                 <div class="input-group mb-2">
                                     <input type="number" id="inputQuantity" class="form-control" th:field="*{quantity}"

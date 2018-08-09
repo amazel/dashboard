@@ -15,5 +15,5 @@ public interface IngredientCategoryService {
 
     IngredientCategory saveIngredientCategory(IngredientCategory ingredientCategory);
 
-    void deleteById(Long id);
+    void delete(IngredientCategory ingredientCategory);
 }

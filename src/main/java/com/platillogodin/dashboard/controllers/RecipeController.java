@@ -77,7 +77,6 @@ public class RecipeController {
     public String saveOrUpdateRecipe(@ModelAttribute("recipe") Recipe recipe, BindingResult bindingResult) {
         log.info("Saving recipe");
         log.info(recipe.toString());
-        log.info(recipe.getIngredientList().toString());
         Recipe saved = recipeService.saveRecipe(recipe);
         log.info(saved.toString());
         return "redirect:/recipes/" + saved.getId() + "/show";

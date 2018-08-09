@@ -29,7 +29,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Ingredient findById(Long id) {
         return ingredientRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("El ingrediente "+id+" no existe"));
+                .orElseThrow(() -> new NotFoundException("El ingrediente " + id + " no existe"));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public void delete(Ingredient ingredient) {
+        ingredientRepository.delete(ingredient);
     }
 }

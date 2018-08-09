@@ -18,5 +18,5 @@ public interface RecipeCategoryService {
 
     RecipeCategory saveRecipeCategory(RecipeCategory recipeCategory);
 
-    void deleteById(Long id) throws ExistingReferencesException;
+    void delete(RecipeCategory recipeCategory) throws ExistingReferencesException;
 }

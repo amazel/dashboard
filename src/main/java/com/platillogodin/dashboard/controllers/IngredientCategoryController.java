@@ -53,15 +53,16 @@ public class IngredientCategoryController {
 
     @GetMapping("/categories/ingredients/{id}/delete")
     public ModelAndView deleteIngredientCategory(@PathVariable Long id, Model model) {
+        IngredientCategory rc = ingredientCategoryService.findById(id);
         try {
-            ingredientCategoryService.deleteById(id);
+            ingredientCategoryService.delete(rc);
         } catch (ExistingReferencesException ere) {
-            IngredientCategory rc = ingredientCategoryService.findById(id);
+
             model.addAttribute("deleteError",
                     "Error al eliminar " + rc.getName() + ", existen ingredientes asociados a esta categoría.");
             return new ModelAndView("forward:/categories/ingredients", model.asMap());
         }
-        model.addAttribute("deleteMessage", "La categoria fue eliminada correctamente");
+        model.addAttribute("deleteMessage", "La categoria " + rc.getName() + " fue eliminada correctamente");
         return new ModelAndView("forward:/categories/ingredients", model.asMap());
     }
 

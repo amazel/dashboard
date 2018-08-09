@@ -42,22 +42,22 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-4">
+                    <div class="form-group col-6">
                         <label for="inputName">Nombre</label>
                         <input type="text" class="form-control" id="inputName" placeholder="e.g. Harina"
                                th:field="*{name}" th:required="required"/>
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group col-3">
                         <label for="inputUOM">Unidad de medida</label>
                         <select id="inputUOM" class="form-control" th:field="*{uom}"
                                 th:required="required">
                             <option th:each="unit : ${T(com.platillogodin.dashboard.domain.UnitOfMeasure).values()}"
                                     th:value="${unit}"
-                                    th:text="${unit.name()}">
+                                    th:text="${unit.name().toLowerCase()}">
                             </option>
                         </select>
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group col-3">
                         <label for="inputExpiration">Caducidad</label>
                         <div class="input-group mb-2">
                             <input type="number" class="form-control" id="inputExpiration" placeholder="e.g. 2"
@@ -66,7 +66,17 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Aceptar</button>
+
+                <div class="form-row justify-content-end">
+                    <div class="col-1">
+                        <a class="btn btn-secondary" href="#" role="button"
+                           th:href="@{'/ingredients'}">
+                            Cancelar</a>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

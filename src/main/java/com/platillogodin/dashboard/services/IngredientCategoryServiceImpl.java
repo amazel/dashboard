@@ -32,7 +32,7 @@ public class IngredientCategoryServiceImpl implements IngredientCategoryService 
     @Override
     public IngredientCategory findById(Long id) {
         return ingredientCategoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("La categoria de ingrediente "+id+" no existe"));
+                .orElseThrow(() -> new NotFoundException("La categoria de ingrediente " + id + " no existe"));
     }
 
     @Override
@@ -41,11 +41,12 @@ public class IngredientCategoryServiceImpl implements IngredientCategoryService 
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void delete(IngredientCategory ingredientCategory) {
 
-        Integer count = ingredientRepository.countAllByCategory(this.findById(id));
-        if(count > 0){
+        Integer count = ingredientRepository.countAllByCategory(this.findById(ingredientCategory.getId()));
+        if (count > 0) {
             throw new ExistingReferencesException();
-        }ingredientCategoryRepository.deleteById(id);
+        }
+        ingredientCategoryRepository.delete(ingredientCategory);
     }
 }

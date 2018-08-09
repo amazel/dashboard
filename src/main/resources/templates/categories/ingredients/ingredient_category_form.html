@@ -28,7 +28,16 @@
                                th:field="*{description}">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Aceptar</button>
+                <div class="form-row justify-content-end">
+                    <div class="col-1">
+                        <a class="btn btn-secondary" href="#" role="button"
+                           th:href="@{'/categories/ingredients'}">
+                            Cancelar</a>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

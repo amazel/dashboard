@@ -10,17 +10,20 @@
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-    <script>
+    <script type="text/javascript" th:inline="none" class="init">
+        /*<![CDATA[*/
         $(document).ready(function () {
             $('#ingredientTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
-                "pageLength": 5
+                "pageLength": 5,
+                "order": [[0, 'asc'], [1, 'asc']]
             });
         });
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+        /*]]>*/
     </script>
 </head>
 <body>
@@ -48,6 +51,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
+                            <div th:if="${deleteError}" class="alert alert-danger">
+                                <p th:text="${deleteError}">...</p>
+                            </div>
+                            <div th:if="${deleteMessage}" class="alert alert-info">
+                                <p th:text="${deleteMessage}">...</p>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table" id="ingredientTable">
                                     <thead>
@@ -65,7 +74,7 @@
                                                th:href="@{'/ingredients/'+${ingredientItem.id}+'/edit'}">Tacos
                                         </a></td>
                                         <td th:text="${ingredientItem.category.name}"></td>
-                                        <td th:text="${ingredientItem.uom}"></td>
+                                        <td th:text="${ingredientItem.uom.name().toLowerCase()}"></td>
                                         <td th:text="${ingredientItem.expirationTime}"></td>
                                         <td style="text-align: center;">
                                             <a href="#" class="badge badge-primary"

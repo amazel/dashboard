@@ -10,17 +10,20 @@
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <script>
+    <script type="text/javascript" th:inline="none" class="init">
+        /*<![CDATA[*/
         $(document).ready(function () {
             $('#recipeTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
-                "pageLength": 5
+                "pageLength": 5,
+                "order": [[0, 'asc'], [1, 'asc']]
             });
         });
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+        /*]]>*/
     </script>
 </head>
 <body>

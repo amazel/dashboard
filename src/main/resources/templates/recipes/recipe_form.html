@@ -16,7 +16,7 @@
             <h4 th:if="${recipe.id} != null">Editar receta</h4>
         </div>
         <div class="card-body">
-            <form th:object="${recipe}" th:action="@{/recipe}" method="post" >
+            <form th:object="${recipe}" th:action="@{/recipe}" method="post">
 
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                     <p>Please Correct Errors Below</p>
@@ -27,7 +27,7 @@
                     <div class="form-group col-6">
                         <label for="inputName">Nombre</label>
                         <input type="text" class="form-control" id="inputName" placeholder="e.g. Pozole"
-                               th:field="*{name}" th:required="required" />
+                               th:field="*{name}" th:required="required"/>
                     </div>
                     <div class="form-group col-6">
                         <label for="inputCategory">Categoría</label>
@@ -65,7 +65,7 @@
                 <div class="form-row justify-content-end">
                     <div class="col-1">
                         <a class="btn btn-secondary" href="#" role="button"
-                           th:href="@{'/recipes/'+${recipe.id}+'/show'}">
+                           th:href="@{'/recipes'}">
                             Cancelar</a>
                     </div>
                     <div class="col-1">

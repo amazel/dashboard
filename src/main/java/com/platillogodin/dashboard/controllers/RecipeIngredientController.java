@@ -32,13 +32,6 @@ public class RecipeIngredientController {
         this.ingredientService = ingredientService;
     }
 
-    @GetMapping("/recipes/{recipeId}/ingredients")
-    public String listIngredients(Model model, @PathVariable Long recipeId) {
-        model.addAttribute("recipe", recipeService.findById(recipeId));
-        model.addAttribute("recipeIngredientList", recipeIngredientService.findAllByRecipeId(recipeId));
-        return LIST_URL;
-    }
-
     @GetMapping("/recipes/{recipeId}/ingredients/add")
     public String newIngredient(Model model, @PathVariable Long recipeId,
                                 @RequestParam(required = false) Long ingredientId) {

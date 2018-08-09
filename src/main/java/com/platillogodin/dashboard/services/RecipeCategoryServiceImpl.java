@@ -40,11 +40,11 @@ public class RecipeCategoryServiceImpl implements RecipeCategoryService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        Integer count = recipeRepository.countAllByRecipeCategory(this.findById(id));
+    public void delete(RecipeCategory recipeCategory) {
+        Integer count = recipeRepository.countAllByRecipeCategory(this.findById(recipeCategory.getId()));
         if(count > 0){
             throw new ExistingReferencesException();
         }
-        recipeCategoryRepository.deleteById(id);
+        recipeCategoryRepository.delete(recipeCategory);
     }
 }
