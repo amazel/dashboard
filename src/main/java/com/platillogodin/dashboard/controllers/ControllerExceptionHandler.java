@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
+    @ExceptionHandler({NumberFormatException.class, Exception.class})
     public ModelAndView handleNumberFormatException(Exception e){
         log.error("Handling NUMBER FORMAT EXCEPTION");
         log.error(e.getMessage());

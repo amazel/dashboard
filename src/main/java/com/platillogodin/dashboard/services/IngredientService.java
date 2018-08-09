@@ -10,4 +10,10 @@ import java.util.List;
 public interface IngredientService {
 
     List<Ingredient> findAll();
+
+    Ingredient findById(Long id);
+
+    Ingredient saveIngredient(Ingredient ingredient);
+
+    void deleteById(Long id);
 }

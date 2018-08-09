@@ -2,6 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 </head>
 <body>
 
@@ -59,53 +62,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" th:if="${recipe.ingredientList!=null && recipe.ingredientList.size()>0}">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row">
-                                    <div class="col-11">
-                                        <h5>Ingredientes</h5>
-                                    </div>
-                                    <div class="col-1">
-                                        <a class="btn btn-default" href="#"
-                                           th:href="@{'/recipes/' + ${recipe.id} + '/ingredients/edit'}">
-                                            <i class="fas fa-edit  fa-2x"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <ul>
-                                    <li th:remove="all">150 gr de Pollo</li>
-                                    <li th:remove="all">250 ml de Leche</li>
-                                    <li th:each="ingredient : ${recipe.ingredientList}"
-                                        th:text="${ingredient.quantity + ' ' + ingredient.ingredient.uom.name().toLowerCase() +' de '+ ingredient.ingredient.name}"></li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="form-row justify-content-end">
+                    <div class="col-1">
+                        <a class="btn btn-secondary" href="#" role="button"
+                           th:href="@{'/recipes/'+${recipe.id}+'/show'}">
+                            Cancelar</a>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
                     </div>
                 </div>
-                <!--<div class="form-row" th:each="recipeIngredient, iStat : *{ingredients}">
-                    <div class="form-group col-md-4">
-                        <label for="inputIngredient">Ingrediente</label>
-                        <select id="inputIngredient" class="form-control">
-                            <option th:each="ingredientItem : ${ingredientList}"
-                                    th:value="${ingredientItem}"
-                                    th:text="${ingredientItem.name}"
-                                    th:selected="${ingredientItem == recipeIngredient.ingredient}"></option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-8">
-                        <label for="inputCity">Cantidad</label>
-                        <input type="number" class="form-control" id="inputCity"
-                               th:field="*{ingredients[__${iStat.index }__].quantity}">
-                    </div>
-                </div>
-                <button type="submit" name="addIngredient">Agregar Ingrediente</button>-->
-
-                <button type="submit" class="btn btn-primary">Aceptar</button>
             </form>
         </div>
     </div>

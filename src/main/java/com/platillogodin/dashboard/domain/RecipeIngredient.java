@@ -14,6 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"recipe"})
 @ToString(exclude = {"recipe"})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"recipe_id", "ingredient_id"})})
 @Entity
 public class RecipeIngredient {
 
@@ -22,8 +23,10 @@ public class RecipeIngredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne
     private Recipe recipe;
+
 
     @OneToOne
     private Ingredient ingredient;

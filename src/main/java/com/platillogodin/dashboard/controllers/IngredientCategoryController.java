@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -51,17 +52,17 @@ public class IngredientCategoryController {
     }
 
     @GetMapping("/categories/ingredients/{id}/delete")
-    public String deleteIngredientCategory(@PathVariable Long id, Model model) {
+    public ModelAndView deleteIngredientCategory(@PathVariable Long id, Model model) {
         try {
             ingredientCategoryService.deleteById(id);
         } catch (ExistingReferencesException ere) {
             IngredientCategory rc = ingredientCategoryService.findById(id);
             model.addAttribute("deleteError",
                     "Error al eliminar " + rc.getName() + ", existen ingredientes asociados a esta categoría.");
-            model.addAttribute("ingredientCategoryList", ingredientCategoryService.findAll());
-            return LIST_URL;
+            return new ModelAndView("forward:/categories/ingredients", model.asMap());
         }
-        return "redirect:/categories/ingredients";
+        model.addAttribute("deleteMessage", "La categoria fue eliminada correctamente");
+        return new ModelAndView("forward:/categories/ingredients", model.asMap());
     }
 
     @PostMapping("/categories/ingredient")

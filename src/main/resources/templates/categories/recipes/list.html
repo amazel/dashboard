@@ -5,11 +5,11 @@
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
     <script>
         $(document).ready(function () {
             $('#recipeTable').DataTable({
@@ -51,6 +51,9 @@
                             <div th:if="${deleteError}" class="alert alert-danger">
                                 <p th:text="${deleteError}">...</p>
                             </div>
+                            <div th:if="${deleteMessage}" class="alert alert-info">
+                                <p th:text="${deleteMessage}">...</p>
+                            </div>
 
                             <div class="table-responsive">
                                 <table class="table" id="recipeTable">
@@ -58,7 +61,6 @@
                                     <tr>
                                         <th>Categoria</th>
                                         <th>Descripcion</th>
-                                        <th>Editar</th>
                                         <th>Eliminar</th>
                                     </tr>
                                     </thead>
@@ -70,13 +72,7 @@
                                             </a>
                                         </td>
                                         <td th:text="${item.description}"></td>
-                                        <td style="text-align: center;">
-                                            <a href="#" class="badge badge-primary"
-                                               th:href="@{'/categories/recipes/'+${item.id}+'/edit'}"
-                                               data-toggle="tooltip" data-placement="bottom" title="Editar...">
-                                                <i class="fas fa-pencil-alt fa-lg"></i>
-                                            </a>
-                                        </td>
+
                                         <td style="text-align: center;">
                                             <a href="#" class="badge badge-danger"
                                                data-toggle="modal"

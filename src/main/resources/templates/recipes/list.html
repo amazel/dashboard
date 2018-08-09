@@ -25,9 +25,9 @@
 </head>
 <body>
 
-    <div th:replace="general.html :: navbar"></div>
+<div th:replace="general.html :: navbar"></div>
 
-    <div class="container-fluid">
+<div class="container-fluid">
     <div class="row">
         <div class="col">
             <div class="card">
@@ -54,8 +54,8 @@
                                     <tr>
                                         <th>Receta</th>
                                         <th>Categoria</th>
-                                        <!--<th>Tiempo de Preparacion</th>-->
-                                        <!--<th>Tiempo de coccion</th>-->
+                                        <th>Tiempo de Preparacion</th>
+                                        <th>Tiempo de coccion</th>
                                         <th>Porciones</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -66,8 +66,8 @@
                                                th:href="@{'/recipes/'+${recipeItem.id}+'/show'}">Tacos
                                         </a></td>
                                         <td th:text="${recipeItem.recipeCategory.name}"></td>
-                                        <!--<td th:text="${recipeItem.prepTime}"></td>-->
-                                        <!--<td th:text="${recipeItem.cookTime}"></td>-->
+                                        <td th:text="${recipeItem.prepTime}"></td>
+                                        <td th:text="${recipeItem.cookTime}"></td>
                                         <td th:text="${recipeItem.servings}"></td>
                                         <td style="text-align: center;">
                                             <a href="#" class="badge badge-primary"
@@ -76,18 +76,16 @@
                                                    data-placement="bottom" title="Editar receta"></i></a>
                                             <a href="#" class="badge badge-danger"
                                                data-toggle="modal"
-                                               data-target="#myModal">
+                                               th:attr="data-target='#modal-delete'+${recipeItem.id}">
                                                 <i class="fas fa-trash-alt fa-lg" data-toggle="tooltip"
                                                    data-placement="bottom"
                                                    title="Eliminar receta"></i>
                                             </a>
                                         </td>
 
-                                        <div class="modal fade" id="myModal">
+                                        <div class="modal fade" th:id="modal-delete+${recipeItem.id}">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-
-                                                    <!-- Modal Header -->
                                                     <div class="modal-header">
                                                         <h4 class="modal-title"
                                                             th:text="${'Eliminar '+ recipeItem.name +'?'}"></h4>
@@ -95,8 +93,6 @@
                                                             &times;
                                                         </button>
                                                     </div>
-
-                                                    <!-- Modal footer -->
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger"
                                                                 data-dismiss="modal">Cancelar

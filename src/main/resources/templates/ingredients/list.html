@@ -9,6 +9,7 @@
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $('#ingredientTable').DataTable({
@@ -25,6 +26,7 @@
 <body>
 
 <div th:replace="general.html :: navbar"></div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col">
@@ -32,12 +34,12 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-11">
-                            <h5>Categorias de Ingredientes</h5>
+                            <h4>Ingredientes</h4>
                         </div>
                         <div class="col-1">
                             <a class="btn btn-default" href="#"
-                               th:href="@{'/categories/ingredients/new'}" data-toggle="tooltip" data-placement="left"
-                               title="Nueva Categoria de Receta">
+                               th:href="@{'/ingredients/new'}" data-toggle="tooltip" data-placement="left"
+                               title="Nuevo ingrediente">
                                 <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
                             </a>
                         </div>
@@ -46,59 +48,54 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-
-                            <div th:if="${deleteError}" class="alert alert-danger">
-                                <p th:text="${deleteError}">...</p>
-                            </div>
-                            <div th:if="${deleteMessage}" class="alert alert-info">
-                                <p th:text="${deleteMessage}">...</p>
-                            </div>
-
                             <div class="table-responsive">
                                 <table class="table" id="ingredientTable">
                                     <thead>
                                     <tr>
+                                        <th>Ingrediente</th>
                                         <th>Categoria</th>
-                                        <th>Descripcion</th>
-                                        <th>Eliminar</th>
+                                        <th>Unidad de medida</th>
+                                        <th>Caducidad</th>
+                                        <th>Acciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="item : ${ingredientCategoryList}">
-                                        <td>
-                                            <a href="#" th:text="${item.name}"
-                                               th:href="@{'/categories/ingredients/'+${item.id}+'/edit'}">Tacos
-                                            </a>
-                                        </td>
-                                        <td th:text="${item.description}"></td>
+                                    <tr th:each="ingredientItem : ${ingredientList}">
+                                        <td><a href="#" th:text="${ingredientItem.name}"
+                                               th:href="@{'/ingredients/'+${ingredientItem.id}+'/edit'}">Tacos
+                                        </a></td>
+                                        <td th:text="${ingredientItem.category.name}"></td>
+                                        <td th:text="${ingredientItem.uom}"></td>
+                                        <td th:text="${ingredientItem.expirationTime}"></td>
                                         <td style="text-align: center;">
+                                            <a href="#" class="badge badge-primary"
+                                               th:href="@{'/ingredients/'+${ingredientItem.id}+'/edit'}">
+                                                <i class="fas fa-pencil-alt fa-lg" data-toggle="tooltip"
+                                                   data-placement="bottom" title="Editar ingrediente"></i></a>
                                             <a href="#" class="badge badge-danger"
                                                data-toggle="modal"
-                                               th:attr="data-target='#modal-delete'+${item.id}">
+                                               th:attr="data-target='#modal-delete'+${ingredientItem.id}">
                                                 <i class="fas fa-trash-alt fa-lg" data-toggle="tooltip"
                                                    data-placement="bottom"
-                                                   title="Eliminar..."></i>
+                                                   title="Eliminar ingrediente"></i>
                                             </a>
                                         </td>
 
-                                        <div class="modal fade" th:id="modal-delete+${item.id}">
+                                        <div class="modal fade" th:id="modal-delete+${ingredientItem.id}">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <!-- Modal Header -->
                                                     <div class="modal-header">
                                                         <h4 class="modal-title"
-                                                            th:text="${'Eliminar '+ item.name +'?'}"></h4>
+                                                            th:text="${'Eliminar '+ ingredientItem.name +'?'}"></h4>
                                                         <button type="button" class="close" data-dismiss="modal">
                                                             &times;
                                                         </button>
                                                     </div>
-
-                                                    <!-- Modal footer -->
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger"
                                                                 data-dismiss="modal">Cancelar
                                                         </button>
-                                                        <a th:href="@{'/categories/ingredients/'+${item.id}+'/delete'}">
+                                                        <a th:href="@{'/ingredients/'+${ingredientItem.id}+'/delete'}">
                                                             <button
                                                                     type="button" class="btn btn-success">Aceptar
                                                             </button>

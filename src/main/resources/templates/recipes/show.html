@@ -55,28 +55,35 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-10">
+                                <div class="col-11">
                                     <h5>Ingredientes</h5>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-1">
                                     <a class="btn btn-default" href="#"
                                        th:href="@{'/recipes/' + ${recipe.id} + '/ingredients/add'}">
                                         <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
-                                    </a>
-                                    <a class="btn btn-default" href="#"
-                                       th:href="@{'/recipes/' + ${recipe.id} + '/ingredients/edit'}">
-                                        <i class="fas fa-edit  fa-2x"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div th:if="${recipe.ingredientList}">
-                                <ul>
+                                <ul class="list-unstyled">
                                     <li th:remove="all">150 gr de Pollo</li>
                                     <li th:remove="all">250 ml de Leche</li>
-                                    <li th:each="ingredient : ${recipe.ingredientList}"
-                                        th:text="${ingredient.quantity + ' ' + ingredient.ingredient.uom.name().toLowerCase() +' de '+ ingredient.ingredient.name}"></li>
+                                    <li th:each="ingredient : ${recipe.ingredientList}">
+
+                                        <a class="btn btn-default" href="#"
+                                           th:href="@{'/recipes/' + ${recipe.id} + '/ingredients/'+ ${ingredient.id} +'/delete'}">
+                                            <i class="fas fa-times" style="color:red"></i>
+                                        </a>
+                                         -
+                                        <a class="btn btn-default" href="#"
+                                           th:href="@{'/recipes/' + ${recipe.id} + '/ingredients/'+${ingredient.id}+'/edit'}"
+                                           th:text="${ingredient.quantity + ' ' + ingredient.ingredient.uom.name().toLowerCase() +' de '+ ingredient.ingredient.name}">
+                                            150 gr de Papas
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -85,6 +92,8 @@
             </div>
         </div>
     </div>
+
+
 </div>
 </body>
 </html>
