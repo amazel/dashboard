@@ -71,9 +71,11 @@ public class DataBootstrap implements CommandLineRunner {
         Ingredient caldo_de_pollo = ingredientRepository.save(
                 new Ingredient(null, "Caldo de Pollo", ingredientCategories.get(4), UnitOfMeasure.ML, 3));
 
-        stockRepository.save(new Stock(null, pasta, 5000, LocalDate.now()));
-        stockRepository.save(new Stock(null, jitomate, 10000, LocalDate.now()));
-        stockRepository.save(new Stock(null, caldo_de_pollo, 500, LocalDate.now()));
+        stockRepository.save(
+                new Stock(null, pasta, 5000, LocalDate.now(), LocalDate.now().plusDays(pasta.getExpirationTime())));
+        stockRepository.save(new Stock(null, jitomate, 10000, LocalDate.now(), LocalDate.now().plusDays(jitomate.getExpirationTime())));
+        stockRepository.save(new Stock(null, caldo_de_pollo, 500, LocalDate.now(),
+                LocalDate.now().plusDays(caldo_de_pollo.getExpirationTime())));
 
 
         Recipe sopaFideo = new Recipe();
@@ -83,9 +85,9 @@ public class DataBootstrap implements CommandLineRunner {
         sopaFideo.setServings(5);
 
 
-        sopaFideo.getIngredientList().add(new RecipeIngredient(null,sopaFideo, pasta, 150));
-        sopaFideo.getIngredientList().add(new RecipeIngredient(null,sopaFideo, jitomate, 200));
-        sopaFideo.getIngredientList().add(new RecipeIngredient(null,sopaFideo, caldo_de_pollo, 100));
+        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, pasta, 150));
+        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, jitomate, 200));
+        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, caldo_de_pollo, 100));
         sopaFideo.setRecipeCategory(recipeCategories.get(0));
         recipeRepository.save(sopaFideo);
 
@@ -95,9 +97,9 @@ public class DataBootstrap implements CommandLineRunner {
         sopaCaracol.setName("Sopa de caracol");
         sopaCaracol.setPrepTime(15);
         sopaCaracol.setServings(6);
-        sopaCaracol.getIngredientList().add(new RecipeIngredient(null,sopaCaracol, pasta, 145));
-        sopaCaracol.getIngredientList().add(new RecipeIngredient(null,sopaCaracol, jitomate, 345));
-        sopaCaracol.getIngredientList().add(new RecipeIngredient(null,sopaCaracol, caldo_de_pollo, 340));
+        sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, pasta, 145));
+        sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, jitomate, 345));
+        sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, caldo_de_pollo, 340));
         sopaCaracol.setRecipeCategory(recipeCategories.get(1));
         recipeRepository.save(sopaCaracol);
 
@@ -106,9 +108,9 @@ public class DataBootstrap implements CommandLineRunner {
         sopaLetras.setName("Sopa de letras");
         sopaLetras.setPrepTime(25);
         sopaLetras.setServings(50);
-        sopaLetras.getIngredientList().add(new RecipeIngredient(null,sopaLetras, pasta, 1500));
-        sopaLetras.getIngredientList().add(new RecipeIngredient(null,sopaLetras, jitomate, 20));
-        sopaLetras.getIngredientList().add(new RecipeIngredient(null,sopaLetras, caldo_de_pollo, 50));
+        sopaLetras.getIngredientList().add(new RecipeIngredient(null, sopaLetras, pasta, 1500));
+        sopaLetras.getIngredientList().add(new RecipeIngredient(null, sopaLetras, jitomate, 20));
+        sopaLetras.getIngredientList().add(new RecipeIngredient(null, sopaLetras, caldo_de_pollo, 50));
         sopaLetras.setRecipeCategory(recipeCategories.get(0));
         recipeRepository.save(sopaLetras);
     }

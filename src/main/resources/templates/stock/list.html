@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript" th:inline="none" class="init">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            $('#recipeTable').DataTable({
+                "lengthMenu": [5, 10, 25, 50],
+                "pageLength": 5,
+                "order": [[0, 'asc'], [1, 'asc']]
+            });
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+        /*]]>*/
+    </script>
+</head>
+<body>
+
+<div th:replace="general.html :: navbar"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-11">
+                            <h5>Inventario</h5>
+                        </div>
+                        <div class="col-1">
+                            <a class="btn btn-default" href="#"
+                               th:href="@{'/stock/add'}" data-toggle="tooltip" data-placement="left"
+                               title="Añadir item">
+                                <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="table-responsive">
+                                <table class="table" id="recipeTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Ingrediente</th>
+                                        <th>Cantidad</th>
+                                        <th>Fecha de abastecimiento</th>
+                                        <th>Fecha de caducidad</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="item : ${stockItems}">
+                                        <td><a href="#" th:text="${item.ingredient.name}"
+                                               th:href="@{'/stock/'+${item.id}+'/edit'}">Papaya
+                                        </a></td>
+                                        <td th:text="${item.quantity}"></td>
+                                        <td th:text="${#temporals.format(item.lastSupplyDate, 'dd/MM/yyyy')}"></td>
+                                        <td th:text="${#temporals.format(item.expirationDate, 'dd/MM/yyyy')}"
+                                        th:class="${(item.expirationDate.isBefore(#temporals.createToday()))?'alert alert-danger':'alert alert-success'}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
