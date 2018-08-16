@@ -23,21 +23,25 @@ public class DataBootstrap implements CommandLineRunner {
     private RecipeCategoryRepository recipeCategoryRepository;
     private IngredientCategoryRepository ingredientCategoryRepository;
     private StockRepository stockRepository;
+    private final MenuCategoryRepository menuCategoryRepository;
 
     public DataBootstrap(IngredientRepository ingredientRepository,
                          RecipeRepository recipeRepository,
                          RecipeCategoryRepository recipeCategoryRepository,
                          IngredientCategoryRepository ingredientCategoryRepository,
-                         StockRepository stockRepository) {
+                         StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository) {
         this.ingredientRepository = ingredientRepository;
         this.recipeRepository = recipeRepository;
         this.recipeCategoryRepository = recipeCategoryRepository;
         this.ingredientCategoryRepository = ingredientCategoryRepository;
         this.stockRepository = stockRepository;
+        this.menuCategoryRepository = menuCategoryRepository;
     }
 
     private List<RecipeCategory> recipeCategories = new ArrayList<>();
     private List<IngredientCategory> ingredientCategories = new ArrayList<>();
+    private List<MenuCategory> menuCategories = new ArrayList<>();
+
 
     @Transactional
     @Override
@@ -49,18 +53,40 @@ public class DataBootstrap implements CommandLineRunner {
     }
 
     private void loadCategories() {
-        recipeCategories.add(recipeCategoryRepository.save(new RecipeCategory(null, "Gordin", "Menu Gordin")));
-        recipeCategories.add(recipeCategoryRepository.save(new RecipeCategory(null, "Caseron", "Menu Caseron")));
+        recipeCategories.add(recipeCategoryRepository.save(
+                new RecipeCategory(null, "Sopas", "Sopas y caldos")));
+        recipeCategories.add(recipeCategoryRepository.save(
+                new RecipeCategory(null, "Aguas", "Aguas y jugos")));
+        recipeCategories.add(recipeCategoryRepository.save(
+                new RecipeCategory(null, "Pollo", "Recetas con pollo")));
+        recipeCategories.add(recipeCategoryRepository.save(
+                new RecipeCategory(null, "Ensaladas", "Ensaladas")));
 
-        ingredientCategories.add(ingredientCategoryRepository.save(new IngredientCategory(null, "Frutas", "")));
-        ingredientCategories.add(ingredientCategoryRepository.save(new IngredientCategory(null, "Verduras", "")));
-        ingredientCategories.add(ingredientCategoryRepository.save(new IngredientCategory(null, "Lacteos", "")));
-        ingredientCategories.add(ingredientCategoryRepository.save(new IngredientCategory(null, "Res", "Carne de res y derivados")));
-        ingredientCategories.add(ingredientCategoryRepository.save(new IngredientCategory(null, "Pollo", "Carne de pollo y derivados")));
-        ingredientCategories.add(ingredientCategoryRepository.save(new IngredientCategory(null, "Cerdo", "Carne de cerdo y derivados")));
+        ingredientCategories.add(ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Frutas", "")));
+        ingredientCategories.add(ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Verduras", "")));
+        ingredientCategories.add(ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Lacteos", "")));
+        ingredientCategories.add(ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Res", "Carne de res y derivados")));
+        ingredientCategories.add(ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Pollo", "Carne de pollo y derivados")));
+        ingredientCategories.add(ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Cerdo", "Carne de cerdo y derivados")));
         ingredientCategories.add(ingredientCategoryRepository.save(
                 new IngredientCategory(null, "Cereales y Pasta", "Cereales y pasta")));
 
+        menuCategories.add(menuCategoryRepository.save(
+                new MenuCategory(null,"Gordin", "Menu Gordin")
+        ));
+        menuCategories.add(menuCategoryRepository.save(
+                new MenuCategory(null,"Caseron", "Menu Caseron")
+        ));
+
+        menuCategories.add(menuCategoryRepository.save(
+                new MenuCategory(null,"Comun", "Menus comunes")
+        ));
     }
 
     private void loadRecipe() {
@@ -68,13 +94,21 @@ public class DataBootstrap implements CommandLineRunner {
                 new Ingredient(null, "Pasta fideo", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
         Ingredient jitomate = ingredientRepository.save(
                 new Ingredient(null, "Jitomate", ingredientCategories.get(1), UnitOfMeasure.GR, 5));
+        Ingredient cebolla = ingredientRepository.save(
+                new Ingredient(null, "Cebolla", ingredientCategories.get(1), UnitOfMeasure.GR, 5));
+        Ingredient agua = ingredientRepository.save(
+                new Ingredient(null, "Agua", ingredientCategories.get(1), UnitOfMeasure.ML, 365));
+        Ingredient mango = ingredientRepository.save(
+                new Ingredient(null, "Mango", ingredientCategories.get(0), UnitOfMeasure.GR, 5));
         Ingredient caldo_de_pollo = ingredientRepository.save(
-                new Ingredient(null, "Caldo de Pollo", ingredientCategories.get(4), UnitOfMeasure.ML, 3));
+                new Ingredient(null, "Caldo de pollo", ingredientCategories.get(4), UnitOfMeasure.ML, 3));
 
         stockRepository.save(
                 new Stock(null, pasta, 5000, LocalDate.now(), LocalDate.now().plusDays(pasta.getExpirationTime())));
-        stockRepository.save(new Stock(null, jitomate, 10000, LocalDate.now(), LocalDate.now().plusDays(jitomate.getExpirationTime())));
-        stockRepository.save(new Stock(null, caldo_de_pollo, 500, LocalDate.now(),
+        stockRepository.save(
+                new Stock(null, jitomate, 10000, LocalDate.now(), LocalDate.now().plusDays(jitomate.getExpirationTime())));
+        stockRepository.save(
+                new Stock(null, caldo_de_pollo, 500, LocalDate.now(),
                 LocalDate.now().plusDays(caldo_de_pollo.getExpirationTime())));
 
 
@@ -87,6 +121,7 @@ public class DataBootstrap implements CommandLineRunner {
 
         sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, pasta, 150));
         sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, jitomate, 200));
+        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, cebolla, 100));
         sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, caldo_de_pollo, 100));
         sopaFideo.setRecipeCategory(recipeCategories.get(0));
         recipeRepository.save(sopaFideo);
@@ -113,6 +148,18 @@ public class DataBootstrap implements CommandLineRunner {
         sopaLetras.getIngredientList().add(new RecipeIngredient(null, sopaLetras, caldo_de_pollo, 50));
         sopaLetras.setRecipeCategory(recipeCategories.get(0));
         recipeRepository.save(sopaLetras);
+
+        Recipe aguaMango = new Recipe();
+        aguaMango.setCookTime(0);
+        aguaMango.setName("Agua de mango");
+        aguaMango.setPrepTime(15);
+        aguaMango.setServings(10);
+
+
+        aguaMango.getIngredientList().add(new RecipeIngredient(null, aguaMango, agua, 1000));
+        aguaMango.getIngredientList().add(new RecipeIngredient(null, aguaMango, mango, 200));
+        aguaMango.setRecipeCategory(recipeCategories.get(1));
+        recipeRepository.save(aguaMango);
     }
 
 

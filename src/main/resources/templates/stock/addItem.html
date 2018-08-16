@@ -11,11 +11,31 @@
     <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.10/css/gijgo.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
           integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
+    </script>
+
+    <script type="text/javascript" th:inline="none" class="init">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            $('#ingredientTable').DataTable({
+                "lengthMenu": [5, 10, 25, 50],
+                "pageLength": 5,
+                "order": [[0, 'asc'], [1, 'asc']]
+            });
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+        /*]]>*/
     </script>
 </head>
 <body>
@@ -30,9 +50,9 @@
                     <div class="row align-items-center">
                         <div class="col-11">
                             <h4 th:if="${stockItem.id != null}"
-                                th:text="${stockItem.ingredient.name +' - Editar inventario'}"></h4>
+                                th:text="${stockItem.ingredient.name +' - Añadir inventario'}"></h4>
                             <h4 th:if="${stockItem.id == null}">
-                                Agregar inventario
+                                Crear inventario inicial
                             </h4>
                         </div>
                     </div>
@@ -73,21 +93,17 @@
                                          th:text="${stockItem.ingredient.uom.name().toLowerCase()}"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-3">
                                 <label for="inputDate">Fecha de abastecimiento</label>
                                 <div class="input-group mb-2">
                                     <input id="inputDate" class="form-control" th:field="*{lastSupplyDate}"
                                            th:value="*{lastSupplyDate}"
                                            type="text"
-                                           th:required="required" >
-
+                                           th:required="required">
                                     <script>
-
                                         var date = new Date();
-
                                         var year = date.getFullYear();
-                                        var month = date.getMonth()+1;
+                                        var month = date.getMonth() + 1;
                                         var day = date.getDate();
 
                                         if (day < 10) {
@@ -96,9 +112,7 @@
                                         if (month < 10) {
                                             month = '0' + month;
                                         }
-
-                                        var today = day + '/' + month + '/' + year
-
+                                        var today = day + '/' + month + '/' + year;
                                         $('#inputDate').datepicker({
                                             uiLibrary: 'bootstrap4',
                                             iconsLibrary: 'fontawesome',
@@ -106,10 +120,8 @@
                                             value: today
                                         });
                                     </script>
-
                                 </div>
                             </div>
-
                         </div>
                         <div class="form-row justify-content-end">
                             <div class="col-1">

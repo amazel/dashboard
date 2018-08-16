@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+</head>
+<body>
+
+<div th:replace="general.html :: navbar"></div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h4 th:if="${menuCategory.id} == null">Nueva Categoria de Menu</h4>
+            <h4 th:if="${menuCategory.id} != null">Editar Categoria de Menu</h4>
+        </div>
+        <div class="card-body">
+            <form th:object="${menuCategory}" th:action="@{/categories/menu}" method="post">
+
+                <input type="hidden" th:field="*{id}"/>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        <label for="inputName">Nombre</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="Pozole"
+                               th:field="*{name}" th:required="required">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="inputDescription">Descripción</label>
+                        <input type="text" class="form-control" id="inputDescription" placeholder="Rico Pozolito"
+                               th:field="*{description}">
+                    </div>
+                </div>
+                <div class="form-row justify-content-end">
+                    <div class="col-1">
+                        <a class="btn btn-secondary" href="#" role="button"
+                           th:href="@{'/categories/menus'}">
+                            Cancelar</a>
+                    </div>
+                    <div class="col-1">
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
