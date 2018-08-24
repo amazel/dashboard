@@ -69,7 +69,7 @@
                         <input type="hidden" th:field="*{id}"/>
                         <input type="hidden" th:field="*{ingredient}"/>
                         <div class="form-row align-items-center">
-                            <div class="form-group col-6">
+                            <div class="form-group col-md-6 col-10">
                                 <label for="inputIngredient">Ingrediente</label>
                                 <input type="text" class="form-control" id="inputIngredient"
                                        th:field="*{ingredient.name}" th:disabled="disabled"/>
@@ -83,7 +83,7 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group col-3">
+                            <div class="form-group col-md-3 col-10">
                                 <label for="inputQuantity">Cantidad</label>
                                 <div class="input-group mb-2">
                                     <input type="number" id="inputQuantity" class="form-control" th:field="*{quantity}"
@@ -93,7 +93,7 @@
                                          th:text="${stockItem.ingredient.uom.name().toLowerCase()}"></div>
                                 </div>
                             </div>
-                            <div class="form-group col-3">
+                            <div class="form-group col-md-3 col-10">
                                 <label for="inputDate">Fecha de abastecimiento</label>
                                 <div class="input-group mb-2">
                                     <input id="inputDate" class="form-control" th:field="*{lastSupplyDate}"
@@ -124,12 +124,12 @@
                             </div>
                         </div>
                         <div class="form-row justify-content-end">
-                            <div class="col-1">
+                            <div class="col-md-1 col-4">
                                 <a class="btn btn-secondary" href="#" role="button"
                                    th:href="@{'/stock'}">
                                     Cancelar</a>
                             </div>
-                            <div class="col-1">
+                            <div class="col-md-1 col-4">
                                 <button type="submit" class="btn btn-primary">Aceptar</button>
                             </div>
                         </div>

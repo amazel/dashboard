@@ -17,24 +17,24 @@
 
                 <input type="hidden" th:field="*{id}"/>
                 <div class="form-row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-md-6 col-12">
                         <label for="inputName">Nombre</label>
-                        <input type="text" class="form-control" id="inputName" placeholder="Pozole"
+                        <input type="text" class="form-control" id="inputName"
                                th:field="*{name}" th:required="required">
                     </div>
-                    <div class="form-group col-6">
+                    <div class="form-group col-md-6 col-12">
                         <label for="inputDescription">Descripción</label>
-                        <input type="text" class="form-control" id="inputDescription" placeholder="Rico Pozolito"
+                        <input type="text" class="form-control" id="inputDescription"
                                th:field="*{description}">
                     </div>
                 </div>
                 <div class="form-row justify-content-end">
-                    <div class="col-1">
+                    <div class="col-md-1 col-4">
                         <a class="btn btn-secondary" href="#" role="button"
                            th:href="@{'/categories/ingredients'}">
                             Cancelar</a>
                     </div>
-                    <div class="col-1">
+                    <div class="col-md-1 col">
                         <button type="submit" class="btn btn-primary">Aceptar</button>
                     </div>
                 </div>

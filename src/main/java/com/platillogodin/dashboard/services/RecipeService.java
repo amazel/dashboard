@@ -1,8 +1,10 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.Recipe;
+import com.platillogodin.dashboard.domain.RecipeCategory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Hugo Lezama on August - 2018
@@ -17,4 +19,5 @@ public interface RecipeService {
 
     void deleteById(Long id);
 
+    Map<String, List<Recipe>> findAllByCategory();
 }

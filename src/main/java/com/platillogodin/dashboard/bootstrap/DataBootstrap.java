@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,18 +25,20 @@ public class DataBootstrap implements CommandLineRunner {
     private IngredientCategoryRepository ingredientCategoryRepository;
     private StockRepository stockRepository;
     private final MenuCategoryRepository menuCategoryRepository;
+    private final MenuRepository menuRepository;
 
     public DataBootstrap(IngredientRepository ingredientRepository,
                          RecipeRepository recipeRepository,
                          RecipeCategoryRepository recipeCategoryRepository,
                          IngredientCategoryRepository ingredientCategoryRepository,
-                         StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository) {
+                         StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository, MenuRepository menuRepository) {
         this.ingredientRepository = ingredientRepository;
         this.recipeRepository = recipeRepository;
         this.recipeCategoryRepository = recipeCategoryRepository;
         this.ingredientCategoryRepository = ingredientCategoryRepository;
         this.stockRepository = stockRepository;
         this.menuCategoryRepository = menuCategoryRepository;
+        this.menuRepository = menuRepository;
     }
 
     private List<RecipeCategory> recipeCategories = new ArrayList<>();
@@ -48,7 +51,7 @@ public class DataBootstrap implements CommandLineRunner {
     public void run(String... args) {
         log.info("Loading bootstrap data");
         loadCategories();
-        loadRecipe();
+        loadData();
 
     }
 
@@ -61,6 +64,8 @@ public class DataBootstrap implements CommandLineRunner {
                 new RecipeCategory(null, "Pollo", "Recetas con pollo")));
         recipeCategories.add(recipeCategoryRepository.save(
                 new RecipeCategory(null, "Ensaladas", "Ensaladas")));
+        recipeCategories.add(recipeCategoryRepository.save(
+                new RecipeCategory(null, "Guarniciones", "Guarniciones")));
 
         ingredientCategories.add(ingredientCategoryRepository.save(
                 new IngredientCategory(null, "Frutas", "")));
@@ -78,18 +83,18 @@ public class DataBootstrap implements CommandLineRunner {
                 new IngredientCategory(null, "Cereales y Pasta", "Cereales y pasta")));
 
         menuCategories.add(menuCategoryRepository.save(
-                new MenuCategory(null,"Gordin", "Menu Gordin")
+                new MenuCategory(null, "Gordin", "Menu Gordin")
         ));
         menuCategories.add(menuCategoryRepository.save(
-                new MenuCategory(null,"Caseron", "Menu Caseron")
+                new MenuCategory(null, "Caseron", "Menu Caseron")
         ));
 
         menuCategories.add(menuCategoryRepository.save(
-                new MenuCategory(null,"Comun", "Menus comunes")
+                new MenuCategory(null, "Comun", "Menus comunes")
         ));
     }
 
-    private void loadRecipe() {
+    void loadData() {
         Ingredient pasta = ingredientRepository.save(
                 new Ingredient(null, "Pasta fideo", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
         Ingredient jitomate = ingredientRepository.save(
@@ -102,6 +107,10 @@ public class DataBootstrap implements CommandLineRunner {
                 new Ingredient(null, "Mango", ingredientCategories.get(0), UnitOfMeasure.GR, 5));
         Ingredient caldo_de_pollo = ingredientRepository.save(
                 new Ingredient(null, "Caldo de pollo", ingredientCategories.get(4), UnitOfMeasure.ML, 3));
+        Ingredient pechugaPollo = ingredientRepository.save(
+                new Ingredient(null, "Pechuga de pollo", ingredientCategories.get(4), UnitOfMeasure.GR, 5));
+        Ingredient arroz = ingredientRepository.save(
+                new Ingredient(null, "Arroz", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
 
         stockRepository.save(
                 new Stock(null, pasta, 5000, LocalDate.now(), LocalDate.now().plusDays(pasta.getExpirationTime())));
@@ -109,23 +118,32 @@ public class DataBootstrap implements CommandLineRunner {
                 new Stock(null, jitomate, 10000, LocalDate.now(), LocalDate.now().plusDays(jitomate.getExpirationTime())));
         stockRepository.save(
                 new Stock(null, caldo_de_pollo, 500, LocalDate.now(),
-                LocalDate.now().plusDays(caldo_de_pollo.getExpirationTime())));
+                        LocalDate.now().plusDays(caldo_de_pollo.getExpirationTime())));
 
 
-        Recipe sopaFideo = new Recipe();
-        sopaFideo.setCookTime(15);
-        sopaFideo.setName("Sopa de fideo");
-        sopaFideo.setPrepTime(5);
-        sopaFideo.setServings(5);
+        Recipe polloCacahuate = new Recipe();
+        polloCacahuate.setCookTime(15);
+        polloCacahuate.setName("Pollo encacahuatado");
+        polloCacahuate.setPrepTime(20);
+        polloCacahuate.setServings(10);
 
+        polloCacahuate.getIngredientList().add(new RecipeIngredient(null, polloCacahuate, cebolla, 150));
+        polloCacahuate.getIngredientList().add(new RecipeIngredient(null, polloCacahuate, jitomate, 200));
+        polloCacahuate.getIngredientList().add(new RecipeIngredient(null, polloCacahuate, pechugaPollo, 500));
+        polloCacahuate.getIngredientList().add(new RecipeIngredient(null, polloCacahuate, caldo_de_pollo, 100));
+        polloCacahuate.setRecipeCategory(recipeCategories.get(2));
+        recipeRepository.save(polloCacahuate);
 
-        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, pasta, 150));
-        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, jitomate, 200));
-        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, cebolla, 100));
-        sopaFideo.getIngredientList().add(new RecipeIngredient(null, sopaFideo, caldo_de_pollo, 100));
-        sopaFideo.setRecipeCategory(recipeCategories.get(0));
-        recipeRepository.save(sopaFideo);
+        Recipe arrozBlanco = new Recipe();
+        arrozBlanco.setCookTime(15);
+        arrozBlanco.setName("Arroz blanco");
+        arrozBlanco.setPrepTime(20);
+        arrozBlanco.setServings(10);
 
+        arrozBlanco.getIngredientList().add(new RecipeIngredient(null, arrozBlanco, cebolla, 150));
+        arrozBlanco.getIngredientList().add(new RecipeIngredient(null, arrozBlanco, arroz, 200));
+        arrozBlanco.setRecipeCategory(recipeCategories.get(4));
+        recipeRepository.save(arrozBlanco);
 
         Recipe sopaCaracol = new Recipe();
         sopaCaracol.setCookTime(10);
@@ -135,7 +153,7 @@ public class DataBootstrap implements CommandLineRunner {
         sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, pasta, 145));
         sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, jitomate, 345));
         sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, caldo_de_pollo, 340));
-        sopaCaracol.setRecipeCategory(recipeCategories.get(1));
+        sopaCaracol.setRecipeCategory(recipeCategories.get(0));
         recipeRepository.save(sopaCaracol);
 
         Recipe sopaLetras = new Recipe();
@@ -160,6 +178,51 @@ public class DataBootstrap implements CommandLineRunner {
         aguaMango.getIngredientList().add(new RecipeIngredient(null, aguaMango, mango, 200));
         aguaMango.setRecipeCategory(recipeCategories.get(1));
         recipeRepository.save(aguaMango);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String todayString = LocalDate.now().format(formatter);
+        Menu today = new Menu(todayString);
+        today.setDate(LocalDate.now());
+        MenuOption op1 = new MenuOption();
+        op1.setMenu(today);
+        op1.setMenuCategory(menuCategories.get(0));
+        op1.setMenuOptionType(MenuOptionType.SIDE);
+        op1.setForecastQuantity(40);
+        op1.setRecipe(arrozBlanco);
+
+        MenuOption op2 = new MenuOption();
+        op2.setMenu(today);
+        op2.setMenuCategory(menuCategories.get(0));
+
+        op2.setMenuOptionType(MenuOptionType.MAIN);
+        op2.setForecastQuantity(50);
+        op2.setRecipe(polloCacahuate);
+
+        today.addMenuOption(op1);
+        today.addMenuOption(op2);
+
+        MenuOption op3 = new MenuOption();
+        op3.setMenu(today);
+        op3.setMenuCategory(menuCategories.get(1));
+        op3.setMenuOptionType(MenuOptionType.STARTER);
+        op3.setForecastQuantity(40);
+        op3.setActualQuantity(45);
+        op3.setRecipe(sopaCaracol);
+
+        today.addMenuOption(op3);
+
+
+        MenuOption op4 = new MenuOption();
+        op4.setMenu(today);
+        op4.setMenuCategory(menuCategories.get(2));
+        op4.setMenuOptionType(MenuOptionType.BEVERAGE);
+        op4.setForecastQuantity(80);
+        op4.setRecipe(aguaMango);
+
+        today.addMenuOption(op4);
+
+        menuRepository.save(today);
+
     }
 
 

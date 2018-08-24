@@ -5,10 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,16 @@ public class Menu {
     @NonNull
     private String id;
 
+    private LocalDate date;
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu")
     private List<MenuOption> options = new ArrayList<>();
+
+    public Menu addMenuOption(MenuOption menuOption){
+        menuOption.setMenu(this);
+        this.options.add(menuOption);
+        return this;
+    }
 }
 

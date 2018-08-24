@@ -1,5 +1,6 @@
 package com.platillogodin.dashboard.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class RecipeIngredient {
 
 
     @ManyToOne
+    @JsonIgnore
     private Recipe recipe;
 
 

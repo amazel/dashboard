@@ -8,4 +8,5 @@ import com.platillogodin.dashboard.domain.Menu;
 public interface MenuService {
     Menu findById(String id);
 
+    Menu save(Menu menu);
 }

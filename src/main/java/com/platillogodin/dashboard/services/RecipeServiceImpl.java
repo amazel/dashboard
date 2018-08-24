@@ -1,12 +1,15 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.Recipe;
+import com.platillogodin.dashboard.domain.RecipeCategory;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Hugo Lezama on August - 2018
@@ -41,5 +44,11 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void deleteById(Long id) {
         recipeRepository.deleteById(id);
+    }
+
+    @Override
+    public Map<String, List<Recipe>> findAllByCategory() {
+
+        return recipeRepository.findAll().stream().collect(Collectors.groupingBy(o -> o.getRecipeCategory().getName()));
     }
 }

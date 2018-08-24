@@ -3,7 +3,6 @@ package com.platillogodin.dashboard.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by Hugo Lezama on August - 2018
@@ -21,6 +20,12 @@ public class MenuOption {
     @OneToOne
     private MenuCategory menuCategory;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuOption")
-    private List<MenuDish> dishes;
+    @Enumerated(value = EnumType.STRING)
+    private MenuOptionType menuOptionType;
+
+    @OneToOne
+    private Recipe recipe;
+
+    private Integer forecastQuantity;
+    private Integer actualQuantity;
 }

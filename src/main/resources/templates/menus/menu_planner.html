@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Platillo Godin - Dashboard</title>
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -15,7 +16,7 @@
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
     <!-- Custom styles for this template -->
-    <link href="../static/css/navbar.css" th:href="@{/css/navbar.css}" rel="stylesheet">
+    <link href="../../static/css/navbar.css" th:href="@{/css/navbar.css}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
           integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
@@ -24,6 +25,11 @@
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="../../static/css/dncalendar-skin.min.css"
           th:href="@{/css/dncalendar-skin.css}">
+
+    <script type="text/javascript" src="../../static/js/jquery.typeahead.js"
+            th:src="@{/js/jquery.typeahead.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.typeahead.css"
+          th:href="@{/css/jquery.typeahead.css}">
 
     <script type="text/javascript">
         $(function () {
@@ -52,9 +58,19 @@
             var mm = Array(2 - String(month).length + 1).join('0') + month;
             var menuDate = date.getFullYear() + mm + date.getDate();
             $('#collapseExample').collapse('hide');
-            $("#form").load('/api/menus', 'menuId=' + menuDate);
+            $("#contentFragment").load('/api/menus', 'menuId=' + menuDate);
+            $("#content").show();
         }
     </script>
+    <style>
+        .table {
+            font-size: 12px;
+        }
+
+        .smallFont {
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="general.html :: navbar"></div>
@@ -73,62 +89,247 @@
         </a>
     </div>
     <br/>
-    <div class="row justify-content-center">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col-11">
-                            <h5>Inventario</h5>
-                        </div>
-                    </div>
-                </div>
-                <div th:fragment="content" id="form">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3">
-                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
-                                     aria-orientation="vertical">
-                                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill"
-                                       href="#v-pills-home" role="tab" aria-controls="v-pills-home"
-                                       aria-selected="true" th:remove="all">Home</a>
-                                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"
-                                       href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
-                                       aria-selected="false" th:remove="all">Profile</a>
+    <div style="display: none" id="content">
+        <div th:fragment="content" id="contentFragment">
+            <h6
+                    th:text="${'Menu para: '+#temporals.dayOfWeekName(menu.date)+', '+#temporals.format(menu.date, 'dd - MMMM - yyyy')}"></h6>
+            <div class="row justify-content-center">
 
-                                    <a data-toggle="pill"
-                                       role="tab"
-                                       aria-selected="false"
-                                       th:class="${stat.index == 0?'nav-link active':'nav-link'}"
-                                       th:each="cat, stat : ${categories}"
-                                       th:text="${cat.name}"
-                                       th:id="${cat.name+'-tab'}"
-                                       th:href="${'#'+cat.name+'-tabContent'}"
-                                       th:attr="aria-controls=${cat.name+'-tabContent'}"></a>
-
+                <div class="col-12 col-md-6 mb-2" th:each="cat, stat : ${categories}">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-10 col-10">
+                                    <h5 th:text="${cat.name}">Gofitness</h5>
+                                </div>
+                                <div class="col-md-2 col-1 text-right">
+                                    <a class="btn btn-default" href="#"
+                                       data-target='#addDish'
+                                       data-backdrop="static"
+                                       data-catid='0'
+                                       th:attr="data-catid=''+${cat.id},
+                                       data-menuid=''+${menu.id}"
+                                       data-toggle="modal">
+                                        <i class="fas fa-plus-circle fa-lg" style="color:green"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="col-9">
-                                <div class="tab-content" id="v-pills-tabContent">
-                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
-                                         aria-labelledby="v-pills-home-tab" th:remove="all">...
-                                    </div>
-                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                                         aria-labelledby="v-pills-profile-tab" th:remove="all">...
-                                    </div>
-                                    <div role="tabpanel"
-                                         th:each="cat,stat : ${categories}"
-                                         th:class="${stat.index == 0?'tab-pane fade show active':'tab-pane fade'}"
-                                         th:id="${cat.name+'-tabContent'}"
-                                         th:attr="aria-labelledby=${cat.name+'-tab'}">
-                                        <p th:text="${menu.id}"></p>
-                                    </div>
+                        </div>
+                        <div class="card-body">
+
+                            <div th:each="option : ${menu.options.?[menuCategory.id == __${cat.id}__]}">
+
+                                <div class="table-responsive">
+                                    <table class="table">
+
+                                        <tbody>
+                                        <tr>
+                                            <td style="width: 18%">
+                                                <div th:text="${option.menuOptionType.getSpanishName()}">Plato Fuerte
+                                                </div>
+                                            </td>
+                                            <td
+                                                    th:style="${option.actualQuantity != null?'width: 54%':'width: 68%'}">
+                                                <a class="smallFont" href="#"
+                                                   data-target='#addDish'
+                                                   data-backdrop="static"
+                                                   data-catid='0'
+                                                   th:attr="data-catid=''+${cat.id},
+                                                   data-menuid=${menu.id},
+                                                   data-menuoptionid=${option.id},
+                                                   data-recipeid=${option.recipe.id},
+                                                   data-recipe=''+${option.recipe.name},
+                                                   data-actualquantity=${option.actualQuantity},
+                                                   data-forecastquantity=${option.forecastQuantity}"
+                                                   data-toggle="modal"
+                                                   th:text="${option.recipe.name}">Pollo Encacahuatado</a>
+
+                                            </td>
+                                            <td th:if="${option.actualQuantity}" style="width: 14%">
+                                                <div th:text="${'#real: '+option.actualQuantity}">#real: 150</div>
+                                            </td>
+                                            <td style="width: 14%">
+                                                <div th:text="${'#est: '+option.forecastQuantity}">#est: 150</div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="modal" id="addDish" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <form id="menuOptionForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Añadir platillo</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <input type="hidden" name="menuId" id="menuId">
+                                <input type="hidden" name="categoryId" id="categoryId">
+                                <input type="hidden" name="menuOptionId" id="menuOptionId">
+                                <div class="form-row">
+                                    <div class="form-group col-md-5 col-12">
+                                        <label for="inputMOType">Tipo</label>
+                                        <select id="inputMOType" class="form-control">
+                                            <option th:each="unit : ${T(com.platillogodin.dashboard.domain.MenuOptionType).values()}"
+                                                    th:value="${unit}"
+                                                    th:text="${unit.getSpanishName()}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-7 col-12">
+                                        <label for="recipe">Platillo</label>
+
+                                        <div class="typeahead__container">
+                                            <div class="typeahead__field">
+                                                <input class="js-typeahead-font_v1 form-control" type="search"
+                                                       id="recipe"
+                                                       autocomplete="off"
+                                                required>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <input type="hidden" id="recipeId">
+                                    <script>
+                                        $.typeahead({
+                                            input: '.js-typeahead-font_v1',
+                                            maxItem: 10,
+                                            order: "asc",
+                                            hint: false,
+                                            group: {
+                                                template: function (item) {
+                                                    return item.recipeCategory.name;
+                                                }
+                                            },
+                                            display: "name",
+                                            source: {
+                                                ajax: {
+                                                    url: "/api/recipes",
+                                                    dataType: "json"
+                                                }
+                                            },
+                                            callback: {
+                                                onClickAfter: function (node, a, item, event) {
+                                                    event.preventDefault;
+                                                    $('#recipeId').val(item.id)
+                                                },
+
+                                                onCancel: function (node, event) {
+                                                    $('#recipeId').val('')
+                                                }
+                                            },
+                                            debug: true
+                                        });
+
+                                        $('#recipe').focusout(function () {
+                                            if (!$('#recipeId').val()) {
+                                                $('#recipe').val('')
+                                            }
+                                        });
+                                        $('#recipe').change(function () {
+                                            $('#recipeId').val('')
+                                        });
+
+                                    </script>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-5 col-6">
+                                        <label for="forecastQuantity"># Estimado</label>
+                                        <input type="number" min="0" id="forecastQuantity" class="form-control"
+                                               required>
+                                    </div>
+                                    <div class="form-group col-md-5 col-6">
+                                        <label for="actualQuantity"># Real</label>
+                                        <input type="number" min="0" id="actualQuantity" class="form-control">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                        id="submitBtn">Aceptar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $('#addDish').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);
+                    var catId = button.data('catid');
+                    var menuId = button.data('menuid');
+                    var menuOptionId = button.data('menuoptionid');
+                    var forecastQuantity = button.data('forecastquantity');
+                    var actualQuantity = button.data('actualquantity');
+                    var recipe = button.data('recipe');
+                    var recipeId = button.data('recipeid');
+                    var modal = $(this);
+                    $(this).find('#categoryId').val(catId);
+                    $(this).find('#menuId').val(menuId)
+
+                    $(this).find('#menuOptionId').val(menuOptionId)
+                    $(this).find('#forecastQuantity').val(forecastQuantity)
+                    $(this).find('#actualQuantity').val(actualQuantity)
+                    $(this).find('#recipe').val(recipe)
+                    $(this).find('#recipeId').val(recipeId)
+
+
+                });
+
+                $('#addDish').on('hide.bs.modal', function (t) {
+                    $('#menuOptionForm').trigger("reset");
+                });
+
+                $("#submitBtn").click(function (event) {
+                    // $('#addDish').modal('hide');
+                    event.preventDefault();
+                    var menuOption = {};
+                    var recipe = {};
+                    var menu = {};
+                    var menuCategory = {};
+                    menuOption["id"] = $('#menuOptionId').val()!=''?Number($('#menuOptionId').val()):null;
+                    menu["id"] = Number($('#menuId').val());
+                    menuOption["menu"] = menu;
+                    recipe["id"] = Number($('#recipeId').val());
+                    menuOption["recipe"] = recipe;
+                    menuCategory["id"] = Number($('#categoryId').val());
+                    menuOption["menuCategory"] = menuCategory;
+                    menuOption["menuOptionType"] = $('#inputMOType').val();
+
+                    menuOption["forecastQuantity"] = Number($('#forecastQuantity').val());
+                    menuOption["actualQuantity"] =
+                        $('#actualQuantity').val()!=''?Number($('#actualQuantity').val()):null;
+
+                    console.log(menuOption);
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        url: "/api/menu_option",
+                        data: JSON.stringify(menuOption),
+                        success: function (data) {
+                            console.log("Success ",data);
+                            $("#contentFragment").load('/api/menus', 'menuId=' + menu.id);
+                        },
+                        error: function (e) {
+                            console.log("ERROR : ", e);
+                        }
+                    });
+                });
+
+            </script>
         </div>
     </div>
 </div>
