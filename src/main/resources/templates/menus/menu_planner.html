@@ -194,7 +194,8 @@
                                                 <input class="js-typeahead-font_v1 form-control" type="search"
                                                        id="recipe"
                                                        autocomplete="off"
-                                                required>
+                                                       required
+                                                placeholder="Escribe el nombre del platillo...">
 
                                             </div>
                                         </div>
@@ -300,7 +301,7 @@
                     var recipe = {};
                     var menu = {};
                     var menuCategory = {};
-                    menuOption["id"] = $('#menuOptionId').val()!=''?Number($('#menuOptionId').val()):null;
+                    menuOption["id"] = $('#menuOptionId').val() != '' ? Number($('#menuOptionId').val()) : null;
                     menu["id"] = Number($('#menuId').val());
                     menuOption["menu"] = menu;
                     recipe["id"] = Number($('#recipeId').val());
@@ -311,7 +312,7 @@
 
                     menuOption["forecastQuantity"] = Number($('#forecastQuantity').val());
                     menuOption["actualQuantity"] =
-                        $('#actualQuantity').val()!=''?Number($('#actualQuantity').val()):null;
+                        $('#actualQuantity').val() != '' ? Number($('#actualQuantity').val()) : null;
 
                     console.log(menuOption);
                     $.ajax({
@@ -320,7 +321,7 @@
                         url: "/api/menu_option",
                         data: JSON.stringify(menuOption),
                         success: function (data) {
-                            console.log("Success ",data);
+                            console.log("Success ", data);
                             $("#contentFragment").load('/api/menus', 'menuId=' + menu.id);
                         },
                         error: function (e) {
