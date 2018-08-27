@@ -12,17 +12,15 @@
 
     <script type="text/javascript" th:inline="none" class="init">
         /*<![CDATA[*/
-        $(document).ready(function () {
+        $(function () {
             $('#recipeTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
                 "pageLength": 5,
                 "order": [[0, 'asc'], [1, 'asc']]
             });
+            $('[data-toggle="tooltip"]').tooltip()
         });
 
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
         /*]]>*/
     </script>
 </head>
@@ -69,7 +67,7 @@
                                         <td th:text="${item.quantity}"></td>
                                         <td th:text="${#temporals.format(item.lastSupplyDate, 'dd/MM/yyyy')}"></td>
                                         <td th:text="${#temporals.format(item.expirationDate, 'dd/MM/yyyy')}"
-                                        th:class="${(item.expirationDate.isBefore(#temporals.createToday()))?'alert alert-danger':'alert alert-success'}"></td>
+                                            th:class="${(item.expirationDate.isBefore(#temporals.createToday()))?'alert alert-danger':'alert alert-success'}"></td>
                                     </tr>
                                     </tbody>
                                 </table>

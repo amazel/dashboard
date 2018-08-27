@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
+    <!--<link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}"  />-->
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../../static/images/apple-touch-icon.png" th:href="@{/images/apple-touch-icon.png}" >
+    <link rel="icon" type="image/png" sizes="32x32" href="../../static/images/favicon-32x32.png" th:href="@{/images/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../static/images/favicon-16x16.png" th:href="@{/images/favicon-16x16.png}">
+    <link rel="manifest" href="../../static/site.webmanifest" th:href="@{/site.webmanifest}">
+    <link rel="mask-icon" href="../../static/safari-pinned-tab.svg" color="#5bbad5" th:href="@{/safari-pinned-tab.svg}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Platillo Godin - Dashboard</title>
     <script
@@ -51,6 +63,17 @@
                 dayNames: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
                 startWeek: 'Monday'
             });
+
+            var menuId = $('#menuId').val();
+            if (menuId != '') {
+                console.log("MENU ID de URL")
+                var year = menuId.substring(0, 4);
+                var month = Number(menuId.substring(4, 6)) - 1;
+                var day = menuId.substring(6);
+                var d = new Date(year, month, day);
+                console.log(d)
+                callMenuApi(d);
+            }
         });
 
         function callMenuApi(date) {
@@ -173,7 +196,7 @@
                             </div>
                             <div class="modal-body">
 
-                                <input type="hidden" name="menuId" id="menuId">
+                                <input type="hidden" name="menuId" id="menuId" th:value="${menuId}">
                                 <input type="hidden" name="categoryId" id="categoryId">
                                 <input type="hidden" name="menuOptionId" id="menuOptionId">
                                 <div class="form-row">
@@ -195,7 +218,7 @@
                                                        id="recipe"
                                                        autocomplete="off"
                                                        required
-                                                placeholder="Escribe el nombre del platillo...">
+                                                       placeholder="Escribe el nombre del platillo...">
 
                                             </div>
                                         </div>

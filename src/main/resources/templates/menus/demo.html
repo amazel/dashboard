@@ -11,7 +11,11 @@
             th:src="@{/js/jquery.typeahead.js}"></script>
     <link rel="stylesheet" type="text/css" href="../../static/css/jquery.typeahead.css"
           th:href="@{/css/jquery.typeahead.css}">
-
+    <script>
+        $(function () {
+            console.log('on Load')
+        });
+    </script>
 </head>
 <body>
 <form id="form-font_v1" name="form-font_v1" action="#">
@@ -45,10 +49,10 @@
             compression: true,
             source: {
 
-                    ajax: {
-                        url: "http://localhost:8080/api/recipes",
-                        dataType: "json"
-                    }
+                ajax: {
+                    url: "http://localhost:8080/api/recipes",
+                    dataType: "json"
+                }
 
             },
             callback: {
@@ -60,7 +64,7 @@
             debug: true
         });
 
-        $('#form-font_v1').submit(function (t) {
+        $('#form-font_v1').on("submit", function (t) {
             event.preventDefault();
             alert($('#myInput').val())
         });

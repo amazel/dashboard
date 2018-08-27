@@ -24,17 +24,15 @@
 
     <script type="text/javascript" th:inline="none" class="init">
         /*<![CDATA[*/
-        $(document).ready(function () {
+        $(function () {
             $('#ingredientTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
                 "pageLength": 5,
                 "order": [[0, 'asc'], [1, 'asc']]
             });
+            $('[data-toggle="tooltip"]').tooltip()
         });
 
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
         /*]]>*/
     </script>
 </head>

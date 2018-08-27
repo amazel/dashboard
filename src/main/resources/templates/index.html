@@ -2,8 +2,118 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <script src="http://www.chartjs.org/samples/latest/utils.js"></script>
+    <script>
+        $(function () {
+            console.log('on Load')
+            getDailySalesData();
+        });
+    </script>
 </head>
 <body>
 <div th:replace="general.html :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div style="width:40%">
+                <canvas id="dailySalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function getDailySalesData() {
+        console.log('loading daily-sales')
+        var colors = [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+        ];
+        $.ajax({
+            // url: '/api/daily-sales',
+            url: 'http://localhost:8080/api/daily-sales',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data.data);
+                console.log(Object.keys(data.data));
+
+                var dataset = [];
+                var i = 0;
+                for (menu in data.data) {
+                    console.log(menu)
+                    console.log(data.data[menu])
+                    dataset.push({
+                        label: menu,
+                        data: data.data[menu],
+                        backgroundColor: colors[i],
+                        borderColor: colors[i],
+                        fill: false
+                    });
+                    i++;
+                }
+                console.log(dataset);
+                chartData = {
+                    labels: data.labels,
+                    datasets: dataset
+                    //     [{
+                    //     label: 'Comidas Totales',
+                    //
+                    //     data: data.units,
+                    //     fill: false
+                    // }]
+                };
+                createDailySalesChart(chartData)
+            }
+        });
+    };
+
+    function createDailySalesChart(chartData) {
+        var ctx = $("#dailySalesChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Comidas por dia'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Dia'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '#Comidas'
+                        }
+                    }]
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

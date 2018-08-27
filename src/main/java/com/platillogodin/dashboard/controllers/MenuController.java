@@ -45,9 +45,9 @@ public class MenuController {
     public String showMenuPlanner(@PathVariable String menuId, Model model) {
         log.info("Show menu planner for day");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String todayString = LocalDate.now().format(formatter);
-        log.info(todayString);
-        model.addAttribute("menu", menuService.findById(todayString));
+        LocalDate localDate = LocalDate.parse(menuId, formatter);
+        model.addAttribute("menu", new Menu()   );
+        model.addAttribute("menuId", menuId);
         model.addAttribute("categories", menuCategoryService.findAll());
         return MENU_URL;
     }
