@@ -44,7 +44,7 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-11">
-                            <h4 th:text="${recipeIngredient.recipe.name+' - Seleccione un ingrediente'}"></h4>
+                            <h5 th:text="${recipeIngredient.recipe.name+' - Seleccione un ingrediente'}"></h5>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         <!--<input type="hidden" th:field="*{recipe}"/>-->
                         <div class="form-row align-items-center">
                             <div class="form-group col-6" >
-                                <label for="inputIngredient">Ingredient</label>
+                                <label for="inputIngredient">Ingrediente</label>
 
                                 <input type="text" class="form-control" id="inputIngredient"
                                        th:field="*{ingredient.name}" th:disabled="disabled"/>
@@ -78,7 +78,7 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group col-3">
+                            <div class="form-group col-6">
                                 <label for="inputQuantity">Cantidad</label>
                                 <div class="input-group mb-2">
                                     <input type="number" id="inputQuantity" class="form-control" th:field="*{quantity}"
@@ -90,12 +90,12 @@
                             </div>
                         </div>
                         <div class="form-row justify-content-end">
-                            <div class="col-1">
+                            <div class="col-md-1 col-4">
                                 <a class="btn btn-secondary" href="#" role="button"
                                    th:href="@{'/recipes/'+${recipeIngredient.recipe.id}+'/show'}">
                                     Cancelar</a>
                             </div>
-                            <div class="col-1">
+                            <div class="col-md-1 col-4">
                                 <button type="submit" class="btn btn-primary">Aceptar</button>
                             </div>
                         </div>

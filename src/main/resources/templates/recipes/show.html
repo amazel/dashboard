@@ -17,11 +17,11 @@
     <div class="card">
         <div class="card-header">
             <div class="row align-items-center">
-                <div class="col-11">
-                    <h4 th:text="${recipe.name}">TACOS DORADOS-E </h4>
+                <div class="col-md-11 col-10">
+                    <h5 th:text="${recipe.name}">TACOS DORADOS-E </h5>
                 </div>
                 <div class="col-1">
-                    <a class="btn btn-default" href="#"
+                    <a href="#"
                        th:href="@{'/recipes/' + ${recipe.id} + '/edit'}">
                         <i class="fas fa-edit  fa-2x"></i>
                     </a>
@@ -30,31 +30,31 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-4 html-editor-align-left">
-                    <h5>Categoria</h5>
+                <div class="col-md-4 col-6">
+                    <h6>Categoria:</h6>
                 </div>
-                <div class="col-2">
+                <div class="col-md-2 col-6">
                     <p th:text="${recipe.recipeCategory.name}">GORDIN-E</p>
                 </div>
-                <div class="col-4 html-editor-align-left">
-                    <h5>Porciones</h5>
+                <div class="col-md-4 col-6">
+                    <h6>Porciones:</h6>
                 </div>
-                <div class="col-2">
+                <div class="col-md-2 col-6">
                     <p th:text="${recipe.servings}">5-E</p>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-4 html-editor-align-left">
-                    <h5>Tiempo de preparacion</h5>
+                <div class="col-md-4 col-6">
+                    <h6>Tiempo de preparación:</h6>
                 </div>
-                <div class="col-2">
+                <div class="col-md-2 col-6">
                     <p th:text="${recipe.prepTime + ' min'} ">5 min-E</p>
                 </div>
-                <div class="col-4 html-editor-align-left">
-                    <h5>Tiempo de coccion</h5>
+                <div class="col-md-4 col-6">
+                    <h6>Tiempo de cocción:</h6>
                 </div>
-                <div class="col-2">
+                <div class="col-md-2 col-6">
                     <p th:text="${recipe.cookTime + ' min'}">5 min-E</p>
                 </div>
             </div>
@@ -63,11 +63,11 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-11">
+                                <div class="col-md-11 col-10">
                                     <h5>Ingredientes</h5>
                                 </div>
-                                <div class="col-1">
-                                    <a class="btn btn-default" href="#" data-toggle="tooltip"
+                                <div class="col-md-1 col-1">
+                                    <a href="#" data-toggle="tooltip"
                                        data-placement="left" title="Agregar ingrediente"
                                        th:href="@{'/recipes/' + ${recipe.id} + '/ingredients/add'}">
                                         <i class="fas fa-plus-circle fa-2x" style="color:green"></i>

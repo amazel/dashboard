@@ -17,5 +17,5 @@ import java.util.Map;
 @NoArgsConstructor
 public class DailySaleCommand {
     List<String> labels = new ArrayList<>();
-    Map<String, List<Integer>> data = new HashMap();
+    Map<String, List<Integer>> data = new HashMap<>();
 }

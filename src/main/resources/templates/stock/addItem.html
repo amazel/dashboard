@@ -47,11 +47,11 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-11">
-                            <h4 th:if="${stockItem.id != null}"
-                                th:text="${stockItem.ingredient.name +' - Añadir inventario'}"></h4>
-                            <h4 th:if="${stockItem.id == null}">
+                            <h5 th:if="${stockItem.id != null}"
+                                th:text="${stockItem.ingredient.name +' - Añadir inventario'}"></h5>
+                            <h5 th:if="${stockItem.id == null}">
                                 Crear inventario inicial
-                            </h4>
+                            </h5>
                         </div>
                     </div>
                 </div>

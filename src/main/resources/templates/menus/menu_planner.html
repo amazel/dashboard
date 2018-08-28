@@ -66,7 +66,7 @@
 
             var menuId = $('#menuId').val();
             if (menuId != '') {
-                console.log("MENU ID de URL")
+                console.log("MENU ID de URL");
                 var year = menuId.substring(0, 4);
                 var month = Number(menuId.substring(4, 6)) - 1;
                 var day = menuId.substring(6);
@@ -79,7 +79,9 @@
         function callMenuApi(date) {
             var month = date.getMonth() + 1;
             var mm = Array(2 - String(month).length + 1).join('0') + month;
-            var menuDate = date.getFullYear() + mm + date.getDate();
+            var day = Array(2 - String(date.getDate()).length + 1).join('0') + date.getDate();
+
+            var menuDate = date.getFullYear() + mm + day;
             $('#collapseExample').collapse('hide');
             $("#contentFragment").load('/api/menus', 'menuId=' + menuDate);
             $("#content").show();
@@ -324,7 +326,7 @@
                     var recipe = {};
                     var menu = {};
                     var menuCategory = {};
-                    menuOption["id"] = $('#menuOptionId').val() != '' ? Number($('#menuOptionId').val()) : null;
+                    menuOption["id"] = $('#menuOptionId').val() !== '' ? Number($('#menuOptionId').val()) : null;
                     menu["id"] = Number($('#menuId').val());
                     menuOption["menu"] = menu;
                     recipe["id"] = Number($('#recipeId').val());
@@ -335,7 +337,7 @@
 
                     menuOption["forecastQuantity"] = Number($('#forecastQuantity').val());
                     menuOption["actualQuantity"] =
-                        $('#actualQuantity').val() != '' ? Number($('#actualQuantity').val()) : null;
+                        $('#actualQuantity').val() !== '' ? Number($('#actualQuantity').val()) : null;
 
                     console.log(menuOption);
                     $.ajax({
