@@ -1,85 +1,22 @@
-CREATE TABLE ingredient(
-    id bigint NOT NULL auto_increment,
-    expiration_time INTEGER,
-    name            VARCHAR(255),
-    uom             VARCHAR(255),
-    category_id bigint,
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE ingredient_category(
-    id bigint NOT NULL auto_increment,
-    description VARCHAR(255),
-    name        VARCHAR(255),
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE menu(
-    id VARCHAR(255) NOT NULL,
-       DATE DATE,
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE menu_category(
-    id bigint NOT NULL auto_increment,
-    description VARCHAR(255),
-    name        VARCHAR(255),
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE menu_option(
-    id bigint NOT NULL auto_increment,
-    actual_quantity   INTEGER,
-    forecast_quantity INTEGER,
-    menu_option_type  VARCHAR(255),
-    menu_id           VARCHAR(255),
-    menu_category_id bigint,
-    recipe_id bigint,
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE recipe(
-    id bigint NOT NULL auto_increment,
-    cook_time INTEGER,
-    image longblob,
-    name      VARCHAR(255),
-    prep_time INTEGER,
-    servings  INTEGER,
-    recipe_category_id bigint,
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE recipe_category(
-    id bigint NOT NULL auto_increment,
-    description VARCHAR(255),
-    name        VARCHAR(255),
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE recipe_ingredient(
-    id bigint NOT NULL auto_increment,
-    quantity INTEGER,
-    ingredient_id bigint,
-    recipe_id bigint,
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-CREATE TABLE stock(
-    id bigint NOT NULL auto_increment,
-    expiration_date  DATE,
-    last_supply_date DATE,
-    quantity         INTEGER,
-    ingredient_id bigint,
-    PRIMARY KEY (id)
-  )
-  engine=InnoDB;
-ALTER TABLE recipe_ingredient ADD CONSTRAINT UK58ocuab26seiw3rx6gd3eh4dn UNIQUE (recipe_id, ingredient_id);
-ALTER TABLE stock ADD CONSTRAINT UK45l03mb9d2qaymgdrub5m3rd4 UNIQUE (ingredient_id);
-ALTER TABLE ingredient ADD CONSTRAINT FKj4w6uwjhbjuuhprwsv5hvayyi FOREIGN KEY (category_id) REFERENCES ingredient_category (id);
-ALTER TABLE menu_option ADD CONSTRAINT FKlr6b5i0f2uomfr8u2q3tt2q9f FOREIGN KEY (menu_id) REFERENCES menu (id);
-ALTER TABLE menu_option ADD CONSTRAINT FK4jwofxyql6mo41yy0w0v8qov3 FOREIGN KEY (menu_category_id) REFERENCES menu_category (id);
-ALTER TABLE menu_option ADD CONSTRAINT FK6w1dujuqa0sa4r2mmdqepkt0b FOREIGN KEY (recipe_id) REFERENCES recipe (id);
-ALTER TABLE recipe ADD CONSTRAINT FKhvgma14wtuckyo4hriw9dn9v6 FOREIGN KEY (recipe_category_id) REFERENCES recipe_category (id);
-ALTER TABLE recipe_ingredient ADD CONSTRAINT FK9b3oxoskt0chwqxge0cnlkc29 FOREIGN KEY (ingredient_id) REFERENCES ingredient (id);
-ALTER TABLE recipe_ingredient ADD CONSTRAINT FKgu1oxq7mbcgkx5dah6o8geirh FOREIGN KEY (recipe_id) REFERENCES recipe (id);
-ALTER TABLE stock ADD CONSTRAINT FK43aicdsfkxdb5nwihpe43bysx FOREIGN KEY (ingredient_id) REFERENCES ingredient (id);
+
+create table ingredient (id bigint not null auto_increment, expiration_time integer, name varchar(255), uom varchar(255), category_id bigint, primary key (id)) engine=InnoDB
+create table ingredient_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
+create table menu (id varchar(255) not null, date date, primary key (id)) engine=InnoDB
+create table menu_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
+create table menu_option (id bigint not null auto_increment, actual_quantity integer, forecast_quantity integer, menu_option_type varchar(255), menu_id varchar(255), menu_category_id bigint, recipe_id bigint, primary key (id)) engine=InnoDB
+create table recipe (id bigint not null auto_increment, cook_time integer, image longblob, name varchar(255), prep_time integer, servings integer, recipe_category_id bigint, primary key (id)) engine=InnoDB
+create table recipe_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
+create table recipe_ingredient (id bigint not null auto_increment, quantity integer, ingredient_id bigint, recipe_id bigint, primary key (id)) engine=InnoDB
+create table stock (id bigint not null auto_increment, expiration_date date, last_supply_date date, quantity integer, ingredient_id bigint, primary key (id)) engine=InnoDB
+create table user (id bigint not null auto_increment, enabled bit not null, password varchar(255), role varchar(255), username varchar(255) not null, primary key (id)) engine=InnoDB
+alter table recipe_ingredient add constraint UK58ocuab26seiw3rx6gd3eh4dn unique (recipe_id, ingredient_id)
+alter table stock add constraint UK45l03mb9d2qaymgdrub5m3rd4 unique (ingredient_id)
+alter table user add constraint UK_sb8bbouer5wak8vyiiy4pf2bx unique (username)
+alter table ingredient add constraint FKj4w6uwjhbjuuhprwsv5hvayyi foreign key (category_id) references ingredient_category (id)
+alter table menu_option add constraint FKlr6b5i0f2uomfr8u2q3tt2q9f foreign key (menu_id) references menu (id)
+alter table menu_option add constraint FK4jwofxyql6mo41yy0w0v8qov3 foreign key (menu_category_id) references menu_category (id)
+alter table menu_option add constraint FK6w1dujuqa0sa4r2mmdqepkt0b foreign key (recipe_id) references recipe (id)
+alter table recipe add constraint FKhvgma14wtuckyo4hriw9dn9v6 foreign key (recipe_category_id) references recipe_category (id)
+alter table recipe_ingredient add constraint FK9b3oxoskt0chwqxge0cnlkc29 foreign key (ingredient_id) references ingredient (id)
+alter table recipe_ingredient add constraint FKgu1oxq7mbcgkx5dah6o8geirh foreign key (recipe_id) references recipe (id)
+alter table stock add constraint FK43aicdsfkxdb5nwihpe43bysx foreign key (ingredient_id) references ingredient (id)

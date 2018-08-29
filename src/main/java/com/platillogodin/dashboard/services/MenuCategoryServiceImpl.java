@@ -1,6 +1,7 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.MenuCategory;
+import com.platillogodin.dashboard.exceptions.ExistingReferencesException;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.MenuCategoryRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class MenuCategoryServiceImpl implements MenuCategoryService {
     @Override
     public MenuCategory findById(Long id) {
         return menuCategoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("La categoria de menu " + id + " no existe"));
+                .orElseThrow(() -> new NotFoundException("La categoría de menu " + id + " no existe"));
     }
 
     @Override
@@ -38,7 +39,6 @@ public class MenuCategoryServiceImpl implements MenuCategoryService {
 
     @Override
     public void delete(MenuCategory menuCategory) {
-
         menuCategoryRepository.delete(menuCategory);
     }
 }

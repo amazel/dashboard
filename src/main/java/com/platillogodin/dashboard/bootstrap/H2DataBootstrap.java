@@ -2,6 +2,7 @@ package com.platillogodin.dashboard.bootstrap;
 
 import com.platillogodin.dashboard.domain.*;
 import com.platillogodin.dashboard.repositories.*;
+import com.platillogodin.dashboard.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -21,19 +22,21 @@ import java.util.List;
 @Profile("default")
 public class H2DataBootstrap implements CommandLineRunner {
 
-    private IngredientRepository ingredientRepository;
-    private RecipeRepository recipeRepository;
-    private RecipeCategoryRepository recipeCategoryRepository;
-    private IngredientCategoryRepository ingredientCategoryRepository;
-    private StockRepository stockRepository;
+    private final IngredientRepository ingredientRepository;
+    private final RecipeRepository recipeRepository;
+    private final RecipeCategoryRepository recipeCategoryRepository;
+    private final IngredientCategoryRepository ingredientCategoryRepository;
+    private final StockRepository stockRepository;
     private final MenuCategoryRepository menuCategoryRepository;
     private final MenuRepository menuRepository;
+    private final UserService userService;
+
 
     public H2DataBootstrap(IngredientRepository ingredientRepository,
                            RecipeRepository recipeRepository,
                            RecipeCategoryRepository recipeCategoryRepository,
                            IngredientCategoryRepository ingredientCategoryRepository,
-                           StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository, MenuRepository menuRepository) {
+                           StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository, MenuRepository menuRepository, UserService userService) {
         this.ingredientRepository = ingredientRepository;
         this.recipeRepository = recipeRepository;
         this.recipeCategoryRepository = recipeCategoryRepository;
@@ -41,6 +44,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         this.stockRepository = stockRepository;
         this.menuCategoryRepository = menuCategoryRepository;
         this.menuRepository = menuRepository;
+        this.userService = userService;
     }
 
     private List<RecipeCategory> recipeCategories = new ArrayList<>();
@@ -52,9 +56,23 @@ public class H2DataBootstrap implements CommandLineRunner {
     @Override
     public void run(String... args) {
         log.info("Loading bootstrap data");
+        loadDefaultUsers();
         loadCategories();
         loadData();
 
+    }
+
+    private void loadDefaultUsers() {
+        User user1 = new User();
+        user1.setUsername("hugo.lezama");
+        user1.setRole(UserRole.ROLE_USER);
+
+        User user2 = new User();
+        user2.setUsername("cesar.lezama");
+        user2.setRole(UserRole.ROLE_ADMIN);
+
+        userService.saveUser(user1);
+        userService.saveUser(user2);
     }
 
     private void loadCategories() {
@@ -74,7 +92,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         ingredientCategories.add(ingredientCategoryRepository.save(
                 new IngredientCategory(null, "Verduras", "")));
         ingredientCategories.add(ingredientCategoryRepository.save(
-                new IngredientCategory(null, "Lacteos", "")));
+                new IngredientCategory(null, "Lácteos", "")));
         ingredientCategories.add(ingredientCategoryRepository.save(
                 new IngredientCategory(null, "Res", "Carne de res y derivados")));
         ingredientCategories.add(ingredientCategoryRepository.save(
@@ -92,11 +110,11 @@ public class H2DataBootstrap implements CommandLineRunner {
         ));
 
         menuCategories.add(menuCategoryRepository.save(
-                new MenuCategory(null, "Comun", "Menus comunes")
+                new MenuCategory(null, "Común", "Menus comunes")
         ));
     }
 
-    void loadData() {
+    private void loadData() {
         Ingredient pasta = ingredientRepository.save(
                 new Ingredient(null, "Pasta fideo", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
         Ingredient jitomate = ingredientRepository.save(

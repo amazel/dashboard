@@ -1,10 +1,13 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="headerfiles">
     <!--<link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}"  />-->
-    <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png" th:href="@{/images/apple-touch-icon.png}" >
-    <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon-32x32.png" th:href="@{/images/favicon-32x32.png}">
-    <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon-16x16.png" th:href="@{/images/favicon-16x16.png}">
+    <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png"
+          th:href="@{/images/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon-32x32.png"
+          th:href="@{/images/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon-16x16.png"
+          th:href="@{/images/favicon-16x16.png}">
     <link rel="manifest" href="../static/site.webmanifest" th:href="@{/site.webmanifest}">
     <link rel="mask-icon" href="../static/safari-pinned-tab.svg" color="#5bbad5" th:href="@{/safari-pinned-tab.svg}">
     <meta charset="UTF-8"/>
@@ -29,7 +32,7 @@
           integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 
     <script>
-        $(document).on('click',function(){
+        $(document).on('click', function () {
             $('#navbarCollapse').collapse('hide');
         })
     </script>
@@ -39,14 +42,17 @@
 <div th:fragment="navbar">
 
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark d-flex justify-content-between">
-        <a class="navbar-brand" href="#" th:href="@{'/'}">Dashboard</a>
+        <a class="navbar-brand" href="#" th:href="@{'/'}">
+            <img src="../static/images/apple-touch-icon.png" th:src="@{/images/apple-touch-icon.png}"
+                 style="background-color: white; border-radius: 5px;"
+                 width="35" height="35"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav  nav-justified w-100">
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link" href="#" th:href="@{'/menus'}">Planear Menus</a>
                 </li>
 
@@ -82,6 +88,20 @@
                         <a class="dropdown-item" href="#" th:href="@{'/categories/recipes'}">Recetas</a>
                         <a class="dropdown-item" href="#" th:href="@{'/categories/ingredients'}">Ingredientes</a>
                         <a class="dropdown-item" href="#" th:href="@{'/categories/menus'}">Menus</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i> <span th:text="${userName}">hugo</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
+                        <a class="dropdown-item" href="#" th:href="@{'/users/profile/'+${userName}}">Mi
+                            Perfil</a>
+                        <a class="dropdown-item" href="#" th:href="@{'/users'}"  sec:authorize="hasRole('ADMIN')">Gestionar usuarios</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" th:href="@{'/logout'}">Salir</a>
                     </div>
                 </li>
             </ul>

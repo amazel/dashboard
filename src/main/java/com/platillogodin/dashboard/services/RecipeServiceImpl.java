@@ -1,7 +1,6 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.Recipe;
-import com.platillogodin.dashboard.domain.RecipeCategory;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe findById(Long id) {
         return recipeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("La receta "+id+" no existe"));
+                .orElseThrow(() -> new NotFoundException("La receta " + id + " no existe"));
     }
 
     @Override
@@ -42,8 +41,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        recipeRepository.deleteById(id);
+    public void delete(Recipe recipe) {
+        recipeRepository.delete(recipe);
     }
 
     @Override

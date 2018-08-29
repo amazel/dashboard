@@ -31,7 +31,7 @@ public class RecipeCategoryServiceImpl implements RecipeCategoryService {
     @Override
     public RecipeCategory findById(Long id) {
         return recipeCategoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("La categoria de receta "+id+" no existe"));
+                .orElseThrow(() -> new NotFoundException("La categoría de receta "+id+" no existe"));
     }
 
     @Override

@@ -32,7 +32,7 @@ public class IngredientCategoryServiceImpl implements IngredientCategoryService 
     @Override
     public IngredientCategory findById(Long id) {
         return ingredientCategoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("La categoria de ingrediente " + id + " no existe"));
+                .orElseThrow(() -> new NotFoundException("La categoría de ingrediente " + id + " no existe"));
     }
 
     @Override

@@ -6,12 +6,11 @@ import com.platillogodin.dashboard.services.RecipeCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -28,8 +27,8 @@ public class RecipeCategoryController {
         this.recipeCategoryService = recipeCategoryService;
     }
 
-    public static final String FORM_URL = "categories/recipes/recipe_category_form";
-    public static final String LIST_URL = "categories/recipes/list";
+    private static final String FORM_URL = "categories/recipes/recipe_category_form";
+    private static final String LIST_URL = "categories/recipes/list";
 
     @GetMapping("/categories/recipes")
     public String listRecipeCategories(Model model) {
@@ -52,23 +51,23 @@ public class RecipeCategoryController {
     }
 
     @GetMapping("/categories/recipes/{id}/delete")
-    public ModelAndView deleteCategoryRecipe(@PathVariable Long id, Model model) {
+    public String deleteCategoryRecipe(@PathVariable Long id, RedirectAttributes ra) {
         RecipeCategory rc = recipeCategoryService.findById(id);
         try {
             recipeCategoryService.delete(rc);
+            ra.addFlashAttribute("deleteMessage", "La categoría " + rc.getName() + " fue eliminada correctamente");
         } catch (ExistingReferencesException ere) {
-            model.addAttribute("deleteError",
+            ra.addFlashAttribute("deleteError",
                     "Error al eliminar " + rc.getName() + ", existen recetas asociadas a esta categoría.");
-            return new ModelAndView("forward:/categories/recipes", model.asMap());
+
         }
-        model.addAttribute("deleteMessage", "La categoria " + rc.getName() + " fue eliminada correctamente");
-        return new ModelAndView("forward:/categories/recipes", model.asMap());
+        return "redirect:/categories/recipes";
     }
 
     @PostMapping("/categories/recipe")
-    public String saveOrUpdateRecipeCategory(@ModelAttribute("recipeCategory") RecipeCategory recipeCategory, BindingResult bindingResult) {
+    public String saveOrUpdateRecipeCategory(@ModelAttribute("recipeCategory") RecipeCategory recipeCategory) {
         log.info("Saving recipeCategory");
-        RecipeCategory saved = recipeCategoryService.saveRecipeCategory(recipeCategory);
+        recipeCategoryService.saveRecipeCategory(recipeCategory);
         return "redirect:/categories/recipes/";
     }
 }

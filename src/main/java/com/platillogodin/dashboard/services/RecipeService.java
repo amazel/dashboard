@@ -17,7 +17,7 @@ public interface RecipeService {
 
     Recipe saveRecipe(Recipe recipe);
 
-    void deleteById(Long id);
+    void delete(Recipe recipe);
 
     Map<String, List<Recipe>> findAllByCategory();
 }

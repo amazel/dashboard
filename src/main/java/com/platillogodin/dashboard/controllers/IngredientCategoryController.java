@@ -6,12 +6,11 @@ import com.platillogodin.dashboard.services.IngredientCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -22,8 +21,8 @@ import java.util.List;
 @Controller
 public class IngredientCategoryController {
 
-    public static final String FORM_URL = "categories/ingredients/ingredient_category_form";
-    public static final String LIST_URL = "categories/ingredients/list";
+    private static final String FORM_URL = "categories/ingredients/ingredient_category_form";
+    private static final String LIST_URL = "categories/ingredients/list";
 
     private final IngredientCategoryService ingredientCategoryService;
 
@@ -52,24 +51,24 @@ public class IngredientCategoryController {
     }
 
     @GetMapping("/categories/ingredients/{id}/delete")
-    public ModelAndView deleteIngredientCategory(@PathVariable Long id, Model model) {
-        IngredientCategory rc = ingredientCategoryService.findById(id);
+    public String deleteIngredientCategory(@PathVariable Long id, RedirectAttributes ra) {
+        IngredientCategory cat = ingredientCategoryService.findById(id);
         try {
-            ingredientCategoryService.delete(rc);
+            ingredientCategoryService.delete(cat);
+            ra.addFlashAttribute("deleteMessage", "La categoría " + cat.getName() + " fue eliminada correctamente");
         } catch (ExistingReferencesException ere) {
 
-            model.addAttribute("deleteError",
-                    "Error al eliminar " + rc.getName() + ", existen ingredientes asociados a esta categoría.");
-            return new ModelAndView("forward:/categories/ingredients", model.asMap());
+            ra.addFlashAttribute("deleteError",
+                    "Error al eliminar " + cat.getName() + ", existen ingredientes asociados a esta categoría.");
         }
-        model.addAttribute("deleteMessage", "La categoria " + rc.getName() + " fue eliminada correctamente");
-        return new ModelAndView("forward:/categories/ingredients", model.asMap());
+
+        return "redirect:/categories/ingredients";
     }
 
     @PostMapping("/categories/ingredient")
-    public String saveOrUpdateIngredientCategory(@ModelAttribute("ingredientCategory") IngredientCategory ingredientCategory, BindingResult bindingResult) {
+    public String saveOrUpdateIngredientCategory(@ModelAttribute("ingredientCategory") IngredientCategory ingredientCategory) {
         log.info("Saving ingredientCategory");
-        IngredientCategory saved = ingredientCategoryService.saveIngredientCategory(ingredientCategory);
+        ingredientCategoryService.saveIngredientCategory(ingredientCategory);
         return "redirect:/categories/ingredients/";
     }
 }

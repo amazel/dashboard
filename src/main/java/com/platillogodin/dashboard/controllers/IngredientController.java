@@ -1,7 +1,6 @@
 package com.platillogodin.dashboard.controllers;
 
 import com.platillogodin.dashboard.domain.Ingredient;
-import com.platillogodin.dashboard.exceptions.ExistingReferencesException;
 import com.platillogodin.dashboard.services.IngredientCategoryService;
 import com.platillogodin.dashboard.services.IngredientService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -63,18 +62,17 @@ public class IngredientController {
     }
 
     @GetMapping("/ingredients/{id}/delete")
-    public ModelAndView deleteIngredient(@PathVariable Long id, Model model) {
+    public String deleteIngredient(@PathVariable Long id, Model model, RedirectAttributes ra) {
         log.info("Deleting ingredient");
         Ingredient ingredient = ingredientService.findById(id);
         try {
             ingredientService.delete(ingredient);
+            ra.addFlashAttribute("deleteMessage", "El ingrediente " + ingredient.getName() + " fue eliminado correctamente");
         } catch (DataIntegrityViolationException ere) {
-            model.addAttribute("deleteError",
+            ra.addFlashAttribute("deleteError",
                     "Error al eliminar " + ingredient.getName() + ", existen recetas que contienen este ingrediente.");
-            return new ModelAndView("forward:/ingredients", model.asMap());
         }
-        model.addAttribute("deleteMessage", "El ingrediente " + ingredient.getName() + " fue eliminado correctamente");
-        return new ModelAndView("forward:/ingredients", model.asMap());
+        return "redirect:/ingredients";
     }
 
     @PostMapping(value = "ingredient")

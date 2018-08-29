@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+
+    <script>
+        $(function() {
+            $("#inputUserName").on({
+                keydown: function (e) {
+                    console.log(e.which)
+                    if (e.which === 32)
+                        return false;
+                },
+                change: function () {
+                    // Regex-remove all spaces in the final value
+                    this.value = this.value.replace(/\s/g, "");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div th:replace="general.html :: navbar"></div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h4 th:if="${user.id} == null">Nuevo Usuario</h4>
+            <h4 th:if="${user.id} != null">Editar Usuario</h4>
+        </div>
+        <div class="card-body">
+            <form th:object="${user}" th:action="@{/users}" method="post">
+
+                <input type="hidden" th:field="*{id}"/>
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-12">
+                        <label for="inputUserName">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="inputUserName"
+                               th:field="*{username}" th:required="required">
+                    </div>
+                    <div class="form-group col-md-6 col-12">
+                        <label for="selectRol">Rol</label>
+                        <select id="selectRol" class="form-control" th:field="*{role}"
+                                th:required="required">
+                            <option th:each="role : ${T(com.platillogodin.dashboard.domain.UserRole).values()}"
+                                    th:value="${role}"
+                                    th:text="${role.name()}">
+                            </option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-row justify-content-end">
+                    <div class="col-md-1 col-4">
+                        <a class="btn btn-secondary" href="#" role="button"
+                           th:href="@{'/users'}">
+                            Cancelar</a>
+                    </div>
+                    <div class="col-md-1 col">
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

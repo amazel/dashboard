@@ -2,24 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
     <script src="http://www.chartjs.org/samples/latest/utils.js"></script>
-    <script>
+    <script type="text/javascript" th:inline="none" class="init">
+        /*<![CDATA[*/
         $(function () {
             console.log('on Load')
             getDailySalesData();
         });
+        /*]]>*/
     </script>
 </head>
 <body>
 <div th:replace="general.html :: navbar"></div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col">
-            <div style="width:40%">
+        <div class="col-md-6 col-12">
+            <div>
                 <canvas id="dailySalesChart"></canvas>
             </div>
         </div>
@@ -39,7 +39,7 @@
         ];
         $.ajax({
             // url: '/api/daily-sales',
-            url: 'http://localhost:8080/api/daily-sales',
+            url: '/api/daily-sales',
             method: 'GET',
             dataType: 'json',
             success: function (data) {
