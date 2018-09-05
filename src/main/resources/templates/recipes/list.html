@@ -3,11 +3,11 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <!-- Custom styles for this template -->
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" charset="utf8"
-            src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
     <script type="text/javascript" th:inline="none" class="init">
         /*<![CDATA[*/
@@ -56,7 +56,7 @@
                                 <div th:text="${deleteMessage}">...</div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table" id="recipeTable">
+                                <table class="table table-sm" id="recipeTable">
                                     <thead>
                                     <tr>
                                         <th>Receta</th>

@@ -2,6 +2,7 @@ package com.platillogodin.dashboard.bootstrap;
 
 import com.platillogodin.dashboard.domain.*;
 import com.platillogodin.dashboard.repositories.*;
+import com.platillogodin.dashboard.services.StockService;
 import com.platillogodin.dashboard.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,25 +28,28 @@ public class H2DataBootstrap implements CommandLineRunner {
     private final RecipeRepository recipeRepository;
     private final RecipeCategoryRepository recipeCategoryRepository;
     private final IngredientCategoryRepository ingredientCategoryRepository;
-    private final StockRepository stockRepository;
     private final MenuCategoryRepository menuCategoryRepository;
     private final MenuRepository menuRepository;
     private final UserService userService;
+    private final StockService stockService;
 
 
     public H2DataBootstrap(IngredientRepository ingredientRepository,
                            RecipeRepository recipeRepository,
                            RecipeCategoryRepository recipeCategoryRepository,
                            IngredientCategoryRepository ingredientCategoryRepository,
-                           StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository, MenuRepository menuRepository, UserService userService) {
+                           MenuCategoryRepository menuCategoryRepository,
+                           MenuRepository menuRepository,
+                           UserService userService,
+                           StockService stockService) {
         this.ingredientRepository = ingredientRepository;
         this.recipeRepository = recipeRepository;
         this.recipeCategoryRepository = recipeCategoryRepository;
         this.ingredientCategoryRepository = ingredientCategoryRepository;
-        this.stockRepository = stockRepository;
         this.menuCategoryRepository = menuCategoryRepository;
         this.menuRepository = menuRepository;
         this.userService = userService;
+        this.stockService = stockService;
     }
 
     private List<RecipeCategory> recipeCategories = new ArrayList<>();
@@ -132,14 +137,37 @@ public class H2DataBootstrap implements CommandLineRunner {
         Ingredient arroz = ingredientRepository.save(
                 new Ingredient(null, "Arroz", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
 
-        stockRepository.save(
-                new Stock(null, pasta, 5000, LocalDate.now(), LocalDate.now().plusDays(pasta.getExpirationTime())));
-        stockRepository.save(
-                new Stock(null, jitomate, 10000, LocalDate.now(), LocalDate.now().plusDays(jitomate.getExpirationTime())));
-        stockRepository.save(
-                new Stock(null, caldo_de_pollo, 500, LocalDate.now(),
-                        LocalDate.now().plusDays(caldo_de_pollo.getExpirationTime())));
+        stockService.saveStock(new Stock(jitomate));
+        stockService.saveStock(new Stock(cebolla));
+        stockService.saveStock(new Stock(agua));
+        stockService.saveStock(new Stock(mango));
+        stockService.saveStock(new Stock(caldo_de_pollo));
+        stockService.saveStock(new Stock(pechugaPollo));
+        stockService.saveStock(new Stock(arroz));
 
+        Stock saved = stockService.saveStock(new Stock(pasta));
+
+        StockEntry entry1_1 = new StockEntry();
+        entry1_1.setCurrentQty(0);
+        entry1_1.setOriginalQty(500);
+        entry1_1.setPrice(new BigDecimal("150.60"));
+        entry1_1.setSupplyDate(LocalDate.now().minusDays(15));
+
+        StockEntry entry1_2 = new StockEntry();
+        entry1_2.setCurrentQty(100);
+        entry1_2.setOriginalQty(1000);
+        entry1_2.setPrice(new BigDecimal("280.90"));
+        entry1_2.setSupplyDate(LocalDate.now().minusDays(5));
+
+        StockEntry entry1_3 = new StockEntry();
+        entry1_3.setCurrentQty(800);
+        entry1_3.setOriginalQty(800);
+        entry1_3.setPrice(new BigDecimal("237.50"));
+        entry1_3.setSupplyDate(LocalDate.now());
+
+        stockService.saveStockEntry(saved,entry1_1);
+        stockService.saveStockEntry(saved,entry1_2);
+        stockService.saveStockEntry(saved,entry1_3);
 
         Recipe polloCacahuate = new Recipe();
         polloCacahuate.setCookTime(15);

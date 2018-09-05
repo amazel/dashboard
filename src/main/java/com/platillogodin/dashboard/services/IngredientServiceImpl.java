@@ -1,6 +1,7 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.Ingredient;
+import com.platillogodin.dashboard.domain.Stock;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.IngredientRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,12 @@ import java.util.List;
 public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
+    private final StockService stockService;
 
-    public IngredientServiceImpl(IngredientRepository ingredientRepository) {
+
+    public IngredientServiceImpl(IngredientRepository ingredientRepository, StockService stockService) {
         this.ingredientRepository = ingredientRepository;
+        this.stockService = stockService;
     }
 
     @Override
@@ -34,7 +38,11 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient saveIngredient(Ingredient ingredient) {
-        return ingredientRepository.save(ingredient);
+        Ingredient saved = ingredientRepository.save(ingredient);
+        Stock stock = new Stock();
+        stock.setIngredient(saved);
+        stockService.saveStock(stock);
+        return saved;
     }
 
     @Override

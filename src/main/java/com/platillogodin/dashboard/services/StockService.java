@@ -1,6 +1,7 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.Stock;
+import com.platillogodin.dashboard.domain.StockEntry;
 
 import java.util.List;
 
@@ -9,8 +10,11 @@ import java.util.List;
  */
 public interface StockService {
     Stock findById(Long id);
+    Stock findByIdFiltered(Long id);
 
-    void saveStockItem(Stock stock);
+    Stock saveStock(Stock stock);
 
     List<Stock> findAll();
+
+    Stock saveStockEntry(Stock stock, StockEntry entry);
 }

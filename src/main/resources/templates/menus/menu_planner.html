@@ -1,47 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-    <!--<link rel="icon" type="image/x-icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}"  />-->
-
-    <link rel="apple-touch-icon" sizes="180x180" href="../../static/images/apple-touch-icon.png" th:href="@{/images/apple-touch-icon.png}" >
-    <link rel="icon" type="image/png" sizes="32x32" href="../../static/images/favicon-32x32.png" th:href="@{/images/favicon-32x32.png}">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../static/images/favicon-16x16.png" th:href="@{/images/favicon-16x16.png}">
-    <link rel="manifest" href="../../static/site.webmanifest" th:href="@{/site.webmanifest}">
-    <link rel="mask-icon" href="../../static/safari-pinned-tab.svg" color="#5bbad5" th:href="@{/safari-pinned-tab.svg}">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Platillo Godin - Dashboard</title>
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
     <!-- Custom styles for this template -->
-    <link href="../../static/css/navbar.css" th:href="@{/css/navbar.css}" rel="stylesheet">
+    <script type="text/javascript"
+            src="../../static/plugins/dncalendar/js/dncalendar.min.js"
+            th:src="@{/plugins/dncalendar/js/dncalendar.min.js}"></script>
+    <!--<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">-->
+    <link rel="stylesheet" type="text/css"
+          href="../../static/plugins/dncalendar/css/dncalendar-skin.min.css"
+          th:href="@{/plugins/dncalendar/css/dncalendar-skin.min.css}">
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <script type="text/javascript"
+            src="../../static/plugins/jquery-typeahead/jquery.typeahead.js"
+            th:src="@{/plugins/jquery-typeahead/jquery.typeahead.js}"></script>
 
-    <script type="text/javascript" src="../../static/js/dncalendar.min.js" th:src="@{/js/dncalendar.js}"></script>
-    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="../../static/css/dncalendar-skin.min.css"
-          th:href="@{/css/dncalendar-skin.css}">
-
-    <script type="text/javascript" src="../../static/js/jquery.typeahead.js"
-            th:src="@{/js/jquery.typeahead.js}"></script>
-    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.typeahead.css"
-          th:href="@{/css/jquery.typeahead.css}">
+    <link rel="stylesheet" type="text/css"
+          href="../../static/plugins/jquery-typeahead/jquery.typeahead.css"
+          th:href="@{/plugins/jquery-typeahead/jquery.typeahead.css}">
 
     <script type="text/javascript">
         $(function () {
@@ -143,7 +120,7 @@
                         <div class="card-body">
 
                             <div th:each="option : ${menu.options.?[menuCategory.id == __${cat.id}__]}">
-
+                                <!--/*@thymesVar id="option" type="com.platillogodin.dashboard.domain.MenuOption"*/-->
                                 <div class="table-responsive">
                                     <table class="table">
 

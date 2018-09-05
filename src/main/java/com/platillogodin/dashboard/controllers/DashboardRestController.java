@@ -1,15 +1,15 @@
 package com.platillogodin.dashboard.controllers;
 
 import com.platillogodin.dashboard.commands.DailySaleCommand;
+import com.platillogodin.dashboard.services.DashboardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Hugo Lezama on August - 2018
@@ -18,6 +18,12 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*")
 public class DashboardRestController {
+
+    private final DashboardService dashboardService;
+
+    public DashboardRestController(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
+    }
 
     @GetMapping("/api/daily-sales")
     public ResponseEntity<?> getDailySales() {
@@ -33,5 +39,11 @@ public class DashboardRestController {
         dailySales.getData().put("Total", Arrays.asList(45, 44, 50, 57, 44));
 
         return ResponseEntity.ok(dailySales);
+    }
+
+    @GetMapping("/api/ingredient-forecast")
+    public String getIngredientForecast(Model model) {
+        model.addAttribute("ingredientForecastList", dashboardService.getIngredientForecast());
+        return "menus/menu_planner :: ingredientForecastFragment";
     }
 }

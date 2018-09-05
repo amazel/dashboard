@@ -29,7 +29,7 @@ public class Recipe {
     private Integer cookTime;
     private Integer servings;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<RecipeIngredient> ingredientList = new ArrayList<>();
 
     @OneToOne

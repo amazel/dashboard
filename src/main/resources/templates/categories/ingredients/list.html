@@ -2,13 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+
     <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+          href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
     <script type="text/javascript" th:inline="none" class="init">
         /*<![CDATA[*/
         $(function () {
@@ -50,6 +53,8 @@
                     <div class="row">
                         <div class="col">
 
+                            <!--/*@thymesVar id="deleteError" type="java.lang.String"*/-->
+                            <!--/*@thymesVar id="deleteMessage" type="java.lang.String"*/-->
                             <div th:if="${deleteError}" class="alert alert-danger" id="deleteError">
                                 <div th:text="${deleteError}">...</div>
                             </div>
@@ -58,7 +63,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table" id="ingredientTable">
+                                <table class="table table-sm" id="ingredientTable">
                                     <thead>
                                     <tr>
                                         <th>Categoria</th>

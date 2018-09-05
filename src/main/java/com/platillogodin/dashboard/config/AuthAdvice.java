@@ -14,7 +14,6 @@ import java.security.Principal;
 public class AuthAdvice {
     @ModelAttribute("userName")
     public String populateUserName(Principal principal) {
-        log.info("populatingUserName");
         if (principal != null && principal.getName() != null) {
             return principal.getName();
         }

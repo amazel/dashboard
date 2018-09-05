@@ -1,6 +1,7 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.Stock;
+import com.platillogodin.dashboard.domain.StockEntry;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.StockRepository;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,28 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public void saveStockItem(Stock stock) {
-        stock.setExpirationDate(stock.getLastSupplyDate().plusDays(stock.getIngredient().getExpirationTime()));
-        stockRepository.save(stock);
+    public Stock findByIdFiltered(Long id) {
+        return stockRepository.findByIdFiltered(id)
+                .orElse(stockRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("No hay registro para este ingrediente")));
+    }
+
+    @Override
+    public Stock saveStock(Stock stock) {
+        return stockRepository.save(stock);
+    }
+
+    public Stock saveStockEntry(Stock stock, StockEntry entry) {
+        if (entry.getId() == null) {
+            entry.setOriginalQty(entry.getCurrentQty());
+        }
+        entry.setExpirationDate(entry.getSupplyDate().plusDays(stock.getIngredient().getExpirationTime()));
+        stock.setTotal(stock.getTotal() + entry.getCurrentQty());
+        if (stock.getLastSupplyDate() == null || entry.getSupplyDate().isAfter(stock.getLastSupplyDate())) {
+            stock.setLastSupplyDate(entry.getSupplyDate());
+        }
+        stock.addStockEntry(entry);
+        return stockRepository.save(stock);
     }
 
     @Override

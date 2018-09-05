@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link href="../../static/css/navbar.css"
+          th:href="@{/css/navbar.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+          crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/plugins/jquery-ui/jquery-ui.min.css" th:href="@{/plugins/jquery-ui/jquery-ui.min.css}"
+          rel="stylesheet">
+    <script src="../../static/plugins/jquery-ui/jquery-ui.min.js"
+            th:src="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
+    <script src="../../static/plugins/jquery-ui/datepicker-es.js"
+            th:src="@{/plugins/jquery-ui/datepicker-es.js}"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+            console.log($.datepicker.iso8601Week( new Date()));
+        })
+    </script>
+</head>
+<body>
+<div th:replace="general.html :: navbar"></div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col-md-11 col-10">
+                    <h5 th:text="${stockItem.ingredient.name}+' - Inventario'">PAPAYA</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4 col-6">
+                    <h6>Existencia total:</h6>
+                </div>
+                <div class="col-md-2 col-6">
+                    <p
+                            th:text="${#numbers.formatInteger(stockItem.total,1,'COMMA')}+' '+${stockItem.ingredient.uom.name().toLowerCase()}">23434</p>
+                </div>
+                <div class="col-md-4 col-6">
+                    <h6>Ultima fecha de compra:</h6>
+                </div>
+                <div class="col-md-2 col-6">
+                    <p th:text="${#temporals.format(stockItem.lastSupplyDate, 'dd/MM/yyyy')}">12/12/2012</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-11">
+                                    <h6>Registros <a
+                                            th:href="@{/stock/__${stockItem.id}__/show(showAll=__${(showAll!=null && showAll.equals('true'))?'false':'true'}__)}"
+                                            th:text="${(showAll!=null && showAll.equals('true'))?'(Mostrar solo actuales)':'(Mostrar todos)'}"
+                                            th:if="${stockItem.stockEntries.size()>0}"></a>
+                                    </h6>
+                                </div>
+                                <div class="col-1" align="right">
+                                    <a href="#"
+                                       data-target='#entryFormModal'
+                                       data-backdrop="static"
+                                       data-entryid=""
+                                       data-uom="ml"
+                                       th:attr="data-stockid=${stockItem.id},
+                                       data-uom=${stockItem.ingredient.uom.name().toLowerCase()}"
+                                       data-toggle="modal">
+                                        <i class="fas fa-plus-circle fa-2x" style="color:green" align="right"
+                                           data-toggle="tooltip"
+                                           data-placement="left" title="Agregar registro"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm" id="stockEntryTable">
+                                <thead>
+                                <tr>
+                                    <th>Fecha de compra</th>
+                                    <th>Cantidad actual</th>
+                                    <th>Cantidad original</th>
+                                    <th>Precio</th>
+                                    <th>Caducidad</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="entry : ${stockItem.stockEntries}">
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <a href="#"
+                                                   data-target='#entryFormModal'
+                                                   data-backdrop="static"
+                                                   data-uom="ml"
+                                                   data-entryid="233"
+                                                   data-supplydate="2018-09-04"
+                                                   data-currentqty="1234"
+                                                   data-price="122.23"
+                                                   data-note="Esta es una nota"
+                                                   th:attr="data-stockid=${stockItem.id},
+                                                   data-uom=${stockItem.ingredient.uom.name().toLowerCase()},
+                                                   data-entryid=${entry.id},
+                                                   data-supplydate=${entry.supplyDate},
+                                                   data-currentqty=${entry.currentQty},
+                                                   data-price=${entry.price},
+                                                   data-note=${entry.note}"
+                                                   data-toggle="modal">
+                                                    <i class="fas fa-edit"></i></a>
+                                            </div>
+                                            <div class="col"
+                                                 th:text="${#temporals.format(entry.supplyDate, 'dd/MM/yyyy')}">
+                                                04/09/2018
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td
+                                            th:text="${#numbers.formatInteger(entry.currentQty,1,'COMMA')}+' '+${stockItem.ingredient.uom.name().toLowerCase()}">
+                                        1500
+                                    </td>
+                                    <td
+                                            th:text="${#numbers.formatInteger(entry.originalQty,1,'COMMA')}+' '+${stockItem.ingredient.uom.name().toLowerCase()}"
+                                    style="color: lightslategrey">
+                                        1200
+                                    </td>
+                                    <td th:text="${#numbers.formatCurrency(entry.price)}">5656.9</td>
+                                    <td th:text="${#temporals.format(entry.expirationDate, 'dd/MM/yyyy')}"
+                                    th:class="${(entry.expirationDate.isBefore(#temporals.createToday()))?'alert alert-danger':'alert alert-success'}"></td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="entryFormModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Añadir Registro</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+                <form id="entryForm">
+                    <div class="modal-body">
+                        <input type="hidden" name="stockId" id="stockId" th:value="${stockItem.id}">
+                        <input type="hidden" name="entryId" id="entryId">
+                        <div class="form-row">
+                            <div class="form-group col-12 col-md-4 ">
+                                <label for="inputSupplyDate">Fecha de compra</label>
+                                <input type="text" id="inputSupplyDate" class="form-control" autocomplete="off">
+                            </div>
+                            <div class="form-group col-6 col-md-4 ">
+                                <label for="inputQuantity">Cantidad</label>
+                                <div class="input-group">
+                                    <input type="number" min="0" id="inputQuantity" class="form-control">
+                                    <div class="input-group-text" id="uomIGT"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 col-6">
+                                <label for="inputPrice">Precio</label>
+                                <input type="number" min="0" id="inputPrice" class="form-control">
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="inputNote">Nota:</label>
+                                <textarea id="inputNote" cols="30" rows="2" class="form-control"
+                                          placeholder="Nota opcional..."></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                id="submitBtn">Aceptar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#entryFormModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        $("#inputSupplyDate").datepicker({
+            beforeShowDay: $.datepicker.noWeekends
+        });
+
+        var uom = button.data('uom');
+        var stockId = button.data('stockid');
+        var entryId = button.data('entryid');
+        var currentqty = button.data('currentqty');
+        var price = button.data('price');
+        var note = button.data('note');
+
+        var supplydate = new String();
+        if (button.data('supplydate') != null) {
+            var day = button.data('supplydate').substring(8);
+            var month = button.data('supplydate').substring(5, 7);
+            var year = button.data('supplydate').substring(0, 4);
+
+            supplydate = day + '/' + month + '/' + year;
+        } else {
+            var day = new Date().getDate();
+            var dd = Array(2 - String(day).length + 1).join('0') + day;
+            var month = new Date().getMonth() + 1;
+            var mm = Array(2 - String(month).length + 1).join('0') + month;
+            var year = new Date().getFullYear();
+            supplydate = dd + '/' + mm + '/' + year;
+        }
+        $("#inputSupplyDate").val(supplydate);
+
+        $("#uomIGT").text(uom);
+        $("#stockId").val(stockId);
+
+        $("#inputQuantity").val(currentqty);
+        $("#inputSupplyDate").val(supplydate);
+        $("#inputPrice").val(price);
+        $("#inputNote").val(note);
+        $("#entryId").val(entryId);
+    });
+
+
+    $("#submitBtn").on('click', function (event) {
+        event.preventDefault();
+
+        var stockEntry = {};
+        var stock = {};
+        stock["id"] = $("#stockId").val();
+        stockEntry["id"] = $("#entryId").val();
+        stockEntry["stock"] = stock;
+        stockEntry["currentQty"] = $("#inputQuantity").val();
+        stockEntry["supplyDate"] = $("#inputSupplyDate").val();
+        stockEntry["price"] = $("#inputPrice").val();
+        stockEntry["note"] = $("#inputNote").val();
+
+        console.log(stockEntry);
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/api/stock/entry",
+            data: JSON.stringify(stockEntry),
+            success: function (data) {
+                console.log("Success ", data);
+                // window.location.replace("http://stackoverflow.com");
+                $(location).attr('href', '/stock/' + stock.id + '/show');
+            },
+
+            error: function (e) {
+                console.log("ERROR : ", e);
+                event.stopImmediatePropagation();
+            }
+        });
+    });
+</script>
+</body>
+</html>

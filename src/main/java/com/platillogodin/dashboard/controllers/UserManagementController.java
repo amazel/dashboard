@@ -36,7 +36,6 @@ public class UserManagementController {
 
     @GetMapping("/users/profile/{userName}")
     public String manageProfile(@PathVariable("userName") String userName, Model model, Principal principal) {
-        log.info(userName);
         if (principal.getName().equals(userName)) {
             User user = userService.findByUsername(userName);
             UserProfile userProfile = new UserProfile();
@@ -83,14 +82,14 @@ public class UserManagementController {
 
     @PostMapping("/users")
     public String saveOrUpdateUser(@ModelAttribute("user") User user) {
-        log.info("Saving user");
+        log.info("Saving user, {}", user);
         userService.saveUser(user);
         return "redirect:/users/";
     }
 
     @PostMapping("/users/profile")
     public String updateUserProfile(@ModelAttribute("userProfile") UserProfile userProfile, RedirectAttributes redirectAttributes) {
-        log.info("Updating userProfile");
+        log.info("Updating userProfile (password)");
         User user = userService.findById(userProfile.getId());
         try {
             userService.updatePassword(user, userProfile.getPassword());

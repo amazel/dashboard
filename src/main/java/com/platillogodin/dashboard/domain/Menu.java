@@ -25,10 +25,10 @@ public class Menu {
     private LocalDate date;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu", fetch = FetchType.LAZY)
     private List<MenuOption> options = new ArrayList<>();
 
-    public Menu addMenuOption(MenuOption menuOption){
+    public Menu addMenuOption(MenuOption menuOption) {
         menuOption.setMenu(this);
         this.options.add(menuOption);
         return this;

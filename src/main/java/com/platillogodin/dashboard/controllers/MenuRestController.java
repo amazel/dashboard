@@ -63,11 +63,8 @@ public class MenuRestController {
         menuOption.setRecipe(recipe);
         menuOption.setMenuCategory(menuCategory);
         if (menuOption.getId() != null) {
-            log.info("UPDATING MENU OPTION {}", menuOption.getId());
-            log.info("MenuOptions size: {}", menu.getOptions().size());
             menu.getOptions()
                     .removeIf(menuOption1 -> menuOption1.getId().equals(menuOption.getId()));
-            log.info("MenuOptions size2: {}", menu.getOptions().size());
         }
         menu.addMenuOption(menuOption);
         Menu saved = menuService.save(menu);
