@@ -4,6 +4,7 @@ import com.platillogodin.dashboard.domain.*;
 import com.platillogodin.dashboard.repositories.*;
 import com.platillogodin.dashboard.services.StockService;
 import com.platillogodin.dashboard.services.UserService;
+import com.platillogodin.dashboard.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -137,13 +138,22 @@ public class H2DataBootstrap implements CommandLineRunner {
         Ingredient arroz = ingredientRepository.save(
                 new Ingredient(null, "Arroz", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
 
-        stockService.saveStock(new Stock(jitomate));
         stockService.saveStock(new Stock(cebolla));
         stockService.saveStock(new Stock(agua));
         stockService.saveStock(new Stock(mango));
         stockService.saveStock(new Stock(caldo_de_pollo));
         stockService.saveStock(new Stock(pechugaPollo));
         stockService.saveStock(new Stock(arroz));
+
+        Stock stockJitomate = stockService.saveStock(new Stock(jitomate));
+
+        StockEntry entryj_1 = new StockEntry();
+        entryj_1.setCurrentQty(900);
+        entryj_1.setOriginalQty(10000);
+        entryj_1.setPrice(new BigDecimal("135.00"));
+        entryj_1.setSupplyDate(LocalDate.now().minusDays(6));
+
+        stockService.saveStockEntry(stockJitomate, entryj_1);
 
         Stock saved = stockService.saveStock(new Stock(pasta));
 
@@ -165,9 +175,9 @@ public class H2DataBootstrap implements CommandLineRunner {
         entry1_3.setPrice(new BigDecimal("237.50"));
         entry1_3.setSupplyDate(LocalDate.now());
 
-        stockService.saveStockEntry(saved,entry1_1);
-        stockService.saveStockEntry(saved,entry1_2);
-        stockService.saveStockEntry(saved,entry1_3);
+        stockService.saveStockEntry(saved, entry1_1);
+        stockService.saveStockEntry(saved, entry1_2);
+        stockService.saveStockEntry(saved, entry1_3);
 
         Recipe polloCacahuate = new Recipe();
         polloCacahuate.setCookTime(15);
@@ -228,48 +238,48 @@ public class H2DataBootstrap implements CommandLineRunner {
         recipeRepository.save(aguaMango);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String todayString = LocalDate.now().format(formatter);
-        Menu today = new Menu(todayString);
-        today.setDate(LocalDate.now());
+        String todayString = Utils.getNextMonday(LocalDate.now()).format(formatter);
+        Menu nextMondayMenu = new Menu(todayString);
+        nextMondayMenu.setDate(LocalDate.now());
         MenuOption op1 = new MenuOption();
-        op1.setMenu(today);
+        op1.setMenu(nextMondayMenu);
         op1.setMenuCategory(menuCategories.get(0));
         op1.setMenuOptionType(MenuOptionType.SIDE);
         op1.setForecastQuantity(40);
         op1.setRecipe(arrozBlanco);
 
         MenuOption op2 = new MenuOption();
-        op2.setMenu(today);
+        op2.setMenu(nextMondayMenu);
         op2.setMenuCategory(menuCategories.get(0));
 
         op2.setMenuOptionType(MenuOptionType.MAIN);
         op2.setForecastQuantity(50);
         op2.setRecipe(polloCacahuate);
 
-        today.addMenuOption(op1);
-        today.addMenuOption(op2);
+        nextMondayMenu.addMenuOption(op1);
+        nextMondayMenu.addMenuOption(op2);
 
         MenuOption op3 = new MenuOption();
-        op3.setMenu(today);
+        op3.setMenu(nextMondayMenu);
         op3.setMenuCategory(menuCategories.get(1));
         op3.setMenuOptionType(MenuOptionType.STARTER);
         op3.setForecastQuantity(40);
         op3.setActualQuantity(45);
         op3.setRecipe(sopaCaracol);
 
-        today.addMenuOption(op3);
+        nextMondayMenu.addMenuOption(op3);
 
 
         MenuOption op4 = new MenuOption();
-        op4.setMenu(today);
+        op4.setMenu(nextMondayMenu);
         op4.setMenuCategory(menuCategories.get(2));
         op4.setMenuOptionType(MenuOptionType.BEVERAGE);
         op4.setForecastQuantity(80);
         op4.setRecipe(aguaMango);
 
-        today.addMenuOption(op4);
+        nextMondayMenu.addMenuOption(op4);
 
-        menuRepository.save(today);
+        menuRepository.save(nextMondayMenu);
 
     }
 

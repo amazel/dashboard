@@ -3,37 +3,34 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
-    <link href="../static/css/navbar.css"
-          th:href="@{/css/navbar.css}" rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-          crossorigin="anonymous">
-
     <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
     <script src="http://www.chartjs.org/samples/latest/utils.js"></script>
     <script type="text/javascript" th:inline="none" class="init">
         /*<![CDATA[*/
         $(function () {
-            console.log('on Load')
             getDailySalesData();
+
         });
         /*]]>*/
     </script>
+    <style>
+        .table-condensed {
+            font-size: 13px;
+        }
+
+        .align-right {
+            text-align: right;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="general.html :: navbar"></div>
@@ -47,31 +44,43 @@
         <i class="fas fa-table fa-lg"></i> Forecast de Ingredientes</a>
 
     <div class="modal" id="nxtWkIF" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-
-            <div th:fragment="ingredientForecastFragment" id="ingredientForecastFragment">
-
+        <div th:fragment="ingredientForecastFragment" id="ingredientForecastFragment">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Forecast de Ingredientes</h5>
+                        <h6 class="modal-title"
+                            th:text="'Estimación de ingredientes - Semana: '+${weekNumber}+' '+${mondayDate}+' - '+${fridayDate}">
+                            Forecast de
+                            Ingredientes</h6>
                         <button type="button" class="close" data-dismiss="modal">
                             &times;
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table table-sm" id="stockEntryTable">
+                        <div class="table-responsive table-condensed">
+                            <table class="table table-sm" id="ingredientsTable">
                                 <thead>
                                 <tr>
                                     <th>Ingrediente</th>
-                                    <th>Cantidad actual</th>
-                                    <th>Cantidad estimada</th>
+                                    <th>Cantidad existente</th>
+                                    <th>Consumo estimado</th>
                                     <th>Diferencia</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="ingredient : ${ingredientForecastList}">
-                                    <td></td>
+                                <tr th:each="item : ${ingredientForecastList}">
+                                    <td th:text="${item.ingredient}">Ingrediente</td>
+                                    <td th:text="${item.actual}" class="align-right">
+                                        423232
+                                    </td>
+                                    <td th:text="${item.forecast}"
+                                        class="align-right">232323
+                                    </td>
+                                    <td th:text="${item.difference}"
+                                        class="align-right"
+                                        th:classappend="${item.className}">
+                                        2323
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -186,9 +195,18 @@
 <script>
 
     $('#nxtWkIF').on('show.bs.modal', function (event) {
-        $("#ingredientForecastFragment").load('/api/menus', 'menuId=' + menuDate);
+        console.log("Loading /api/menus");
 
+        $("#ingredientForecastFragment").load('/api/ingredient-forecast', function () {
+        // $("#ingredientForecastFragment").load('http://localhost:8080/api/ingredient-forecast', function () {
+            $('#ingredientsTable').DataTable({
+                lengthChange: false,
+                searching: false,
+                paging: false
+            });
+        });
     });
+
 </script>
 </body>
 </html>

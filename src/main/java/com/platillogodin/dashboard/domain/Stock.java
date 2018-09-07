@@ -36,6 +36,9 @@ public class Stock {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate lastSupplyDate;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate nextExpirationDate;
+
     public Stock addStockEntry(StockEntry stockEntry) {
         stockEntry.setStock(this);
         this.getStockEntries().add(stockEntry);

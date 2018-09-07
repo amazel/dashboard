@@ -57,7 +57,7 @@ public class MenuController {
         log.info(menuId);
         model.addAttribute("menu", menuService.findById(menuId));
         model.addAttribute("categories", menuCategoryService.findAll());
-        return "index :: content";
+        return "menus/menu_planner :: content";
     }
 
 }

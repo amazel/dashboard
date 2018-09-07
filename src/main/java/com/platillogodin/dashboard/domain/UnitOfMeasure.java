@@ -5,5 +5,5 @@ package com.platillogodin.dashboard.domain;
  */
 
 public enum UnitOfMeasure {
-    GR, ML
+    GR, ML, PZ
 }

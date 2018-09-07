@@ -47,6 +47,9 @@ public class StockServiceImpl implements StockService {
         if (stock.getLastSupplyDate() == null || entry.getSupplyDate().isAfter(stock.getLastSupplyDate())) {
             stock.setLastSupplyDate(entry.getSupplyDate());
         }
+        if (stock.getNextExpirationDate() == null || entry.getExpirationDate().isBefore(stock.getNextExpirationDate())) {
+            stock.setNextExpirationDate(entry.getExpirationDate());
+        }
         stock.addStockEntry(entry);
         return stockRepository.save(stock);
     }

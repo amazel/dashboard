@@ -19,11 +19,7 @@ import java.util.Arrays;
 @CrossOrigin(origins = "*")
 public class DashboardRestController {
 
-    private final DashboardService dashboardService;
 
-    public DashboardRestController(DashboardService dashboardService) {
-        this.dashboardService = dashboardService;
-    }
 
     @GetMapping("/api/daily-sales")
     public ResponseEntity<?> getDailySales() {
@@ -41,9 +37,4 @@ public class DashboardRestController {
         return ResponseEntity.ok(dailySales);
     }
 
-    @GetMapping("/api/ingredient-forecast")
-    public String getIngredientForecast(Model model) {
-        model.addAttribute("ingredientForecastList", dashboardService.getIngredientForecast());
-        return "menus/menu_planner :: ingredientForecastFragment";
-    }
 }
