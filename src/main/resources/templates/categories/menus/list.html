@@ -16,6 +16,12 @@
         /*<![CDATA[*/
         $(function () {
 
+            $('#menuTable').DataTable({
+                lengthChange: false,
+                searching: false,
+                paging: false
+            });
+
             $('[data-toggle="tooltip"]').tooltip();
             $('#deleteError').delay(5000).fadeOut('slow');
             $('#deleteMessage').delay(5000).fadeOut('slow');
@@ -53,7 +59,7 @@
                             <div th:if="${deleteMessage}" class="alert alert-info" id="deleteMessage">
                                 <div th:text="${deleteMessage}">...</div>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive table-condensed">
                                 <table class="table table-sm" id="menuTable">
                                     <thead>
                                     <tr>

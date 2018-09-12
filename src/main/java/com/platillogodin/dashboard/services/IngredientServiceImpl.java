@@ -7,6 +7,7 @@ import com.platillogodin.dashboard.repositories.IngredientRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -37,16 +38,21 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient saveIngredient(Ingredient ingredient) {
+    public Ingredient saveIngredient(Ingredient ingredient, String price) {
+        boolean createStock = ingredient.getId() == null;
         Ingredient saved = ingredientRepository.save(ingredient);
-        Stock stock = new Stock();
-        stock.setIngredient(saved);
-        stockService.saveStock(stock);
+        if (createStock) {
+            Stock stock = new Stock();
+            stock.setIngredient(saved);
+            stock.setLastPrice(new BigDecimal(price));
+            stockService.saveStock(stock);
+        }
         return saved;
     }
 
     @Override
     public void delete(Ingredient ingredient) {
+        stockService.deleteStockByIngredient(ingredient);
         ingredientRepository.delete(ingredient);
     }
 }

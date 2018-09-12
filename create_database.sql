@@ -1,12 +1,13 @@
+
 create table ingredient (id bigint not null auto_increment, expiration_time integer, name varchar(255), uom varchar(255), category_id bigint, primary key (id)) engine=InnoDB
 create table ingredient_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
-create table menu (id varchar(255) not null, date date, primary key (id)) engine=InnoDB
+create table menu (id varchar(255) not null, date date, total_cost decimal(19,2), primary key (id)) engine=InnoDB
 create table menu_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
-create table menu_option (id bigint not null auto_increment, actual_quantity integer, forecast_quantity integer, menu_option_type varchar(255), menu_id varchar(255), menu_category_id bigint, recipe_id bigint, primary key (id)) engine=InnoDB
+create table menu_option (id bigint not null auto_increment, actual_quantity integer, cost decimal(19,2), forecast_quantity integer, menu_option_type varchar(255), menu_id varchar(255), menu_category_id bigint, recipe_id bigint, primary key (id)) engine=InnoDB
 create table recipe (id bigint not null auto_increment, cook_time integer, image longblob, name varchar(255), prep_time integer, servings integer, recipe_category_id bigint, primary key (id)) engine=InnoDB
 create table recipe_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
 create table recipe_ingredient (id bigint not null auto_increment, quantity integer, ingredient_id bigint, recipe_id bigint, primary key (id)) engine=InnoDB
-create table stock (id bigint not null auto_increment, last_supply_date date, next_expiration_date date, total integer, ingredient_id bigint, primary key (id)) engine=InnoDB
+create table stock (id bigint not null auto_increment, last_price decimal(9,5), last_supply_date date, next_expiration_date date, total integer, ingredient_id bigint, primary key (id)) engine=InnoDB
 create table stock_entry (id bigint not null auto_increment, current_qty integer, expiration_date date, note varchar(255), original_qty integer, price decimal(19,2), supply_date date, stock_id bigint, primary key (id)) engine=InnoDB
 create table user (id bigint not null auto_increment, enabled bit not null, password varchar(255), role varchar(255), username varchar(255) not null, primary key (id)) engine=InnoDB
 alter table recipe_ingredient add constraint UK58ocuab26seiw3rx6gd3eh4dn unique (recipe_id, ingredient_id)

@@ -14,7 +14,7 @@
         $(function () {
             $('#recipeTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
-                "pageLength": 5,
+                "pageLength": 10,
                 "order": [[0, 'asc'], [1, 'asc']]
             });
             $('[data-toggle="tooltip"]').tooltip();
@@ -55,7 +55,7 @@
                             <div th:if="${deleteMessage}" class="alert alert-info" id="deleteMessage">
                                 <div th:text="${deleteMessage}">...</div>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive table-condensed">
                                 <table class="table table-sm" id="recipeTable">
                                     <thead>
                                     <tr>
@@ -79,13 +79,16 @@
                                         <td style="text-align: center;">
                                             <a href="#" class="badge badge-primary"
                                                th:href="@{'/recipes/'+${recipeItem.id}+'/edit'}">
-                                                <i class="fas fa-pencil-alt fa-lg" data-toggle="tooltip"
-                                                   data-placement="bottom" title="Editar receta"></i></a>
+                                                <i class="fas fa-pencil-alt fa-lg"
+                                                   data-toggle="tooltip"
+                                                   data-placement="bottom"
+                                                   title="Editar receta"></i></a>
                                             <a href="#" class="badge badge-danger"
                                                data-toggle="modal"
                                                data-target="#modal-delete"
                                                th:attr="data-id=${recipeItem.id}, data-name=${recipeItem.name}">
-                                                <i class="fas fa-trash-alt fa-lg" data-toggle="tooltip"
+                                                <i class="fas fa-trash-alt fa-lg"
+                                                   data-toggle="tooltip"
                                                    data-placement="bottom"
                                                    title="Eliminar receta"></i>
                                             </a>

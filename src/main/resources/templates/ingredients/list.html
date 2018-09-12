@@ -18,7 +18,7 @@
         $(function () {
             $('#ingredientTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
-                "pageLength": 5,
+                "pageLength": 10,
                 "order": [[0, 'asc'], [1, 'asc']]
             });
 
@@ -60,7 +60,7 @@
                             <div th:if="${deleteMessage}" class="alert alert-info" id="deleteMessage">
                                 <div th:text="${deleteMessage}">...</div>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive table-condensed">
                                 <table class="table table-sm" id="ingredientTable">
                                     <thead>
                                     <tr>

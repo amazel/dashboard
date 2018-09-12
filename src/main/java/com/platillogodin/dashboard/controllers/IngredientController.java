@@ -8,10 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -76,10 +73,12 @@ public class IngredientController {
     }
 
     @PostMapping(value = "ingredient")
-    public String saveOrUpdateIngredient(@ModelAttribute("ingredient") Ingredient ingredient, BindingResult bindingResult) {
+    public String saveOrUpdateIngredient(@ModelAttribute("ingredient") Ingredient ingredient,
+                                         @RequestParam(value = "initialPrice", required = false) String price,
+                                         BindingResult bindingResult) {
         log.info("Saving ingredient");
-        log.info(ingredient.toString());
-        Ingredient saved = ingredientService.saveIngredient(ingredient);
+        log.info(price);
+        Ingredient saved = ingredientService.saveIngredient(ingredient, price);
         log.info(saved.toString());
         return REDIRECT_LIST_URL;
     }

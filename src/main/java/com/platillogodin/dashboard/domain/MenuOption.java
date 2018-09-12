@@ -3,6 +3,7 @@ package com.platillogodin.dashboard.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Created by Hugo Lezama on August - 2018
@@ -28,4 +29,6 @@ public class MenuOption {
 
     private Integer forecastQuantity;
     private Integer actualQuantity;
+
+    private BigDecimal cost;
 }

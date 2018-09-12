@@ -138,14 +138,14 @@ public class H2DataBootstrap implements CommandLineRunner {
         Ingredient arroz = ingredientRepository.save(
                 new Ingredient(null, "Arroz", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
 
-        stockService.saveStock(new Stock(cebolla));
-        stockService.saveStock(new Stock(agua));
-        stockService.saveStock(new Stock(mango));
-        stockService.saveStock(new Stock(caldo_de_pollo));
-        stockService.saveStock(new Stock(pechugaPollo));
-        stockService.saveStock(new Stock(arroz));
+        stockService.saveStock(new Stock(cebolla,new BigDecimal("0.010")));
+        stockService.saveStock(new Stock(agua,new BigDecimal("0.002")));
+        stockService.saveStock(new Stock(mango,new BigDecimal("0.01357")));
+        stockService.saveStock(new Stock(caldo_de_pollo,new BigDecimal("0.022")));
+        stockService.saveStock(new Stock(pechugaPollo, new BigDecimal("0.08")));
+        stockService.saveStock(new Stock(arroz,new BigDecimal("0.0172")));
 
-        Stock stockJitomate = stockService.saveStock(new Stock(jitomate));
+        Stock stockJitomate = stockService.saveStock(new Stock(jitomate, new BigDecimal("0.0181")));
 
         StockEntry entryj_1 = new StockEntry();
         entryj_1.setCurrentQty(900);
@@ -155,28 +155,28 @@ public class H2DataBootstrap implements CommandLineRunner {
 
         stockService.saveStockEntry(stockJitomate, entryj_1);
 
-        Stock saved = stockService.saveStock(new Stock(pasta));
+        Stock saved = stockService.saveStock(new Stock(pasta, new BigDecimal("0.0029")));
 
         StockEntry entry1_1 = new StockEntry();
         entry1_1.setCurrentQty(0);
         entry1_1.setOriginalQty(500);
-        entry1_1.setPrice(new BigDecimal("150.60"));
+        entry1_1.setPrice(new BigDecimal("26"));
         entry1_1.setSupplyDate(LocalDate.now().minusDays(15));
 
         StockEntry entry1_2 = new StockEntry();
         entry1_2.setCurrentQty(100);
         entry1_2.setOriginalQty(1000);
-        entry1_2.setPrice(new BigDecimal("280.90"));
+        entry1_2.setPrice(new BigDecimal("50"));
         entry1_2.setSupplyDate(LocalDate.now().minusDays(5));
 
         StockEntry entry1_3 = new StockEntry();
         entry1_3.setCurrentQty(800);
         entry1_3.setOriginalQty(800);
-        entry1_3.setPrice(new BigDecimal("237.50"));
+        entry1_3.setPrice(new BigDecimal("40.8"));
         entry1_3.setSupplyDate(LocalDate.now());
 
-        stockService.saveStockEntry(saved, entry1_1);
         stockService.saveStockEntry(saved, entry1_2);
+        stockService.saveStockEntry(saved, entry1_1);
         stockService.saveStockEntry(saved, entry1_3);
 
         Recipe polloCacahuate = new Recipe();

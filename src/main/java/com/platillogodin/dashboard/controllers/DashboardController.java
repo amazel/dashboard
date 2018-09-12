@@ -1,6 +1,7 @@
 package com.platillogodin.dashboard.controllers;
 
 import com.platillogodin.dashboard.commands.IngredientForecast;
+import com.platillogodin.dashboard.commands.WeeklyCosts;
 import com.platillogodin.dashboard.services.DashboardService;
 import com.platillogodin.dashboard.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class DashboardController {
         model.addAttribute("weekNumber", "");
         model.addAttribute("mondayDate", "");
         model.addAttribute("fridayDate", "");
+        model.addAttribute("weeklyCosts", new WeeklyCosts());
         return "index";
     }
 
@@ -57,5 +59,17 @@ public class DashboardController {
         model.addAttribute("fridayDate", formatter.format(nextMonday.plusDays(4)));
 
         return "index :: ingredientForecastFragment";
+    }
+
+
+    @GetMapping("/api/weekly-costs-forecast")
+    public String weeklyCostsForecast(Model model) {
+        model.addAttribute("weeklyCosts", dashboardService.getWeeklyCostsForecast());
+        LocalDate nextMonday = Utils.getNextMonday(LocalDate.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyy");
+        model.addAttribute("weekNumber", nextMonday.get(WeekFields.ISO.weekOfWeekBasedYear()));
+        model.addAttribute("mondayDate", formatter.format(nextMonday));
+        model.addAttribute("fridayDate", formatter.format(nextMonday.plusDays(4)));
+        return "index :: weeklyCostsFragment";
     }
 }

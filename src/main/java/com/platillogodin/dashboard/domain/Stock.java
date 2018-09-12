@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,10 @@ public class Stock {
     private List<StockEntry> stockEntries = new ArrayList<>();
 
     private Integer total = 0;
+
+    @NonNull
+    @Column(precision = 9, scale = 5)
+    private BigDecimal lastPrice;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate lastSupplyDate;

@@ -1,11 +1,13 @@
 package com.platillogodin.dashboard.services;
 
+import com.platillogodin.dashboard.domain.Ingredient;
 import com.platillogodin.dashboard.domain.Stock;
 import com.platillogodin.dashboard.domain.StockEntry;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.StockRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -44,14 +46,24 @@ public class StockServiceImpl implements StockService {
         }
         entry.setExpirationDate(entry.getSupplyDate().plusDays(stock.getIngredient().getExpirationTime()));
         stock.setTotal(stock.getTotal() + entry.getCurrentQty());
+
         if (stock.getLastSupplyDate() == null || entry.getSupplyDate().isAfter(stock.getLastSupplyDate())) {
             stock.setLastSupplyDate(entry.getSupplyDate());
         }
         if (stock.getNextExpirationDate() == null || entry.getExpirationDate().isBefore(stock.getNextExpirationDate())) {
             stock.setNextExpirationDate(entry.getExpirationDate());
         }
+        if (!entry.getSupplyDate().isBefore(stock.getLastSupplyDate())) {
+            stock.setLastPrice(entry.getPrice().divide(BigDecimal.valueOf(entry.getCurrentQty())));
+        }
         stock.addStockEntry(entry);
         return stockRepository.save(stock);
+    }
+
+    @Override
+    public void deleteStockByIngredient(Ingredient ingredient) {
+        Stock stock = stockRepository.findByIngredient(ingredient);
+        stockRepository.delete(stock);
     }
 
     @Override

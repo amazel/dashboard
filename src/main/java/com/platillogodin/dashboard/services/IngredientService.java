@@ -13,7 +13,7 @@ public interface IngredientService {
 
     Ingredient findById(Long id);
 
-    Ingredient saveIngredient(Ingredient ingredient);
+    Ingredient saveIngredient(Ingredient ingredient, String price);
 
     void delete(Ingredient ingredient);
 }

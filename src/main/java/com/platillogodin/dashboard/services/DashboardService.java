@@ -1,6 +1,7 @@
 package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.commands.IngredientForecast;
+import com.platillogodin.dashboard.commands.WeeklyCosts;
 
 import java.util.List;
 
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface DashboardService {
     List<IngredientForecast> getIngredientForecast();
+    WeeklyCosts getWeeklyCostsForecast();
 }

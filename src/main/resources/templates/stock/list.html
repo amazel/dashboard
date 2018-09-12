@@ -17,8 +17,8 @@
         $(function () {
             $('#recipeTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
-                "pageLength": 5,
-                "order": [[0, 'asc'], [1, 'asc']]
+                "pageLength": 10,
+                "order": [[1, 'desc']]
             });
             $('[data-toggle="tooltip"]').tooltip()
         });
@@ -44,7 +44,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <div class="table-responsive">
+                            <div class="table-responsive table-condensed">
                                 <table class="table table-sm" id="recipeTable">
                                     <thead>
                                     <tr>

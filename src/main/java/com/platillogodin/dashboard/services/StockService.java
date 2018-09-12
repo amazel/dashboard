@@ -1,5 +1,6 @@
 package com.platillogodin.dashboard.services;
 
+import com.platillogodin.dashboard.domain.Ingredient;
 import com.platillogodin.dashboard.domain.Stock;
 import com.platillogodin.dashboard.domain.StockEntry;
 
@@ -17,4 +18,6 @@ public interface StockService {
     List<Stock> findAll();
 
     Stock saveStockEntry(Stock stock, StockEntry entry);
+
+    void deleteStockByIngredient(Ingredient ingredient);
 }

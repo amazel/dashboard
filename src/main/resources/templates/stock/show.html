@@ -3,25 +3,25 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
-    <link href="../../static/css/navbar.css"
-          th:href="@{/css/navbar.css}" rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-          crossorigin="anonymous">
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"-->
+            <!--integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="-->
+            <!--crossorigin="anonymous"></script>-->
+    <!--<link rel="stylesheet"-->
+          <!--href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"-->
+          <!--integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"-->
+          <!--crossorigin="anonymous">-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"-->
+            <!--integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"-->
+            <!--crossorigin="anonymous"></script>-->
+    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"-->
+            <!--integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"-->
+            <!--crossorigin="anonymous"></script>-->
+    <!--<link href="../../static/css/dashboard.css"-->
+          <!--th:href="@{/css/dashboard.css}" rel="stylesheet">-->
+    <!--<link rel="stylesheet"-->
+          <!--href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"-->
+          <!--integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"-->
+          <!--crossorigin="anonymous">-->
 
     <!-- Custom styles for this template -->
     <link href="../../static/plugins/jquery-ui/jquery-ui.min.css" th:href="@{/plugins/jquery-ui/jquery-ui.min.css}"
@@ -96,62 +96,64 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-sm" id="stockEntryTable">
-                                <thead>
-                                <tr>
-                                    <th>Fecha de compra</th>
-                                    <th>Cantidad actual</th>
-                                    <th>Cantidad original</th>
-                                    <th>Precio</th>
-                                    <th>Caducidad</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="entry : ${stockItem.stockEntries}">
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-2">
-                                                <a href="#"
-                                                   data-target='#entryFormModal'
-                                                   data-backdrop="static"
-                                                   data-uom="ml"
-                                                   data-entryid="233"
-                                                   data-supplydate="2018-09-04"
-                                                   data-currentqty="1234"
-                                                   data-price="122.23"
-                                                   data-note="Esta es una nota"
-                                                   th:attr="data-stockid=${stockItem.id},
+                            <div class="table-responsive table-condensed">
+                                <table class="table table-sm" id="stockEntryTable">
+                                    <thead>
+                                    <tr>
+                                        <th>Fecha de compra</th>
+                                        <th>Cantidad actual</th>
+                                        <th>Cantidad original</th>
+                                        <th>Precio</th>
+                                        <th>Caducidad</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="entry : ${stockItem.stockEntries}">
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    <a href="#"
+                                                       data-target='#entryFormModal'
+                                                       data-backdrop="static"
+                                                       data-uom="ml"
+                                                       data-entryid="233"
+                                                       data-supplydate="2018-09-04"
+                                                       data-currentqty="1234"
+                                                       data-price="122.23"
+                                                       data-note="Esta es una nota"
+                                                       th:attr="data-stockid=${stockItem.id},
                                                    data-uom=${stockItem.ingredient.uom.name().toLowerCase()},
                                                    data-entryid=${entry.id},
                                                    data-supplydate=${entry.supplyDate},
                                                    data-currentqty=${entry.currentQty},
                                                    data-price=${entry.price},
                                                    data-note=${entry.note}"
-                                                   data-toggle="modal">
-                                                    <i class="fas fa-edit"></i></a>
+                                                       data-toggle="modal">
+                                                        <i class="fas fa-edit"></i></a>
+                                                </div>
+                                                <div class="col"
+                                                     th:text="${#temporals.format(entry.supplyDate, 'dd/MM/yyyy')}">
+                                                    04/09/2018
+                                                </div>
                                             </div>
-                                            <div class="col"
-                                                 th:text="${#temporals.format(entry.supplyDate, 'dd/MM/yyyy')}">
-                                                04/09/2018
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td
-                                            th:text="${#numbers.formatInteger(entry.currentQty,1,'COMMA')}+' '+${stockItem.ingredient.uom.name().toLowerCase()}">
-                                        1500
-                                    </td>
-                                    <td
-                                            th:text="${#numbers.formatInteger(entry.originalQty,1,'COMMA')}+' '+${stockItem.ingredient.uom.name().toLowerCase()}"
-                                    style="color: lightslategrey">
-                                        1200
-                                    </td>
-                                    <td th:text="${#numbers.formatCurrency(entry.price)}">5656.9</td>
-                                    <td th:text="${#temporals.format(entry.expirationDate, 'dd/MM/yyyy')}"
-                                    th:class="${(entry.expirationDate.isBefore(#temporals.createToday()))?'alert alert-danger':'alert alert-success'}"></td>
+                                        </td>
+                                        <td
+                                                th:text="${#numbers.formatInteger(entry.currentQty,1,'COMMA')}+' '+${stockItem.ingredient.uom.name().toLowerCase()}">
+                                            1500
+                                        </td>
+                                        <td
+                                                th:text="${#numbers.formatInteger(entry.originalQty,1,'COMMA')}+' '+${stockItem.ingredient.uom.name().toLowerCase()}"
+                                                style="color: lightslategrey">
+                                            1200
+                                        </td>
+                                        <td th:text="${#numbers.formatCurrency(entry.price)}">5656.9</td>
+                                        <td th:text="${#temporals.format(entry.expirationDate, 'dd/MM/yyyy')}"
+                                            th:class="${(entry.expirationDate.isBefore(#temporals.createToday()))?'alert alert-danger':'alert alert-success'}"></td>
 
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
