@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -48,7 +47,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/users")
-    public String listIngredientCategories(Model model) {
+    public String listUsers(Model model) {
         List<User> userList = userService.findAll();
         model.addAttribute("userList", userList);
         return LIST_URL;
@@ -68,29 +67,29 @@ public class UserManagementController {
     }
 
     @GetMapping("/users/{id}/delete")
-    public ModelAndView deleteUser(@PathVariable Long id, Model model) {
+    public String deleteUser(@PathVariable Long id, Model model, RedirectAttributes ra) {
         User user = userService.findById(id);
         try {
             userService.delete(user);
+            ra.addFlashAttribute("deleteMessage", "El usuario " + user.getUsername() + " fue eliminado correctamente");
         } catch (DeleteException de) {
-            model.addAttribute("deleteError", de.getMessage());
-            return new ModelAndView("forward:/users", model.asMap());
+            ra.addFlashAttribute("deleteError", de.getMessage());
         }
-        model.addAttribute("deleteMessage", "Usuario " + user.getUsername() + " eliminado correctamente");
-        return new ModelAndView("forward:/users", model.asMap());
+        return "redirect:/users";
     }
 
     @PostMapping("/users")
     public String saveOrUpdateUser(@ModelAttribute("user") User user) {
         log.info("Saving user, {}", user);
         userService.saveUser(user);
-        return "redirect:/users/";
+        return "redirect:/users";
     }
 
     @PostMapping("/users/profile")
     public String updateUserProfile(@ModelAttribute("userProfile") UserProfile userProfile, RedirectAttributes redirectAttributes) {
         log.info("Updating userProfile (password)");
         User user = userService.findById(userProfile.getId());
+        log.info("user {}", user);
         try {
             userService.updatePassword(user, userProfile.getPassword());
             redirectAttributes.addFlashAttribute("message", "Contraseña actualizada con éxito");

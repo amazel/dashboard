@@ -4,13 +4,13 @@ import com.platillogodin.dashboard.domain.Menu;
 import com.platillogodin.dashboard.domain.MenuCategory;
 import com.platillogodin.dashboard.domain.MenuOption;
 import com.platillogodin.dashboard.domain.Recipe;
+import com.platillogodin.dashboard.exceptions.GenericException;
 import com.platillogodin.dashboard.services.MenuCategoryService;
 import com.platillogodin.dashboard.services.MenuService;
 import com.platillogodin.dashboard.services.RecipeCategoryService;
 import com.platillogodin.dashboard.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,8 +53,20 @@ public class MenuRestController {
         return ResponseEntity.ok(recipeCategoryService.findAll());
     }
 
+    @GetMapping("/api/menu_option/delete")
+    public ResponseEntity<?> deleteMenuOption(@RequestParam("menuOptionId") Long menuOptionId,
+                                              @RequestParam("menuId") String menuId) {
+        log.info("Deleting option: {} from Menu {}", menuOptionId, menuId);
+        Menu menu = menuService.findById(menuId);
+        log.info("menu: {}", menu.getOptions().size());
+        menu.getOptions().removeIf(menuOption -> menuOption.getId().equals(menuOptionId));
+        log.info("menu2: {}", menu.getOptions().size());
+        menuService.save(menu);
+        return ResponseEntity.ok("OK");
+    }
+
     @PostMapping("/api/menu_option")
-    public ResponseEntity<?> saveMenuOption(@Valid @RequestBody MenuOption menuOption, Model model) {
+    public ResponseEntity<?> saveMenuOption(@Valid @RequestBody MenuOption menuOption) {
         log.info("/api/menu_option");
         log.info(menuOption.toString());
         Menu menu = menuService.findById(menuOption.getMenu().getId());
@@ -72,4 +84,19 @@ public class MenuRestController {
         return ResponseEntity.ok("OK");
     }
 
+    @GetMapping("/api/menu/process-day")
+    public ResponseEntity<?> processDay(@RequestParam("menuId") String menuId) {
+        log.info("/api/menu/process-day");
+        log.info(menuId);
+        Menu menu = menuService.findById(menuId);
+        if (menu.getOptions().size() == 0) {
+            return ResponseEntity.badRequest().body("No hay platillos en este dia para procesar");
+        }
+        try {
+            menuService.processMenuDay(menu);
+        } catch (GenericException ge) {
+            return ResponseEntity.badRequest().body(ge.getMessage());
+        }
+        return ResponseEntity.ok("Listo, proceso cerrado");
+    }
 }

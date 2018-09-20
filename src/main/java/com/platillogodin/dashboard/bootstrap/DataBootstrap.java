@@ -72,19 +72,31 @@ public class DataBootstrap implements CommandLineRunner {
         user3.setUsername("maru");
         user3.setRole(UserRole.ROLE_ADMIN);
         userService.saveUser(user3);
+
+        User user4 = new User();
+        user4.setUsername("Yas");
+        user4.setRole(UserRole.ROLE_USER);
+        userService.saveUser(user4);
     }
 
     private void loadRecipeCategories() {
         recipeCategoryRepository.save(
-                new RecipeCategory(null, "Sopas", "Sopas y caldos"));
+                new RecipeCategory(null, "Sopas", "Sopas, caldos y cremas"));
         recipeCategoryRepository.save(
                 new RecipeCategory(null, "Aguas", "Aguas y jugos"));
         recipeCategoryRepository.save(
-                new RecipeCategory(null, "Pollo", "Recetas con pollo"));
+                new RecipeCategory(null, "Pollo", "Recetas con pollo y/o pavo"));
         recipeCategoryRepository.save(
                 new RecipeCategory(null, "Ensaladas", "Ensaladas"));
         recipeCategoryRepository.save(
-                new RecipeCategory(null, "Guarniciones", "Guarniciones"));
+                new RecipeCategory(null, "Arroz", "Arroz"));
+        recipeCategoryRepository.save(
+                new RecipeCategory(null, "Pastas", "Pastas"));
+        recipeCategoryRepository.save(
+                new RecipeCategory(null, "Pescados y mariscos", "Recetas con pescados y/o mariscos"));
+        recipeCategoryRepository.save(
+                new RecipeCategory(null, "Carnes", "Recetas con carne de res y/o cerdo"));
+
     }
 
     private void loadIngredientCategories() {
@@ -101,15 +113,29 @@ public class DataBootstrap implements CommandLineRunner {
         ingredientCategoryRepository.save(
                 new IngredientCategory(null, "Cerdo", "Carne de cerdo y derivados"));
         ingredientCategoryRepository.save(
-                new IngredientCategory(null, "Cereales y Pasta", "Cereales y pasta"));
+                new IngredientCategory(null, "Cereales", "Cereales"));
+        ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Pastas", "Pastas"));
+        ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Líquidos", "Líquidos"));
+        ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Pescados", "Pescados"));
+        ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Mariscos", "Mariscos"));
+        ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Desechables", "Productos desechables"));
+        ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Especias", "Especias"));
+        ingredientCategoryRepository.save(
+                new IngredientCategory(null, "Legumbres", "Legumbres"));
     }
 
     private void loadMenuCategories() {
         menuCategoryRepository.save(
-                new MenuCategory(null, "Gordin", "Menu Gordin"));
+                new MenuCategory(null, "Gordin", "Menú Gordin"));
         menuCategoryRepository.save(
-                new MenuCategory(null, "Caseron", "Menu Caseron"));
+                new MenuCategory(null, "Caserón", "Menú Caserón"));
         menuCategoryRepository.save(
-                new MenuCategory(null, "Común", "Menus comunes"));
+                new MenuCategory(null, "Especial", "Menús especiales"));
     }
 }

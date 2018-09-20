@@ -3,7 +3,7 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-    <!--   <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+       <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"
                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
                crossorigin="anonymous"></script>
        <link rel="stylesheet"
@@ -53,7 +53,7 @@
     <script type="text/javascript" th:inline="none" class="init">
         /*<![CDATA[*/
         $(function () {
-            getDailySalesData();
+            getChartsData();
 
         });
         /*]]>*/
@@ -71,21 +71,24 @@
 <body>
 <div th:replace="general.html :: navbar"></div>
 <div class="container-fluid" sec:authorize="hasRole('ADMIN')">
-
-    <a href="#"
-       class="btn btn-info"
-       data-target='#nxtWkIF'
-       data-backdrop="static"
-       data-toggle="modal">
-        <i class="fas fa-table fa-lg"></i> Forecast de Ingredientes</a>
-
-    <a href="#"
-       class="btn btn-info"
-       data-target='#weeklyCosts'
-       data-backdrop="static"
-       data-toggle="modal">
-        <i class="fas fa-table fa-lg"></i> Forecast de Costos</a>
-
+    <div class="row justify-content-between justify-content-md-center">
+        <div class="col-md-3 col-6">
+            <a href="#"
+               class="btn btn-info btn-sm"
+               data-target='#nxtWkIF'
+               data-backdrop="static"
+               data-toggle="modal">
+                <i class="fas fa-table fa-lg"></i> Forecast de Ingredientes</a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="#"
+               class="btn btn-info btn-sm"
+               data-target='#weeklyCosts'
+               data-backdrop="static"
+               data-toggle="modal">
+                <i class="fas fa-table"></i> Forecast de Costos</a>
+        </div>
+    </div>
     <div class="modal" id="nxtWkIF" tabindex="-1">
         <div th:fragment="ingredientForecastFragment" id="ingredientForecastFragment">
             <div class="modal-dialog modal-lg">
@@ -213,11 +216,16 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
+    <br>
+    <div class="row justify-content-center">
         <div class="col-md-5 col-12">
             <div class="chartjs-wrapper">
                 <canvas id="dailySalesChart" class="chartjs" width="undefined" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col-md-5 col-12">
+            <div class="chartjs-wrapper">
+                <canvas id="dailyTotalCostChart" class="chartjs" width="undefined" height="200"></canvas>
             </div>
         </div>
     </div>
@@ -227,62 +235,57 @@
 </div>
 
 <script>
-    function getDailySalesData() {
-        console.log('loading daily-sales')
-        var colors = [
-            'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)',
-            'rgb(255, 205, 86)',
-            'rgb(75, 192, 192)',
-            'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)',
-            'rgb(201, 203, 207)'
-        ];
+    function getChartsData() {
+        console.log('loading daily-sales');
         $.ajax({
             // url: 'http://localhost:8080/api/daily-sales',
             url: '/api/daily-sales',
             method: 'GET',
             dataType: 'json',
             success: function (data) {
-                console.log(data.data);
-                console.log(Object.keys(data.data));
-
-                var dataset = [];
-                var i = 0;
-                for (menu in data.data) {
-                    console.log(menu)
-                    console.log(data.data[menu])
-                    dataset.push({
-                        label: menu,
-                        data: data.data[menu],
-                        backgroundColor: colors[i],
-                        borderColor: colors[i],
-                        fill: false,
-                        lineTension: 0.2
-                    });
-                    i++;
-                }
-                console.log(dataset);
-                chartData = {
-                    labels: data.labels,
-                    datasets: dataset
-                    //     [{
-                    //     label: 'Comidas Totales',
-                    //
-                    //     data: data.units,
-                    //     fill: false
-                    // }]
-                };
                 var ctx = $("#dailySalesChart");
-                createDailySalesChart(chartData, ctx)
+                var ctx2 = $("#dailyTotalCostChart");
+                createDailySalesChart(createChartData(data.countData, data.labels), ctx);
+                createDailyTotalCostChart(createChartData(data.costData, data.labels), ctx2);
             }
         });
-    };
+    }
+
+    function createChartData(data, labels) {
+        var colors = [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)'
+        ];
+        var borderColors = [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)'
+        ];
+        var countDataSet = [];
+        var i = 0;
+        for (var menuCat in data) {
+            countDataSet.push({
+                label: menuCat,
+                data: data[menuCat],
+                backgroundColor: colors[i],
+                borderColor: borderColors[i],
+                borderWidth: 1
+            });
+            i++;
+        }
+        return {
+            labels: labels,
+            datasets: countDataSet
+        };
+    }
 
     function createDailySalesChart(chartData, ctx) {
 
         var myChart = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: chartData,
             options: {
                 responsive: true,
@@ -293,6 +296,22 @@
                 tooltips: {
                     mode: 'index',
                     intersect: false,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var category = data.datasets[tooltipItem.datasetIndex].label;
+                            var valor = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            var total = 0;
+                            for (var i = 0; i < data.datasets.length; i++) {
+                                total += data.datasets[i].data[tooltipItem.index];
+                            }
+
+                            if (tooltipItem.datasetIndex != data.datasets.length - 1) {
+                                return category + " : " + valor;
+                            } else {
+                                return [category + " : " + valor, "Total: " + total];
+                            }
+                        }
+                    }
                 },
                 hover: {
                     mode: 'nearest',
@@ -301,6 +320,7 @@
                 scales: {
                     xAxes: [{
                         display: true,
+                        stacked: true,
                         scaleLabel: {
                             display: true,
                             labelString: 'Dia'
@@ -308,6 +328,7 @@
                     }],
                     yAxes: [{
                         display: true,
+                        stacked: true,
                         scaleLabel: {
                             display: true,
                             labelString: '# Comidas'
@@ -317,9 +338,64 @@
             }
         });
     }
-</script>
 
-<script>
+
+    function createDailyTotalCostChart(chartData, ctx) {
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Costo total por dia'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var category = data.datasets[tooltipItem.datasetIndex].label;
+                            var valor = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            var total = 0;
+                            for (var i = 0; i < data.datasets.length; i++) {
+                                total += data.datasets[i].data[tooltipItem.index];
+                            }
+
+                            if (tooltipItem.datasetIndex != data.datasets.length - 1) {
+                                return category + ": $" + valor;
+                            } else {
+                                return [category + ": $" + valor, "Total: $" + total];
+                            }
+                        }
+                    }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        // stacked: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Dia'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        // stacked: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Costo'
+                        }
+                    }]
+                }
+            }
+        });
+    }
 
     $('#nxtWkIF').on('show.bs.modal', function (event) {
         console.log("Loading /api/ingredient-forecast");

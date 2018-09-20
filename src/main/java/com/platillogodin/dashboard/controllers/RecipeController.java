@@ -78,7 +78,7 @@ public class RecipeController {
         return "redirect:/recipes";
     }
 
-    @PostMapping(value = "recipe")
+    @PostMapping("recipe")
     public String saveOrUpdateRecipe(@ModelAttribute("recipe") Recipe recipe) {
         log.info("Saving recipe");
         Recipe saved = recipeService.saveRecipe(recipe);

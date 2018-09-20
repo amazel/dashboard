@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Hugo Lezama on August - 2018
@@ -56,6 +57,7 @@ public class H2DataBootstrap implements CommandLineRunner {
     private List<RecipeCategory> recipeCategories = new ArrayList<>();
     private List<IngredientCategory> ingredientCategories = new ArrayList<>();
     private List<MenuCategory> menuCategories = new ArrayList<>();
+    private List<Recipe> recipes = new ArrayList<>();
 
 
     @Transactional
@@ -116,7 +118,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         ));
 
         menuCategories.add(menuCategoryRepository.save(
-                new MenuCategory(null, "Común", "Menus comunes")
+                new MenuCategory(null, "Especial", "Menu Especial")
         ));
     }
 
@@ -138,12 +140,12 @@ public class H2DataBootstrap implements CommandLineRunner {
         Ingredient arroz = ingredientRepository.save(
                 new Ingredient(null, "Arroz", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
 
-        stockService.saveStock(new Stock(cebolla,new BigDecimal("0.010")));
-        stockService.saveStock(new Stock(agua,new BigDecimal("0.002")));
-        stockService.saveStock(new Stock(mango,new BigDecimal("0.01357")));
-        stockService.saveStock(new Stock(caldo_de_pollo,new BigDecimal("0.022")));
+        stockService.saveStock(new Stock(cebolla, new BigDecimal("0.010")));
+        stockService.saveStock(new Stock(agua, new BigDecimal("0.002")));
+        stockService.saveStock(new Stock(mango, new BigDecimal("0.01357")));
+        stockService.saveStock(new Stock(caldo_de_pollo, new BigDecimal("0.022")));
         stockService.saveStock(new Stock(pechugaPollo, new BigDecimal("0.08")));
-        stockService.saveStock(new Stock(arroz,new BigDecimal("0.0172")));
+        stockService.saveStock(new Stock(arroz, new BigDecimal("0.0172")));
 
         Stock stockJitomate = stockService.saveStock(new Stock(jitomate, new BigDecimal("0.0181")));
 
@@ -176,7 +178,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         entry1_3.setSupplyDate(LocalDate.now());
 
         stockService.saveStockEntry(saved, entry1_2);
-        stockService.saveStockEntry(saved, entry1_1);
+//        stockService.saveStockEntry(saved, entry1_1);
         stockService.saveStockEntry(saved, entry1_3);
 
         Recipe polloCacahuate = new Recipe();
@@ -190,6 +192,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         polloCacahuate.getIngredientList().add(new RecipeIngredient(null, polloCacahuate, pechugaPollo, 500));
         polloCacahuate.getIngredientList().add(new RecipeIngredient(null, polloCacahuate, caldo_de_pollo, 100));
         polloCacahuate.setRecipeCategory(recipeCategories.get(2));
+        recipes.add(polloCacahuate);
         recipeRepository.save(polloCacahuate);
 
         Recipe arrozBlanco = new Recipe();
@@ -201,6 +204,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         arrozBlanco.getIngredientList().add(new RecipeIngredient(null, arrozBlanco, cebolla, 150));
         arrozBlanco.getIngredientList().add(new RecipeIngredient(null, arrozBlanco, arroz, 200));
         arrozBlanco.setRecipeCategory(recipeCategories.get(4));
+        recipes.add(arrozBlanco);
         recipeRepository.save(arrozBlanco);
 
         Recipe sopaCaracol = new Recipe();
@@ -212,6 +216,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, jitomate, 345));
         sopaCaracol.getIngredientList().add(new RecipeIngredient(null, sopaCaracol, caldo_de_pollo, 340));
         sopaCaracol.setRecipeCategory(recipeCategories.get(0));
+        recipes.add(sopaCaracol);
         recipeRepository.save(sopaCaracol);
 
         Recipe sopaLetras = new Recipe();
@@ -223,6 +228,7 @@ public class H2DataBootstrap implements CommandLineRunner {
         sopaLetras.getIngredientList().add(new RecipeIngredient(null, sopaLetras, jitomate, 20));
         sopaLetras.getIngredientList().add(new RecipeIngredient(null, sopaLetras, caldo_de_pollo, 50));
         sopaLetras.setRecipeCategory(recipeCategories.get(0));
+        recipes.add(sopaLetras);
         recipeRepository.save(sopaLetras);
 
         Recipe aguaMango = new Recipe();
@@ -235,53 +241,59 @@ public class H2DataBootstrap implements CommandLineRunner {
         aguaMango.getIngredientList().add(new RecipeIngredient(null, aguaMango, agua, 1000));
         aguaMango.getIngredientList().add(new RecipeIngredient(null, aguaMango, mango, 200));
         aguaMango.setRecipeCategory(recipeCategories.get(1));
+        recipes.add(aguaMango);
         recipeRepository.save(aguaMango);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String todayString = Utils.getNextMonday(LocalDate.now()).format(formatter);
-        Menu nextMondayMenu = new Menu(todayString);
-        nextMondayMenu.setDate(LocalDate.now());
-        MenuOption op1 = new MenuOption();
-        op1.setMenu(nextMondayMenu);
-        op1.setMenuCategory(menuCategories.get(0));
-        op1.setMenuOptionType(MenuOptionType.SIDE);
-        op1.setForecastQuantity(40);
-        op1.setRecipe(arrozBlanco);
+        String nextMonday = Utils.getNextMonday(LocalDate.now()).format(formatter);
+        createMenu(nextMonday, LocalDate.now());
 
-        MenuOption op2 = new MenuOption();
-        op2.setMenu(nextMondayMenu);
-        op2.setMenuCategory(menuCategories.get(0));
+        LocalDate lastMonday = Utils.getNextMonday(LocalDate.now()).minusDays(14);
+        createMenu(lastMonday.format(formatter), lastMonday);
 
-        op2.setMenuOptionType(MenuOptionType.MAIN);
-        op2.setForecastQuantity(50);
-        op2.setRecipe(polloCacahuate);
-
-        nextMondayMenu.addMenuOption(op1);
-        nextMondayMenu.addMenuOption(op2);
-
-        MenuOption op3 = new MenuOption();
-        op3.setMenu(nextMondayMenu);
-        op3.setMenuCategory(menuCategories.get(1));
-        op3.setMenuOptionType(MenuOptionType.STARTER);
-        op3.setForecastQuantity(40);
-        op3.setActualQuantity(45);
-        op3.setRecipe(sopaCaracol);
-
-        nextMondayMenu.addMenuOption(op3);
-
-
-        MenuOption op4 = new MenuOption();
-        op4.setMenu(nextMondayMenu);
-        op4.setMenuCategory(menuCategories.get(2));
-        op4.setMenuOptionType(MenuOptionType.BEVERAGE);
-        op4.setForecastQuantity(80);
-        op4.setRecipe(aguaMango);
-
-        nextMondayMenu.addMenuOption(op4);
-
-        menuRepository.save(nextMondayMenu);
+        lastMonday = lastMonday.plusDays(1);
+        createMenu(lastMonday.format(formatter), lastMonday);
+        lastMonday = lastMonday.plusDays(1);
+        createMenu(lastMonday.format(formatter), lastMonday);
+        lastMonday = lastMonday.plusDays(1);
+        createMenu(lastMonday.format(formatter), lastMonday);
+        lastMonday = lastMonday.plusDays(1);
+        createMenu(lastMonday.format(formatter), lastMonday);
 
     }
 
+    public void createMenu(String menuId, LocalDate date) {
+        Random r = new Random();
+        Menu menu = new Menu(menuId);
+        menu.setDate(date);
+        menu.setWeekNumber(Utils.findWeekNumber(menu.getDate()));
+
+        menu = createMenuCategory(menu, menuCategories.get(0), MenuOptionType.MAIN);
+        menu = createMenuCategory(menu, menuCategories.get(1), MenuOptionType.MAIN);
+        menu = createMenuCategory(menu, menuCategories.get(2), MenuOptionType.MAIN);
+        menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())),
+                MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
+        menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())), MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
+        menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())), MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
+        menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())), MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
+
+        menuRepository.save(menu);
+    }
+
+    public Menu createMenuCategory(Menu menu, MenuCategory menuCategory, MenuOptionType menuOptionType) {
+        Random r = new Random();
+        MenuOption op1 = new MenuOption();
+        op1.setMenu(menu);
+        op1.setMenuCategory(menuCategory);
+        op1.setMenuOptionType(menuOptionType);
+        op1.setForecastQuantity(r.nextInt(100) + 15);
+        op1.setRecipe(recipes.get(r.nextInt(recipes.size())));
+        if (menu.getDate().isBefore(LocalDate.now())) {
+            op1.setActualQuantity(op1.getForecastQuantity() - 3);
+            op1.setCost(BigDecimal.valueOf(r.nextInt(1000) + 50));
+        }
+        menu.addMenuOption(op1);
+        return menu;
+    }
 
 }

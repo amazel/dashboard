@@ -4,8 +4,9 @@ import com.platillogodin.dashboard.domain.Recipe;
 import com.platillogodin.dashboard.domain.RecipeCategory;
 import com.platillogodin.dashboard.services.RecipeCategoryService;
 import com.platillogodin.dashboard.services.RecipeService;
-import org.junit.Before;
-import org.junit.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,12 +24,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Slf4j
 public class RecipeControllerTest {
 
     @Mock
     RecipeService recipeService;
     @Mock
     RecipeCategoryService recipeCategoryService;
+
     RecipeController recipeController;
     MockMvc mockMvc;
 
@@ -36,7 +39,7 @@ public class RecipeControllerTest {
     private static final String SHOW_URL = "recipes/show";
     private static final String LIST_URL = "recipes/list";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         recipeController = new RecipeController(recipeService, recipeCategoryService);
@@ -116,7 +119,6 @@ public class RecipeControllerTest {
         Recipe saved = new Recipe();
         saved.setId(200L);
         when(recipeService.saveRecipe(any())).thenReturn(saved);
-
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         )

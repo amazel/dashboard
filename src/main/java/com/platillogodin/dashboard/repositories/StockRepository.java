@@ -20,5 +20,5 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
 
     Stock findByIngredient(Ingredient ingredient);
 
-    List<Stock> findAllByIngredient(List<Ingredient> ingredients);
+    List<Stock> findAllByIngredientIn(List<Ingredient> ingredients);
 }

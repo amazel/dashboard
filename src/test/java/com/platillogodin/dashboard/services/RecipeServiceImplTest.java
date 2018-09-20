@@ -2,17 +2,21 @@ package com.platillogodin.dashboard.services;
 
 import com.platillogodin.dashboard.domain.Recipe;
 import com.platillogodin.dashboard.repositories.RecipeRepository;
-import org.junit.Before;
-import org.junit.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 public class RecipeServiceImplTest {
 
     RecipeService recipeService;
@@ -20,7 +24,7 @@ public class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         recipeService = new RecipeServiceImpl(recipeRepository);

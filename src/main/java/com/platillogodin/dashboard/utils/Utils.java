@@ -26,4 +26,8 @@ public class Utils {
         }
         return date.plusDays(8 - dayOfWeek);
     }
+
+    public static Integer findWeekNumber(LocalDate date) {
+        return date.get(WeekFields.ISO.weekOfYear());
+    }
 }

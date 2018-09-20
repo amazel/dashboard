@@ -23,11 +23,14 @@ public class Menu {
     @NonNull
     private String id;
 
+    private Integer weekNumber;
     private LocalDate date;
 
     private BigDecimal totalCost;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu", fetch = FetchType.LAZY)
+    private boolean processed = false;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<MenuOption> options = new ArrayList<>();
 
     public Menu addMenuOption(MenuOption menuOption) {

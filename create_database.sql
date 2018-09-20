@@ -1,7 +1,6 @@
-
 create table ingredient (id bigint not null auto_increment, expiration_time integer, name varchar(255), uom varchar(255), category_id bigint, primary key (id)) engine=InnoDB
 create table ingredient_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
-create table menu (id varchar(255) not null, date date, total_cost decimal(19,2), primary key (id)) engine=InnoDB
+create table menu (id varchar(255) not null, date date, processed bit not null, total_cost decimal(19,2), week_number integer, primary key (id)) engine=InnoDB
 create table menu_category (id bigint not null auto_increment, description varchar(255), name varchar(255), primary key (id)) engine=InnoDB
 create table menu_option (id bigint not null auto_increment, actual_quantity integer, cost decimal(19,2), forecast_quantity integer, menu_option_type varchar(255), menu_id varchar(255), menu_category_id bigint, recipe_id bigint, primary key (id)) engine=InnoDB
 create table recipe (id bigint not null auto_increment, cook_time integer, image longblob, name varchar(255), prep_time integer, servings integer, recipe_category_id bigint, primary key (id)) engine=InnoDB

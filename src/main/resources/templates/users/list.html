@@ -6,7 +6,9 @@
     <script type="text/javascript" th:inline="none" class="init">
         /*<![CDATA[*/
         $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#deleteError').delay(5000).fadeOut('slow');
+            $('#deleteMessage').delay(5000).fadeOut('slow');
         });
         /*]]>*/
     </script>
@@ -35,15 +37,15 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-
-                            <div th:if="${deleteError}" class="alert alert-danger">
-                                <p th:text="${deleteError}">...</p>
+                            <!--/*@thymesVar id="deleteError" type="java.lang.String"*/-->
+                            <!--/*@thymesVar id="deleteMessage" type="java.lang.String"*/-->
+                            <div th:if="${deleteError}" class="alert alert-danger" id="deleteError">
+                                <div th:text="${deleteError}">...</div>
                             </div>
-                            <div th:if="${deleteMessage}" class="alert alert-info">
-                                <p th:text="${deleteMessage}">...</p>
+                            <div th:if="${deleteMessage}" class="alert alert-info" id="deleteMessage">
+                                <div th:text="${deleteMessage}">...</div>
                             </div>
-
-                            <div class="table-responsive">
+                            <div class="table-responsive table-condensed">
                                 <table class="table table-sm" id="usersTable">
                                     <thead>
                                     <tr>

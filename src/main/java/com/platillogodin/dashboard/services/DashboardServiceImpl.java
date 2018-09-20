@@ -1,11 +1,9 @@
 package com.platillogodin.dashboard.services;
 
-import com.platillogodin.dashboard.commands.IngredientForecast;
-import com.platillogodin.dashboard.commands.WeeklyCostItem;
-import com.platillogodin.dashboard.commands.WeeklyCosts;
-import com.platillogodin.dashboard.commands.WeeklyRecipeCosts;
+import com.platillogodin.dashboard.commands.*;
 import com.platillogodin.dashboard.domain.*;
 import com.platillogodin.dashboard.repositories.MenuCategoryRepository;
+import com.platillogodin.dashboard.repositories.MenuOptionRepository;
 import com.platillogodin.dashboard.repositories.MenuRepository;
 import com.platillogodin.dashboard.repositories.StockRepository;
 import com.platillogodin.dashboard.utils.Utils;
@@ -31,12 +29,14 @@ public class DashboardServiceImpl implements DashboardService {
     private final MenuRepository menuRepository;
     private final StockRepository stockRepository;
     private final MenuCategoryRepository menuCategoryRepository;
+    private final MenuOptionRepository menuOptionRepository;
 
 
-    public DashboardServiceImpl(MenuRepository menuRepository, StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository) {
+    public DashboardServiceImpl(MenuRepository menuRepository, StockRepository stockRepository, MenuCategoryRepository menuCategoryRepository, MenuOptionRepository menuOptionRepository) {
         this.menuRepository = menuRepository;
         this.stockRepository = stockRepository;
         this.menuCategoryRepository = menuCategoryRepository;
+        this.menuOptionRepository = menuOptionRepository;
     }
 
     @Override
@@ -171,5 +171,10 @@ public class DashboardServiceImpl implements DashboardService {
         weeklyCosts.getWeeklyCostItems().add(totalRecord);
 
         return weeklyCosts;
+    }
+
+    @Override
+    public List<CategoryTotal> getTotalsByCategory() {
+        return menuOptionRepository.getTotalsByCategory();
     }
 }

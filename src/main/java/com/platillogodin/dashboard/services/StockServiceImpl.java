@@ -40,6 +40,7 @@ public class StockServiceImpl implements StockService {
         return stockRepository.save(stock);
     }
 
+    @Override
     public Stock saveStockEntry(Stock stock, StockEntry entry) {
         if (entry.getId() == null) {
             entry.setOriginalQty(entry.getCurrentQty());
@@ -59,6 +60,7 @@ public class StockServiceImpl implements StockService {
         stock.addStockEntry(entry);
         return stockRepository.save(stock);
     }
+
 
     @Override
     public void deleteStockByIngredient(Ingredient ingredient) {

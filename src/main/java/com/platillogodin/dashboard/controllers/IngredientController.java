@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -38,7 +37,7 @@ public class IngredientController {
 
         List<Ingredient> ingredientList = ingredientService.findAll();
         model.addAttribute("ingredientList", ingredientList);
-        return "ingredients/list";
+        return LIST_URL;
     }
 
     @GetMapping("ingredients/new")
@@ -72,14 +71,12 @@ public class IngredientController {
         return "redirect:/ingredients";
     }
 
-    @PostMapping(value = "ingredient")
+    @PostMapping("ingredient")
     public String saveOrUpdateIngredient(@ModelAttribute("ingredient") Ingredient ingredient,
-                                         @RequestParam(value = "initialPrice", required = false) String price,
-                                         BindingResult bindingResult) {
+                                         @RequestParam(value = "initialPrice", required = false) String price) {
         log.info("Saving ingredient");
-        log.info(price);
         Ingredient saved = ingredientService.saveIngredient(ingredient, price);
-        log.info(saved.toString());
+        log.info("saved: {}", saved);
         return REDIRECT_LIST_URL;
     }
 }

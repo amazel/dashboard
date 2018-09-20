@@ -3,6 +3,26 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
+   <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link href="../../static/css/dashboard.css"
+          th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+          crossorigin="anonymous">-->
+
     <!-- Custom styles for this template -->
     <script type="text/javascript"
             src="../../static/plugins/dncalendar/js/dncalendar.min.js"
@@ -60,7 +80,9 @@
 
             var menuDate = date.getFullYear() + mm + day;
             $('#collapseExample').collapse('hide');
-            $("#contentFragment").load('/api/menus', 'menuId=' + menuDate);
+            $("#contentFragment").load('/api/menus', 'menuId=' + menuDate, function (responseText) {
+                $('#menuIdFrame').val(menuDate);
+            });
             $("#content").show();
         }
     </script>
@@ -71,6 +93,18 @@
 
         .smallFont {
             font-size: 12px;
+        }
+
+        .card-body {
+            padding: 0.3rem;
+        }
+
+        .card-header {
+            padding: .5rem 1rem;
+        }
+
+        .table th {
+            padding: .25rem;
         }
     </style>
 </head>
@@ -93,211 +127,268 @@
     <br/>
     <div style="display: none" id="content">
         <div th:fragment="content" id="contentFragment">
-            <h6
-                    th:text="${'Menu para: '+#temporals.dayOfWeekName(menu.date)+', '+#temporals.format(menu.date, 'dd - MMMM - yyyy')}"></h6>
+
+            <input type="hidden" name="menuIdFrame" id="menuIdFrame">
+
+            <div class="row justify-content-md-around justify-content-between">
+                <div class="col-md-5 col-5 align-self-center"><h6
+                        th:text="${'Menú del: '+#temporals.dayOfWeekName(menu.date)+', '+#temporals.format(menu.date, 'dd - MMMM - yyyy')}">
+                    Menu del: Lunes, 12 - Septiembre - 2018</h6>
+                </div>
+                <div class="col-md-2 col-4 align-content-end">
+                    <span th:if="${menu.processed}" style="color: green; font-size: small">
+                    <i class="fas fa-check" style="color:green"></i> Procesado
+                </span>
+                    <button class="btn btn-info btn-sm" id="processDayBtn"
+                            th:disabled="${menu.processed}">Procesar Menú
+                    </button>
+
+                </div>
+            </div>
+            <br>
+            <div class="alert alert-danger" id="errorMessage" style="display: none;"></div>
+            <div class="alert alert-info" id="message" style="display: none;"></div>
             <div class="row justify-content-center">
 
-                <div class="col-12 col-md-6 mb-2" th:each="cat, stat : ${categories}">
+                <div class="col-12 col-md-6 mb-3" th:each="cat, stat : ${categories}">
                     <div class="card">
                         <div class="card-header">
-                            <div class="row">
+                            <div class="row justify-content-between">
                                 <div class="col-md-10 col-10">
                                     <h6 th:text="${cat.name}">Gofitness</h6>
                                 </div>
                                 <div class="col-md-2 col-1 text-right">
-                                    <a class="btn btn-default" href="#"
+                                    <a href="#"
                                        data-target='#addDish'
                                        data-backdrop="static"
                                        data-catid='0'
                                        th:attr="data-catid=''+${cat.id},
                                        data-menuid=''+${menu.id}"
-                                       data-toggle="modal">
+                                       data-toggle="modal"
+                                       th:if="${!menu.processed}">
                                         <i class="fas fa-plus-circle fa-lg" style="color:green"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-
-                            <div th:each="option : ${menu.options.?[menuCategory.id == __${cat.id}__]}">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Platillo</th>
+                                    <th>#Est</th>
+                                    <th>#Real</th>
+                                </tr>
+                                </thead>
+                                <tbody>
                                 <!--/*@thymesVar id="option" type="com.platillogodin.dashboard.domain.MenuOption"*/-->
-                                <div class="table-responsive">
-                                    <table class="table">
-
-                                        <tbody>
-                                        <tr>
-                                            <td style="width: 18%">
-                                                <div th:text="${option.menuOptionType.getSpanishName()}">Plato Fuerte
-                                                </div>
-                                            </td>
-                                            <td
-                                                    th:style="${option.actualQuantity != null?'width: 54%':'width: 68%'}">
-                                                <a class="smallFont" href="#"
-                                                   data-target='#addDish'
-                                                   data-backdrop="static"
-                                                   data-catid='0'
-                                                   th:attr="data-catid=''+${cat.id},
+                                <tr th:each="option : ${menu.options.?[menuCategory.id == __${cat.id}__]}">
+                                    <td style="width: 25%">
+                                        <span th:if="${!menu.processed}">
+                                            <a href="#" class="deleteOptionBtn"
+                                               th:attr="data-menuoptionid=${option.id},
+                                                   data-menuid=${menu.id}">
+                                            <i class="fas fa-times" style="color:red"></i>
+                                        </a> -
+                                        </span>
+                                        <span th:text="${option.menuOptionType.getSpanishName()}">Plato Fuerte
+                                                </span>
+                                    </td>
+                                    <td style="width: 55%">
+                                        <a class="smallFont" href="#"
+                                           data-target='#addDish'
+                                           data-backdrop="static"
+                                           data-catid='0'
+                                           th:attr="data-catid=''+${cat.id},
                                                    data-menuid=${menu.id},
                                                    data-menuoptionid=${option.id},
                                                    data-recipeid=${option.recipe.id},
                                                    data-recipe=''+${option.recipe.name},
                                                    data-actualquantity=${option.actualQuantity},
                                                    data-forecastquantity=${option.forecastQuantity}"
-                                                   data-toggle="modal"
-                                                   th:text="${option.recipe.name}">Pollo Encacahuatado</a>
+                                           data-toggle="modal"
+                                           th:text="${option.recipe.name}"
+                                           th:if="${!menu.processed}">Chicharron en chile verde</a>
 
-                                            </td>
-                                            <td th:if="${option.actualQuantity}" style="width: 14%">
-                                                <div th:text="${'#real: '+option.actualQuantity}">#real: 150</div>
-                                            </td>
-                                            <td style="width: 14%">
-                                                <div th:text="${'#est: '+option.forecastQuantity}">#est: 150</div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                        <div th:text="${option.recipe.name}" th:if="${menu.processed}">Chicharron en
+                                            chile verde
+                                        </div>
+
+                                    </td>
+                                    <td style="width: 10%">
+                                        <div th:text="${option.forecastQuantity}">1580</div>
+                                    </td>
+                                    <td style="width: 10%">
+                                        <div th:text="${option.actualQuantity}">1880</div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="modal" id="addDish" tabindex="-1">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <form id="menuOptionForm">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Añadir platillo</h5>
-                                <button type="button" class="close" data-dismiss="modal">
-                                    &times;
-                                </button>
-                            </div>
-                            <div class="modal-body">
+        <div class="modal" id="addDish" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form id="menuOptionForm" action="">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Añadir/Modificar platillo</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body">
 
-                                <input type="hidden" name="menuId" id="menuId" th:value="${menuId}">
-                                <input type="hidden" name="categoryId" id="categoryId">
-                                <input type="hidden" name="menuOptionId" id="menuOptionId">
-                                <div class="form-row">
-                                    <div class="form-group col-md-5 col-12">
-                                        <label for="inputMOType">Tipo</label>
-                                        <select id="inputMOType" class="form-control">
-                                            <option th:each="unit : ${T(com.platillogodin.dashboard.domain.MenuOptionType).values()}"
-                                                    th:value="${unit}"
-                                                    th:text="${unit.getSpanishName()}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-7 col-12">
-                                        <label for="recipe">Platillo</label>
+                            <input type="hidden" name="menuId" id="menuId" th:value="${menuId}">
+                            <input type="hidden" name="categoryId" id="categoryId">
+                            <input type="hidden" name="menuOptionId" id="menuOptionId">
+                            <div class="form-row">
+                                <div class="form-group col-md-5 col-12">
+                                    <label for="inputMOType">Tipo</label>
+                                    <select id="inputMOType" class="form-control">
+                                        <option th:each="unit : ${T(com.platillogodin.dashboard.domain.MenuOptionType).values()}"
+                                                th:value="${unit}"
+                                                th:text="${unit.getSpanishName()}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-7 col-12">
+                                    <label for="recipe">Platillo</label>
 
-                                        <div class="typeahead__container">
-                                            <div class="typeahead__field">
-                                                <input class="js-typeahead-font_v1 form-control" type="search"
-                                                       id="recipe"
-                                                       autocomplete="off"
-                                                       required
-                                                       placeholder="Escribe el nombre del platillo...">
+                                    <div class="typeahead__container">
+                                        <div class="typeahead__field">
+                                            <input class="js-typeahead-font_v1 form-control" type="search"
+                                                   id="recipe"
+                                                   autocomplete="off"
+                                                   required="required"
+                                                   placeholder="Escribe el nombre del platillo...">
 
-                                            </div>
                                         </div>
-
                                     </div>
-                                    <input type="hidden" id="recipeId">
-                                    <script>
-                                        $.typeahead({
-                                            input: '.js-typeahead-font_v1',
-                                            maxItem: 10,
-                                            order: "asc",
-                                            hint: false,
-                                            group: {
-                                                template: function (item) {
-                                                    return item.recipeCategory.name;
-                                                }
-                                            },
-                                            display: "name",
-                                            source: {
-                                                ajax: {
-                                                    url: "/api/recipes",
-                                                    dataType: "json"
-                                                }
-                                            },
-                                            callback: {
-                                                onClickAfter: function (node, a, item, event) {
-                                                    event.preventDefault;
-                                                    $('#recipeId').val(item.id)
-                                                },
 
-                                                onCancel: function (node, event) {
-                                                    $('#recipeId').val('')
-                                                }
-                                            },
-                                            debug: true
-                                        });
-
-                                        $('#recipe').focusout(function () {
-                                            if (!$('#recipeId').val()) {
-                                                $('#recipe').val('')
+                                </div>
+                                <input type="hidden" id="recipeId">
+                                <script>
+                                    $.typeahead({
+                                        input: '.js-typeahead-font_v1',
+                                        maxItem: 10,
+                                        order: "asc",
+                                        hint: false,
+                                        group: {
+                                            template: function (item) {
+                                                return item.recipeCategory.name;
                                             }
-                                        });
-                                        $('#recipe').change(function () {
-                                            $('#recipeId').val('')
-                                        });
+                                        },
+                                        display: "name",
+                                        source: {
+                                            ajax: {
+                                                url: "/api/recipes",
+                                                dataType: "json"
+                                            }
+                                        },
+                                        callback: {
+                                            onClickAfter: function (node, a, item, event) {
+                                                event.preventDefault;
+                                                $('#recipeId').val(item.id)
+                                            },
 
-                                    </script>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-5 col-6">
-                                        <label for="forecastQuantity"># Estimado</label>
-                                        <input type="number" min="0" id="forecastQuantity" class="form-control"
-                                               required>
-                                    </div>
-                                    <div class="form-group col-md-5 col-6">
-                                        <label for="actualQuantity"># Real</label>
-                                        <input type="number" min="0" id="actualQuantity" class="form-control">
-                                    </div>
-                                </div>
+                                            onCancel: function (node, event) {
+                                                $('#recipeId').val('')
+                                            }
+                                        },
+                                        debug: true
+                                    });
 
+                                    $('#recipe').on('focusout', function () {
+                                        if (!$('#recipeId').val()) {
+                                            $('#recipe').val('')
+                                        }
+                                    });
+                                    $('#recipe').on('change', function () {
+                                        $('#recipeId').val('')
+                                    });
+
+                                </script>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-success" data-dismiss="modal"
-                                        id="submitBtn">Aceptar
-                                </button>
+                            <div class="form-row">
+                                <div class="form-group col-md-5 col-6">
+                                    <label for="forecastQuantity"># Estimado</label>
+                                    <input type="number" min="0" id="forecastQuantity" class="form-control"
+                                           required="required">
+                                </div>
+                                <div class="form-group col-md-5 col-6">
+                                    <label for="actualQuantity"># Real</label>
+                                    <input type="number" min="0" id="actualQuantity" class="form-control">
+                                </div>
                             </div>
-                        </form>
-                    </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                    id="submitBtn">Aceptar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <script>
-                $('#addDish').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget);
-                    var catId = button.data('catid');
-                    var menuId = button.data('menuid');
-                    var menuOptionId = button.data('menuoptionid');
-                    var forecastQuantity = button.data('forecastquantity');
-                    var actualQuantity = button.data('actualquantity');
-                    var recipe = button.data('recipe');
-                    var recipeId = button.data('recipeid');
-                    var modal = $(this);
-                    $(this).find('#categoryId').val(catId);
-                    $(this).find('#menuId').val(menuId)
+        </div>
+        <script>
 
-                    $(this).find('#menuOptionId').val(menuOptionId)
-                    $(this).find('#forecastQuantity').val(forecastQuantity)
-                    $(this).find('#actualQuantity').val(actualQuantity)
-                    $(this).find('#recipe').val(recipe)
-                    $(this).find('#recipeId').val(recipeId)
+            $('.deleteOptionBtn').on('click', function (t) {
+                var menuOptionId = $(this).data('menuoptionid');
+                var menuId = $(this).data('menuid');
 
-
+                $.ajax({
+                    method: 'GET',
+                    url: "/api/menu_option/delete?menuOptionId=" + menuOptionId + '&menuId=' + menuId,
+                    success: function (data) {
+                        console.log("Success ", data);
+                        $("#contentFragment").load('/api/menus', 'menuId=' + menuId, function (responseText) {
+                            $('#menuIdFrame').val(menuId);
+                        });
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    }
                 });
 
-                $('#addDish').on('hide.bs.modal', function (t) {
-                    $('#menuOptionForm').trigger("reset");
-                });
+            });
 
-                $("#submitBtn").click(function (event) {
-                    // $('#addDish').modal('hide');
+            $('#addDish').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var catId = button.data('catid');
+                var menuId = button.data('menuid');
+                var menuOptionId = button.data('menuoptionid');
+                var forecastQuantity = button.data('forecastquantity');
+                var actualQuantity = button.data('actualquantity');
+                var recipe = button.data('recipe');
+                var recipeId = button.data('recipeid');
+                var modal = $(this);
+                $(this).find('#categoryId').val(catId);
+                $(this).find('#menuId').val(menuId)
+
+                $(this).find('#menuOptionId').val(menuOptionId)
+                $(this).find('#forecastQuantity').val(forecastQuantity)
+                $(this).find('#actualQuantity').val(actualQuantity)
+                $(this).find('#recipe').val(recipe)
+                $(this).find('#recipeId').val(recipeId)
+            });
+
+            $('#addDish').on('hide.bs.modal', function (t) {
+                $('#menuOptionForm').trigger("reset");
+            });
+
+            $("#submitBtn").on('click', function (event) {
+
+                if ($('#forecastQuantity').val() === '' || $('#recipeId').val() === '') {
+                    event.stopPropagation();
+
+                } else {
                     event.preventDefault();
                     var menuOption = {};
                     var recipe = {};
@@ -324,17 +415,42 @@
                         data: JSON.stringify(menuOption),
                         success: function (data) {
                             console.log("Success ", data);
-                            $("#contentFragment").load('/api/menus', 'menuId=' + menu.id);
+                            $("#contentFragment").load('/api/menus', 'menuId=' + menu.id, function (responseText) {
+                                $('#menuIdFrame').val(menu.id);
+                            });
                         },
                         error: function (e) {
                             console.log("ERROR : ", e);
                         }
                     });
-                });
+                }
 
-            </script>
-        </div>
+            });
+
+            $('#errorMessage').delay(10000).fadeOut('slow');
+            $('#message').delay(10000).fadeOut('slow');
+
+            $('#processDayBtn').on('click', function (t) {
+                $('#processDayBtn').prop("disabled", true);
+                $.ajax({
+                    url: '/api/menu/process-day?menuId=' + $('#menuIdFrame').val(),
+                    method: 'GET',
+                    success: function (data) {
+                        $('#message').show();
+                        $('#message').text(data);
+
+                    },
+                    error: function (jqXHR) {
+                        $('#errorMessage').show();
+                        $('#errorMessage').text(jqXHR.responseText);
+                        $('#processDayBtn').prop("disabled", false);
+                    }
+                });
+            });
+
+        </script>
     </div>
+</div>
 </div>
 </body>
 </html>
