@@ -15,8 +15,8 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({NumberFormatException.class, Exception.class})
     public ModelAndView handleNumberFormatException(Exception e) {
-        log.error("Handling NUMBER FORMAT EXCEPTION");
-        log.error(e.toString());
+        log.error("Handling  EXCEPTION");
+        log.error("Exception: {}", e);
         ModelAndView mav = new ModelAndView();
         mav.addObject("exception", e);
         mav.setViewName("error");

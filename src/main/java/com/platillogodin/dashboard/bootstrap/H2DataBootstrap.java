@@ -72,11 +72,11 @@ public class H2DataBootstrap implements CommandLineRunner {
 
     private void loadDefaultUsers() {
         User user1 = new User();
-        user1.setUsername("hugo.lezama");
+        user1.setUsername("Hugo");
         user1.setRole(UserRole.ROLE_USER);
 
         User user2 = new User();
-        user2.setUsername("cesar.lezama");
+        user2.setUsername("Cesar");
         user2.setRole(UserRole.ROLE_ADMIN);
 
         userService.saveUser(user1);
@@ -140,46 +140,21 @@ public class H2DataBootstrap implements CommandLineRunner {
         Ingredient arroz = ingredientRepository.save(
                 new Ingredient(null, "Arroz", ingredientCategories.get(6), UnitOfMeasure.GR, 365));
 
-        stockService.saveStock(new Stock(cebolla, new BigDecimal("0.010")));
-        stockService.saveStock(new Stock(agua, new BigDecimal("0.002")));
-        stockService.saveStock(new Stock(mango, new BigDecimal("0.01357")));
+        createStock(stockService.saveStock(new Stock(cebolla, new BigDecimal("0.010"))));
+        createStock(stockService.saveStock(new Stock(agua, new BigDecimal("0.002"))));
+        createStock(stockService.saveStock(new Stock(mango, new BigDecimal("0.01357"))));
         stockService.saveStock(new Stock(caldo_de_pollo, new BigDecimal("0.022")));
-        stockService.saveStock(new Stock(pechugaPollo, new BigDecimal("0.08")));
-        stockService.saveStock(new Stock(arroz, new BigDecimal("0.0172")));
+        createStock(stockService.saveStock(new Stock(pechugaPollo, new BigDecimal("0.08"))));
+        createStock(stockService.saveStock(new Stock(arroz, new BigDecimal("0.0172"))));
 
         Stock stockJitomate = stockService.saveStock(new Stock(jitomate, new BigDecimal("0.0181")));
-
-        StockEntry entryj_1 = new StockEntry();
-        entryj_1.setCurrentQty(900);
-        entryj_1.setOriginalQty(10000);
-        entryj_1.setPrice(new BigDecimal("135.00"));
-        entryj_1.setSupplyDate(LocalDate.now().minusDays(6));
-
-        stockService.saveStockEntry(stockJitomate, entryj_1);
-
-        Stock saved = stockService.saveStock(new Stock(pasta, new BigDecimal("0.0029")));
-
-        StockEntry entry1_1 = new StockEntry();
-        entry1_1.setCurrentQty(0);
-        entry1_1.setOriginalQty(500);
-        entry1_1.setPrice(new BigDecimal("26"));
-        entry1_1.setSupplyDate(LocalDate.now().minusDays(15));
-
-        StockEntry entry1_2 = new StockEntry();
-        entry1_2.setCurrentQty(100);
-        entry1_2.setOriginalQty(1000);
-        entry1_2.setPrice(new BigDecimal("50"));
-        entry1_2.setSupplyDate(LocalDate.now().minusDays(5));
-
-        StockEntry entry1_3 = new StockEntry();
-        entry1_3.setCurrentQty(800);
-        entry1_3.setOriginalQty(800);
-        entry1_3.setPrice(new BigDecimal("40.8"));
-        entry1_3.setSupplyDate(LocalDate.now());
-
-        stockService.saveStockEntry(saved, entry1_2);
-//        stockService.saveStockEntry(saved, entry1_1);
-        stockService.saveStockEntry(saved, entry1_3);
+        Stock stockPasta = stockService.saveStock(new Stock(pasta, new BigDecimal("0.0029")));
+        createStock(stockJitomate);
+        createStock(stockJitomate);
+        createStock(stockJitomate);
+        createStock(stockPasta);
+        createStock(stockPasta);
+        createStock(stockPasta);
 
         Recipe polloCacahuate = new Recipe();
         polloCacahuate.setCookTime(15);
@@ -260,6 +235,16 @@ public class H2DataBootstrap implements CommandLineRunner {
         lastMonday = lastMonday.plusDays(1);
         createMenu(lastMonday.format(formatter), lastMonday);
 
+    }
+
+    private void createStock(Stock stock) {
+        Random r = new Random();
+        StockEntry entry = new StockEntry();
+        entry.setCurrentQty(r.nextInt(100) * 10);
+        entry.setOriginalQty(entry.getCurrentQty()+100);
+        entry.setPrice(BigDecimal.valueOf(r.nextInt(1000) + 250));
+        entry.setSupplyDate(LocalDate.now().minusDays(r.nextInt(8)));
+        stockService.saveStockEntry(stock, entry);
     }
 
     public void createMenu(String menuId, LocalDate date) {

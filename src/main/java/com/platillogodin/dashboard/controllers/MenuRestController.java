@@ -97,6 +97,6 @@ public class MenuRestController {
         } catch (GenericException ge) {
             return ResponseEntity.badRequest().body(ge.getMessage());
         }
-        return ResponseEntity.ok("Listo, proceso cerrado");
+        return ResponseEntity.ok("El menú fue procesado con éxito!");
     }
 }

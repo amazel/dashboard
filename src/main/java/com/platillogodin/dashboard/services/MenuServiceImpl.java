@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -74,7 +75,7 @@ public class MenuServiceImpl implements MenuService {
                         .filter(stock -> stock.getIngredient().getId().equals(ri.getIngredient().getId()))
                         .findFirst()
                         .orElseThrow(() -> new NotFoundException("No se encontró registro en el inventario para el " +
-                                "ingrediente: " + ri.getIngredient().getName()));
+                                "ingrediente " + ri.getIngredient().getName()));
                 List<StockEntry> filteredStockEntries = ingredientStock.getStockEntries()
                         .stream()
                         .filter(stockEntry -> stockEntry.getCurrentQty() > 0)
@@ -83,7 +84,8 @@ public class MenuServiceImpl implements MenuService {
 
                 BigDecimal ingredientCost = BigDecimal.ZERO;
                 for (StockEntry entry : filteredStockEntries) {
-                    BigDecimal unitCost = entry.getPrice().divide(BigDecimal.valueOf(entry.getOriginalQty()));
+                    BigDecimal unitCost = entry.getPrice().divide(BigDecimal.valueOf(entry.getOriginalQty()), 2,
+                            RoundingMode.HALF_UP);
                     log.info("Unit cost for entry ID {}: {}", entry.getId(), unitCost.toString());
                     if (BigDecimal.valueOf(entry.getCurrentQty()).compareTo(neededQty) < 0) {
                         log.info("NO HAY SUFICIENTE EN LA ENTRY: {}, SE NECESITA {}", entry.getCurrentQty(), neededQty);
@@ -111,12 +113,12 @@ public class MenuServiceImpl implements MenuService {
                 log.info("Cost for ingredient {}: {}", ri.getIngredient().getName(), ingredientCost);
                 menuOptionCost = menuOptionCost.add(ingredientCost);
                 if (neededQty.compareTo(BigDecimal.ZERO) != 0) {
-                    throw new GenericException("No hay suficiente stock de: " + ri.getIngredient().getName() + " para procesar " +
-                            "este dia");
+                    throw new GenericException("No hay suficiente cantidad de " + ri.getIngredient().getName() + " en el " +
+                            "inventario para procesar el menú. Receta: " + ri.getRecipe().getName());
                 }
             }
             option.setCost(menuOptionCost);
-            log.info("Total cost for Menu option {}: {}", option.getRecipe().getName(),
+            log.info("Costo total de la opcion del menu {}: {}", option.getRecipe().getName(),
                     menuOptionCost);
             totalMenuCost = totalMenuCost.add(menuOptionCost);
         }

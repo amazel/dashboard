@@ -56,13 +56,14 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav  nav-justified w-100">
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="#" th:href="@{'/menus'}">Planear Menus</a>
+                    <a class="nav-link" href="#" th:href="@{'/menus'}">
+                        <i class="far fa-calendar-alt"></i> Planear Menus</a>
                 </li>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Recetas
+                        <i class="fas fa-utensils"></i> Recetas
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
                         <a class="dropdown-item" href="#" th:href="@{'/recipes'}">Lista</a>
@@ -72,7 +73,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Ingredientes
+                        <i class="fas fa-lemon"></i> Ingredientes
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
                         <a class="dropdown-item" href="#" th:href="@{'/ingredients'}">Lista</a>
@@ -80,12 +81,13 @@
                     </div>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" href="#" th:href="@{'/stock'}">Inventario</a>
+                    <a class="nav-link" href="#" th:href="@{'/stock'}">
+                        <i class="fas fa-warehouse"></i> Inventario</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Categorias
+                        <i class="fas fa-tags"></i> Categorias
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
                         <a class="dropdown-item" href="#" th:href="@{'/categories/recipes'}">Recetas</a>
@@ -98,7 +100,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user"></i>
-                        <span th:text="${userName}">hugo</span>
+                        <span th:text="${userName}"> Hugo</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
                         <a class="dropdown-item" href="#" th:href="@{'/users/profile/'+${userName}}">Mi

@@ -8,6 +8,7 @@ import com.platillogodin.dashboard.repositories.StockRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -55,7 +56,8 @@ public class StockServiceImpl implements StockService {
             stock.setNextExpirationDate(entry.getExpirationDate());
         }
         if (!entry.getSupplyDate().isBefore(stock.getLastSupplyDate())) {
-            stock.setLastPrice(entry.getPrice().divide(BigDecimal.valueOf(entry.getCurrentQty())));
+            stock.setLastPrice(entry.getPrice().divide(BigDecimal.valueOf(entry.getCurrentQty()), 2,
+                    RoundingMode.HALF_UP));
         }
         stock.addStockEntry(entry);
         return stockRepository.save(stock);

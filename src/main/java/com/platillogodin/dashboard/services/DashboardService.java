@@ -14,5 +14,5 @@ public interface DashboardService {
 
     WeeklyCosts getWeeklyCostsForecast();
 
-    List<CategoryTotal> getTotalsByCategory();
+    List<CategoryTotal> getTotalsByCategory(Integer days);
 }

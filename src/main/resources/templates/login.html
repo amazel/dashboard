@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
+
     <script>
         $(function () {
             $('#errorMsg').delay(5000).fadeOut('slow');
@@ -43,7 +44,11 @@
                             <input type="password" name="password" id="password" class="form-control input-lg"
                                    placeholder="Contraseña" required="true" autocomplete="off">
                         </div>
+                        <div class="custom-checkbox custom-control">
+                            <input type="checkbox" name="remember-me" id="remember" class="custom-control-input">
+                            <label for="remember" class="custom-control-label">Mantener sesión abierta </label>
 
+                        </div>
                         <div class="row justify-content-center">
                             <div class="col" align="right">
                                 <input type="submit" class="btn btn-primary"

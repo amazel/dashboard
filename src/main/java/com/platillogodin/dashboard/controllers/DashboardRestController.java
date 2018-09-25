@@ -1,7 +1,7 @@
 package com.platillogodin.dashboard.controllers;
 
 import com.platillogodin.dashboard.commands.CategoryTotal;
-import com.platillogodin.dashboard.commands.DailySaleCommand;
+import com.platillogodin.dashboard.commands.ChartsCommand;
 import com.platillogodin.dashboard.services.DashboardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,13 +34,9 @@ public class DashboardRestController {
     public ResponseEntity<?> getDailySales() {
         log.info("REST //api/daily-sales");
 
-        List<CategoryTotal> lista = dashboardService.getTotalsByCategory();
+        List<CategoryTotal> lista = dashboardService.getTotalsByCategory(15);
 
-        for (CategoryTotal o : lista) {
-            log.info("O {}", o);
-        }
-
-        DailySaleCommand dailySales = new DailySaleCommand();
+        ChartsCommand chartsCommand = new ChartsCommand();
 
         LinkedHashSet<String> days =
                 lista.stream().map(categoryTotal -> {
@@ -47,21 +44,26 @@ public class DashboardRestController {
                     String dia = categoryTotal.getMenuId().substring(6);
                     return dia.concat("/").concat(mes);
                 }).collect(Collectors.toCollection(LinkedHashSet::new));
-        dailySales.getLabels().addAll(days);
+        chartsCommand.getLabels().addAll(days);
 
 
         for (CategoryTotal o : lista) {
-            List<Integer> countValues = dailySales.getCountData().getOrDefault(o.getCategory(), new ArrayList<>());
+            log.info("O {}", o);
+            List<Integer> countValues = chartsCommand.getCountData().getOrDefault(o.getCategory(), new ArrayList<>());
             countValues.add(o.getQuantity().intValue());
-            dailySales.getCountData().put(o.getCategory(), countValues);
+            chartsCommand.getCountData().put(o.getCategory(), countValues);
 
-            List<BigDecimal> costValues = dailySales.getCostData().getOrDefault(o.getCategory(), new ArrayList<>());
+            List<BigDecimal> costValues = chartsCommand.getCostData().getOrDefault(o.getCategory(), new ArrayList<>());
             costValues.add(o.getPrice());
-            dailySales.getCostData().put(o.getCategory(), costValues);
+            chartsCommand.getCostData().put(o.getCategory(), costValues);
+
+            List<BigDecimal> unitCosts = chartsCommand.getUnitCostData().getOrDefault(o.getCategory(), new ArrayList<>());
+            unitCosts.add(o.getPrice().divide(BigDecimal.valueOf(o.getQuantity()), 2, RoundingMode.HALF_UP));
+            chartsCommand.getUnitCostData().put(o.getCategory(), unitCosts);
         }
 
 
-        return ResponseEntity.ok(dailySales);
+        return ResponseEntity.ok(chartsCommand);
     }
 
 }

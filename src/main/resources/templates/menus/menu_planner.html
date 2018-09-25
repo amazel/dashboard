@@ -3,7 +3,7 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-   <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
     <link rel="stylesheet"
@@ -16,7 +16,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
-    <link href="../../static/css/dashboard.css"
+    <link href="../static/css/dashboard.css"
           th:href="@{/css/dashboard.css}" rel="stylesheet">
     <link rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
@@ -44,7 +44,7 @@
         $(function () {
             var my_calendar = $("#dncalendar-container").dnCalendar({
                 dataTitles: {defaultDate: 'Activo', today: 'Hoy'},
-                dayClick: function (date, view) {
+                dayClick: function (date) {
                     var month = date.getMonth() + 1;
                     my_calendar.update({
                         defaultDate: date.getFullYear() + "-" + month + "-" + date.getDate()
@@ -62,13 +62,13 @@
             });
 
             var menuId = $('#menuId').val();
-            if (menuId != '') {
+            if (menuId !== '') {
                 console.log("MENU ID de URL");
                 var year = menuId.substring(0, 4);
                 var month = Number(menuId.substring(4, 6)) - 1;
                 var day = menuId.substring(6);
                 var d = new Date(year, month, day);
-                console.log(d)
+                console.log(d);
                 callMenuApi(d);
             }
         });
@@ -80,7 +80,7 @@
 
             var menuDate = date.getFullYear() + mm + day;
             $('#collapseExample').collapse('hide');
-            $("#contentFragment").load('/api/menus', 'menuId=' + menuDate, function (responseText) {
+            $("#contentFragment").load('/api/menus', 'menuId=' + menuDate, function () {
                 $('#menuIdFrame').val(menuDate);
             });
             $("#content").show();
@@ -120,34 +120,37 @@
     </div>
     <div class="row justify-content-center">
 
-        <a href="#" class="badge badge-info" data-toggle="collapse" data-target="#collapseExample"
+        <a href="#" class="badge badge-secondary" data-toggle="collapse" data-target="#collapseExample"
            aria-expanded="true" aria-controls="collapseExample"><i class="far fa-calendar-alt fa-2x"></i>
         </a>
     </div>
-    <br/>
+
     <div style="display: none" id="content">
         <div th:fragment="content" id="contentFragment">
 
             <input type="hidden" name="menuIdFrame" id="menuIdFrame">
 
-            <div class="row justify-content-md-around justify-content-between">
-                <div class="col-md-5 col-5 align-self-center"><h6
+
+            <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom">
+                <h6
                         th:text="${'Menú del: '+#temporals.dayOfWeekName(menu.date)+', '+#temporals.format(menu.date, 'dd - MMMM - yyyy')}">
-                    Menu del: Lunes, 12 - Septiembre - 2018</h6>
-                </div>
-                <div class="col-md-2 col-4 align-content-end">
-                    <span th:if="${menu.processed}" style="color: green; font-size: small">
-                    <i class="fas fa-check" style="color:green"></i> Procesado
-                </span>
-                    <button class="btn btn-info btn-sm" id="processDayBtn"
-                            th:disabled="${menu.processed}">Procesar Menú
+                    Menu del: Lunes, 12 - Septiembre - 2018 </h6><span th:if="${menu.processed}" style="color: green;
+                     font-size: small">
+                        <i class="fas fa-check" style="color:green"></i> Procesado
+                    </span>
+                <div class="btn-toolbar mb-2 mb-md-0">
+
+                    <button class="btn btn-sm btn-outline-secondary" id="processDayBtn"
+                            th:if="${!menu.processed}">Procesar Menú
                     </button>
 
                 </div>
             </div>
-            <br>
+
+
             <div class="alert alert-danger" id="errorMessage" style="display: none;"></div>
-            <div class="alert alert-info" id="message" style="display: none;"></div>
+            <div class="alert alert-secondary" id="message" style="display: none;"></div>
             <div class="row justify-content-center">
 
                 <div class="col-12 col-md-6 mb-3" th:each="cat, stat : ${categories}">
@@ -163,7 +166,7 @@
                                        data-backdrop="static"
                                        data-catid='0'
                                        th:attr="data-catid=''+${cat.id},
-                                       data-menuid=''+${menu.id}"
+                                        data-menuid=''+${menu.id}"
                                        data-toggle="modal"
                                        th:if="${!menu.processed}">
                                         <i class="fas fa-plus-circle fa-lg" style="color:green"></i>
@@ -185,28 +188,28 @@
                                 <!--/*@thymesVar id="option" type="com.platillogodin.dashboard.domain.MenuOption"*/-->
                                 <tr th:each="option : ${menu.options.?[menuCategory.id == __${cat.id}__]}">
                                     <td style="width: 25%">
-                                        <span th:if="${!menu.processed}">
-                                            <a href="#" class="deleteOptionBtn"
-                                               th:attr="data-menuoptionid=${option.id},
-                                                   data-menuid=${menu.id}">
-                                            <i class="fas fa-times" style="color:red"></i>
-                                        </a> -
-                                        </span>
+                                         <span th:if="${!menu.processed}">
+                                             <a href="#" class="deleteOptionBtn"
+                                                th:attr="data-menuoptionid=${option.id},
+                                                    data-menuid=${menu.id}">
+                                             <i class="fas fa-times" style="color:red"></i>
+                                         </a> -
+                                         </span>
                                         <span th:text="${option.menuOptionType.getSpanishName()}">Plato Fuerte
-                                                </span>
+                                                 </span>
                                     </td>
                                     <td style="width: 55%">
-                                        <a class="smallFont" href="#"
+                                        <a class="smallFont text-secondary font-weight-bold" href="#"
                                            data-target='#addDish'
                                            data-backdrop="static"
                                            data-catid='0'
                                            th:attr="data-catid=''+${cat.id},
-                                                   data-menuid=${menu.id},
-                                                   data-menuoptionid=${option.id},
-                                                   data-recipeid=${option.recipe.id},
-                                                   data-recipe=''+${option.recipe.name},
-                                                   data-actualquantity=${option.actualQuantity},
-                                                   data-forecastquantity=${option.forecastQuantity}"
+                                                    data-menuid=${menu.id},
+                                                    data-menuoptionid=${option.id},
+                                                    data-recipeid=${option.recipe.id},
+                                                    data-recipe=''+${option.recipe.name},
+                                                    data-actualquantity=${option.actualQuantity},
+                                                    data-forecastquantity=${option.forecastQuantity}"
                                            data-toggle="modal"
                                            th:text="${option.recipe.name}"
                                            th:if="${!menu.processed}">Chicharron en chile verde</a>
@@ -229,228 +232,235 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="modal" id="addDish" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <form id="menuOptionForm" action="">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Añadir/Modificar platillo</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
 
-        <div class="modal" id="addDish" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <form id="menuOptionForm" action="">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Añadir/Modificar platillo</h5>
-                            <button type="button" class="close" data-dismiss="modal">
-                                &times;
-                            </button>
-                        </div>
-                        <div class="modal-body">
-
-                            <input type="hidden" name="menuId" id="menuId" th:value="${menuId}">
-                            <input type="hidden" name="categoryId" id="categoryId">
-                            <input type="hidden" name="menuOptionId" id="menuOptionId">
-                            <div class="form-row">
-                                <div class="form-group col-md-5 col-12">
-                                    <label for="inputMOType">Tipo</label>
-                                    <select id="inputMOType" class="form-control">
-                                        <option th:each="unit : ${T(com.platillogodin.dashboard.domain.MenuOptionType).values()}"
-                                                th:value="${unit}"
-                                                th:text="${unit.getSpanishName()}">
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-7 col-12">
-                                    <label for="recipe">Platillo</label>
-
-                                    <div class="typeahead__container">
-                                        <div class="typeahead__field">
-                                            <input class="js-typeahead-font_v1 form-control" type="search"
-                                                   id="recipe"
-                                                   autocomplete="off"
-                                                   required="required"
-                                                   placeholder="Escribe el nombre del platillo...">
-
-                                        </div>
+                                <input type="hidden" name="menuId" id="menuId" th:value="${menuId}">
+                                <input type="hidden" name="categoryId" id="categoryId">
+                                <input type="hidden" name="menuOptionId" id="menuOptionId">
+                                <div class="form-row">
+                                    <div class="form-group col-md-5 col-12">
+                                        <label for="inputMOType">Tipo</label>
+                                        <select id="inputMOType" class="form-control">
+                                            <option th:each="unit : ${T(com.platillogodin.dashboard.domain.MenuOptionType).values()}"
+                                                    th:value="${unit}"
+                                                    th:text="${unit.getSpanishName()}">
+                                            </option>
+                                        </select>
                                     </div>
+                                    <div class="form-group col-md-7 col-12">
+                                        <label for="recipe">Platillo</label>
 
+                                        <div class="typeahead__container">
+                                            <div class="typeahead__field">
+                                                <input class="js-typeahead-font_v1 form-control" type="search"
+                                                       id="recipe"
+                                                       autocomplete="off"
+                                                       required="required"
+                                                       placeholder="Escribe el nombre del platillo...">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <input type="hidden" id="recipeId">
                                 </div>
-                                <input type="hidden" id="recipeId">
-                                <script>
-                                    $.typeahead({
-                                        input: '.js-typeahead-font_v1',
-                                        maxItem: 10,
-                                        order: "asc",
-                                        hint: false,
-                                        group: {
-                                            template: function (item) {
-                                                return item.recipeCategory.name;
-                                            }
-                                        },
-                                        display: "name",
-                                        source: {
-                                            ajax: {
-                                                url: "/api/recipes",
-                                                dataType: "json"
-                                            }
-                                        },
-                                        callback: {
-                                            onClickAfter: function (node, a, item, event) {
-                                                event.preventDefault;
-                                                $('#recipeId').val(item.id)
-                                            },
+                                <div class="form-row">
+                                    <div class="form-group col-md-5 col-6">
+                                        <label for="forecastQuantity"># Estimado</label>
+                                        <input type="number" min="0" id="forecastQuantity" class="form-control"
+                                               required="required">
+                                    </div>
+                                    <div class="form-group col-md-5 col-6">
+                                        <label for="actualQuantity"># Real</label>
+                                        <input type="number" min="0" id="actualQuantity" class="form-control">
+                                    </div>
+                                </div>
 
-                                            onCancel: function (node, event) {
-                                                $('#recipeId').val('')
-                                            }
-                                        },
-                                        debug: true
-                                    });
-
-                                    $('#recipe').on('focusout', function () {
-                                        if (!$('#recipeId').val()) {
-                                            $('#recipe').val('')
-                                        }
-                                    });
-                                    $('#recipe').on('change', function () {
-                                        $('#recipeId').val('')
-                                    });
-
-                                </script>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-5 col-6">
-                                    <label for="forecastQuantity"># Estimado</label>
-                                    <input type="number" min="0" id="forecastQuantity" class="form-control"
-                                           required="required">
-                                </div>
-                                <div class="form-group col-md-5 col-6">
-                                    <label for="actualQuantity"># Real</label>
-                                    <input type="number" min="0" id="actualQuantity" class="form-control">
-                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                        id="submitBtn">Aceptar
+                                </button>
                             </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-success" data-dismiss="modal"
-                                    id="submitBtn">Aceptar
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <script>
 
-            $('.deleteOptionBtn').on('click', function (t) {
-                var menuOptionId = $(this).data('menuoptionid');
-                var menuId = $(this).data('menuid');
-
-                $.ajax({
-                    method: 'GET',
-                    url: "/api/menu_option/delete?menuOptionId=" + menuOptionId + '&menuId=' + menuId,
-                    success: function (data) {
-                        console.log("Success ", data);
-                        $("#contentFragment").load('/api/menus', 'menuId=' + menuId, function (responseText) {
-                            $('#menuIdFrame').val(menuId);
-                        });
+            <script>
+                $.typeahead({
+                    input: '.js-typeahead-font_v1',
+                    maxItem: 10,
+                    order: "asc",
+                    hint: false,
+                    group: {
+                        template: function (item) {
+                            return item.recipeCategory.name;
+                        }
                     },
-                    error: function (e) {
-                        console.log("ERROR : ", e);
-                    }
+                    display: "name",
+                    source: {
+                        ajax: {
+                            url: "/api/recipes",
+                            dataType: "json"
+                        }
+                    },
+                    callback: {
+                        onClickAfter: function (node, a, item, event) {
+                            event.preventDefault();
+                            $('#recipeId').val(item.id)
+                        },
+
+                        onCancel: function () {
+                            $('#recipeId').val('')
+                        }
+                    },
+                    debug: false
                 });
 
-            });
+                var $recipe = $('#recipe');
+                var $recipeId = $('#recipeId');
+                $recipe.on('focusout', function () {
+                    if (!$recipeId.val()) {
+                        $recipe.val('')
+                    }
+                });
+                $recipe.on('change', function () {
+                    $recipeId.val('')
+                });
 
-            $('#addDish').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var catId = button.data('catid');
-                var menuId = button.data('menuid');
-                var menuOptionId = button.data('menuoptionid');
-                var forecastQuantity = button.data('forecastquantity');
-                var actualQuantity = button.data('actualquantity');
-                var recipe = button.data('recipe');
-                var recipeId = button.data('recipeid');
-                var modal = $(this);
-                $(this).find('#categoryId').val(catId);
-                $(this).find('#menuId').val(menuId)
-
-                $(this).find('#menuOptionId').val(menuOptionId)
-                $(this).find('#forecastQuantity').val(forecastQuantity)
-                $(this).find('#actualQuantity').val(actualQuantity)
-                $(this).find('#recipe').val(recipe)
-                $(this).find('#recipeId').val(recipeId)
-            });
-
-            $('#addDish').on('hide.bs.modal', function (t) {
-                $('#menuOptionForm').trigger("reset");
-            });
-
-            $("#submitBtn").on('click', function (event) {
-
-                if ($('#forecastQuantity').val() === '' || $('#recipeId').val() === '') {
-                    event.stopPropagation();
-
-                } else {
-                    event.preventDefault();
-                    var menuOption = {};
-                    var recipe = {};
-                    var menu = {};
-                    var menuCategory = {};
-                    menuOption["id"] = $('#menuOptionId').val() !== '' ? Number($('#menuOptionId').val()) : null;
-                    menu["id"] = Number($('#menuId').val());
-                    menuOption["menu"] = menu;
-                    recipe["id"] = Number($('#recipeId').val());
-                    menuOption["recipe"] = recipe;
-                    menuCategory["id"] = Number($('#categoryId').val());
-                    menuOption["menuCategory"] = menuCategory;
-                    menuOption["menuOptionType"] = $('#inputMOType').val();
-
-                    menuOption["forecastQuantity"] = Number($('#forecastQuantity').val());
-                    menuOption["actualQuantity"] =
-                        $('#actualQuantity').val() !== '' ? Number($('#actualQuantity').val()) : null;
-
-                    console.log(menuOption);
+                var $processDayBtn = $('#processDayBtn');
+                $processDayBtn.on('click', function () {
+                    $processDayBtn.prop("disabled", true);
+                    var $menuId = $('#menuIdFrame').val();
                     $.ajax({
-                        type: "POST",
-                        contentType: "application/json",
-                        url: "/api/menu_option",
-                        data: JSON.stringify(menuOption),
+                        url: '/api/menu/process-day?menuId=' + $menuId,
+                        method: 'GET',
+                        success: function (data) {
+                            $("#contentFragment").load('/api/menus', 'menuId=' + $menuId, function () {
+                                var messageSel = $('#message');
+                                $('#menuIdFrame').val($menuId);
+                                messageSel.text(data);
+                                messageSel.show();
+                                messageSel.delay(10000).fadeOut('slow');
+                            });
+
+
+                        },
+                        error: function (jqXHR) {
+                            var errorMsgSel = $('#errorMessage');
+                            errorMsgSel.text(jqXHR.responseText);
+                            errorMsgSel.show();
+                            errorMsgSel.delay(10000).fadeOut('slow');
+                            $processDayBtn.prop("disabled", false);
+                        }
+                    });
+                });
+
+                $('.deleteOptionBtn').on('click', function () {
+
+                    var menuOptionId = $(this).data('menuoptionid');
+                    var menuId = $(this).data('menuid');
+
+                    $.ajax({
+                        method: 'GET',
+                        url: "/api/menu_option/delete?menuOptionId=" + menuOptionId + '&menuId=' + menuId,
                         success: function (data) {
                             console.log("Success ", data);
-                            $("#contentFragment").load('/api/menus', 'menuId=' + menu.id, function (responseText) {
-                                $('#menuIdFrame').val(menu.id);
+                            $("#contentFragment").load('/api/menus', 'menuId=' + menuId, function () {
+                                $('#menuIdFrame').val(menuId);
                             });
                         },
                         error: function (e) {
                             console.log("ERROR : ", e);
                         }
                     });
-                }
 
-            });
+                });
 
-            $('#errorMessage').delay(10000).fadeOut('slow');
-            $('#message').delay(10000).fadeOut('slow');
+                var $addDishSel = $('#addDish');
+                $addDishSel.on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget);
+                    var catId = button.data('catid');
+                    var menuId = button.data('menuid');
+                    var menuOptionId = button.data('menuoptionid');
+                    var forecastQuantity = button.data('forecastquantity');
+                    var actualQuantity = button.data('actualquantity');
+                    var recipe = button.data('recipe');
+                    var recipeId = button.data('recipeid');
+                    $(this).find('#categoryId').val(catId);
+                    $(this).find('#menuId').val(menuId);
 
-            $('#processDayBtn').on('click', function (t) {
-                $('#processDayBtn').prop("disabled", true);
-                $.ajax({
-                    url: '/api/menu/process-day?menuId=' + $('#menuIdFrame').val(),
-                    method: 'GET',
-                    success: function (data) {
-                        $('#message').show();
-                        $('#message').text(data);
+                    $(this).find('#menuOptionId').val(menuOptionId);
+                    $(this).find('#forecastQuantity').val(forecastQuantity);
+                    $(this).find('#actualQuantity').val(actualQuantity);
+                    $(this).find('#recipe').val(recipe);
+                    $(this).find('#recipeId').val(recipeId)
+                });
 
-                    },
-                    error: function (jqXHR) {
-                        $('#errorMessage').show();
-                        $('#errorMessage').text(jqXHR.responseText);
-                        $('#processDayBtn').prop("disabled", false);
+                $addDishSel.on('hide.bs.modal', function () {
+                    $('#menuOptionForm').trigger("reset");
+                });
+
+                $("#submitBtn").on('click', function (event) {
+                    var $forecastQty = $('#forecastQuantity');
+                    var $recipeId = $('#recipeId');
+                    if ($forecastQty.val() === '' || $recipeId.val() === '') {
+                        event.stopPropagation();
+
+                    } else {
+                        event.preventDefault();
+                        var menuOption = {};
+                        var recipe = {};
+                        var menu = {};
+                        var menuCategory = {};
+                        var $menuOptionIdSel = $('#menuOptionId')
+                        menuOption["id"] = $menuOptionIdSel.val() !== '' ? Number($menuOptionIdSel.val()) : null;
+                        menu["id"] = Number($('#menuId').val());
+                        menuOption["menu"] = menu;
+                        recipe["id"] = Number($recipeId.val());
+                        menuOption["recipe"] = recipe;
+                        menuCategory["id"] = Number($('#categoryId').val());
+                        menuOption["menuCategory"] = menuCategory;
+                        menuOption["menuOptionType"] = $('#inputMOType').val();
+
+                        menuOption["forecastQuantity"] = Number($forecastQty.val());
+
+                        var $actualQuantity = $('#actualQuantity');
+                        menuOption["actualQuantity"] = $actualQuantity.val() !== '' ? Number($actualQuantity.val()) : null;
+
+                        console.log(menuOption);
+                        $.ajax({
+                            type: "POST",
+                            contentType: "application/json",
+                            url: "/api/menu_option",
+                            data: JSON.stringify(menuOption),
+                            success: function (data) {
+                                console.log("Success ", data);
+                                $("#contentFragment").load('/api/menus', 'menuId=' + menu.id, function () {
+                                    $('#menuIdFrame').val(menu.id);
+                                });
+                            },
+                            error: function (e) {
+                                console.log("ERROR : ", e);
+                            }
+                        });
                     }
                 });
-            });
-
-        </script>
+            </script>
+        </div>
     </div>
-</div>
 </div>
 </body>
 </html>

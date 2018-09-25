@@ -2,6 +2,7 @@ package com.platillogodin.dashboard.repositories;
 
 import com.platillogodin.dashboard.commands.CategoryTotal;
 import com.platillogodin.dashboard.domain.MenuOption;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,6 +20,6 @@ public interface MenuOptionRepository extends JpaRepository<MenuOption, Long> {
             "WHERE mo.cost > 0 " +
             "GROUP BY mo.menu.id, mo.menuCategory.name " +
             "ORDER BY mo.menu.id, mo.menuCategory.name")
-    List<CategoryTotal> getTotalsByCategory();
+    List<CategoryTotal> getTotalsByCategory(Pageable pageable);
 
 }

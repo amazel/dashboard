@@ -16,8 +16,9 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailySaleCommand {
+public class ChartsCommand {
     List<String> labels = new ArrayList<>();
     Map<String, List<Integer>> countData = new HashMap<>();
     Map<String, List<BigDecimal>> costData = new HashMap<>();
+    Map<String, List<BigDecimal>> unitCostData = new HashMap<>();
 }

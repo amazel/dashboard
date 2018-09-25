@@ -16,12 +16,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Slf4j
 @Configuration
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     private final AccessDeniedHandler accessDeniedHandler;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public SpringSecurityConfig(AccessDeniedHandler accessDeniedHandler, UserDetailsServiceImpl userDetailsService) {
+    public SpringSecurity(AccessDeniedHandler accessDeniedHandler, UserDetailsServiceImpl userDetailsService) {
         this.accessDeniedHandler = accessDeniedHandler;
         this.userDetailsService = userDetailsService;
     }
@@ -55,23 +55,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").permitAll()
                 .and().logout().permitAll()
+                .and().rememberMe().userDetailsService(userDetailsService)
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler)
                 .defaultAuthenticationEntryPointFor(apiAuthenticationEntryPoint(), new AntPathRequestMatcher("/api/**")
         )
         ;
     }
-
-    // create two users, admin and user
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//
-//        auth.inMemoryAuthentication()
-//                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-//                .withUser("user").password("password").roles("USER")
-//                .and()
-//                .withUser("admin").password("password").roles("ADMIN");
-//    }
-
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -86,6 +75,5 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**", "/js/**", "/images/**")
                 .antMatchers("/h2-console/**/**");
     }
-
 
 }

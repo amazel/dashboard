@@ -8,6 +8,7 @@ import com.platillogodin.dashboard.repositories.MenuRepository;
 import com.platillogodin.dashboard.repositories.StockRepository;
 import com.platillogodin.dashboard.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -174,7 +175,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public List<CategoryTotal> getTotalsByCategory() {
-        return menuOptionRepository.getTotalsByCategory();
+    public List<CategoryTotal> getTotalsByCategory(Integer days) {
+        return menuOptionRepository.getTotalsByCategory(PageRequest.of(0, days));
     }
 }
