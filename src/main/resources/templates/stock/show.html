@@ -76,7 +76,8 @@
                                     <h6>Registros <a
                                             th:href="@{/stock/__${stockItem.id}__/show(showAll=__${(showAll!=null && showAll.equals('true'))?'false':'true'}__)}"
                                             th:text="${(showAll!=null && showAll.equals('true'))?'(Mostrar solo actuales)':'(Mostrar todos)'}"
-                                            th:if="${stockItem.stockEntries.size()>0}"></a>
+                                            th:if="${stockItem.stockEntries.size()>0}"
+                                    class="text-info"></a>
                                     </h6>
                                 </div>
                                 <div class="col-1" align="right">
@@ -88,7 +89,7 @@
                                        th:attr="data-stockid=${stockItem.id},
                                        data-uom=${stockItem.ingredient.uom.name().toLowerCase()}"
                                        data-toggle="modal">
-                                        <i class="fas fa-plus-circle fa-2x" style="color:green" align="right"
+                                        <i class="fas fa-plus-circle fa-2x text-info" align="right"
                                            data-toggle="tooltip"
                                            data-placement="left" title="Agregar registro"></i>
                                     </a>
@@ -113,6 +114,7 @@
                                             <div class="row">
                                                 <div class="col-2">
                                                     <a href="#"
+                                                       class="text-info"
                                                        data-target='#entryFormModal'
                                                        data-backdrop="static"
                                                        data-uom="ml"
@@ -200,7 +202,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success" data-dismiss="modal"
+                        <button type="submit" class="btn btn-info" data-dismiss="modal"
                                 id="submitBtn">Aceptar
                         </button>
                     </div>

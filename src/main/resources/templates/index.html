@@ -3,7 +3,7 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+   <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
     <link rel="stylesheet"
@@ -24,8 +24,9 @@
           crossorigin="anonymous">-->
 
     <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+          href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.bootstrap4.min.css">
 
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
@@ -35,6 +36,8 @@
 
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
     <script type="text/javascript" charset="utf8"
@@ -107,15 +110,15 @@
         <div class="btn-toolbar mb-2 mb-md-0">
             <div>
                 <a href="#"
-                   class="btn btn-sm btn-outline-secondary"
+                   class="btn btn-sm btn-outline-info"
                    data-target='#nxtWkIF'
                    data-backdrop="static"
                    data-toggle="modal">
-                    <i class="fas fa-table fa-lg"></i> Forecast de Ingredientes</a>
+                    <i class="fas fa-table"></i> Forecast de Ingredientes</a>
             </div>
             <div>
                 <a href="#"
-                   class="btn btn-sm btn-outline-secondary"
+                   class="btn btn-sm btn-outline-info"
                    data-target='#weeklyCosts'
                    data-backdrop="static"
                    data-toggle="modal">
@@ -505,13 +508,27 @@
 
         $("#ingredientForecastFragment").load('/api/ingredient-forecast', function () {
             // $("#ingredientForecastFragment").load('http://localhost:8080/api/ingredient-forecast', function () {
-            $('#ingredientsTable').DataTable({
+            var table = $('#ingredientsTable').DataTable({
                 lengthChange: false,
                 searching: false,
                 paging: false,
                 dom: 'Bfrtip',
                 buttons: [
-                    'excel', 'pdf', 'print'
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'badge badge-pill badge-info'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'PDF',
+                        className: 'badge badge-pill badge-info'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Imprimir',
+                        className: 'badge badge-pill badge-info'
+                    }
                 ]
             });
         });

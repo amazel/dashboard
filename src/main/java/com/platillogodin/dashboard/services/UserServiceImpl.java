@@ -6,6 +6,7 @@ import com.platillogodin.dashboard.exceptions.DeleteException;
 import com.platillogodin.dashboard.exceptions.NotFoundException;
 import com.platillogodin.dashboard.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${dashboard.default.password}")
+    private String defaultPassword;
 
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -51,13 +55,13 @@ public class UserServiceImpl implements UserService {
 
     public User saveUser(User user) {
         if (user.getId() == null) {
-            user.setPassword(passwordEncoder.encode("soygodin"));
+            user.setPassword(passwordEncoder.encode(defaultPassword));
         }
         return userRepository.save(user);
     }
 
     public void updatePassword(User user, String password) {
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(password == null ? defaultPassword : password));
         userRepository.save(user);
     }
 }

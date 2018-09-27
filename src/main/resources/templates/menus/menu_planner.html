@@ -16,7 +16,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
-    <link href="../static/css/dashboard.css"
+    <link href="../../static/css/dashboard.css"
           th:href="@{/css/dashboard.css}" rel="stylesheet">
     <link rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
@@ -120,8 +120,8 @@
     </div>
     <div class="row justify-content-center">
 
-        <a href="#" class="badge badge-secondary" data-toggle="collapse" data-target="#collapseExample"
-           aria-expanded="true" aria-controls="collapseExample"><i class="far fa-calendar-alt fa-2x"></i>
+        <a href="#" class="btn btn-outline-info" data-toggle="collapse" data-target="#collapseExample"
+           aria-expanded="true" aria-controls="collapseExample"><i class="far fa-calendar-alt fa-lg"></i>
         </a>
     </div>
 
@@ -132,35 +132,35 @@
 
 
             <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-1 border-bottom">
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-3 mb-3 border-bottom">
                 <h6
-                        th:text="${'Menú del: '+#temporals.dayOfWeekName(menu.date)+', '+#temporals.format(menu.date, 'dd - MMMM - yyyy')}">
-                    Menu del: Lunes, 12 - Septiembre - 2018 </h6><span th:if="${menu.processed}" style="color: green;
-                     font-size: small">
-                        <i class="fas fa-check" style="color:green"></i> Procesado
-                    </span>
-                <div class="btn-toolbar mb-2 mb-md-0">
-
-                    <button class="btn btn-sm btn-outline-secondary" id="processDayBtn"
+                        th:text="${'Menú del: '+#temporals.dayOfWeekName(menu.date)+', '+#temporals.format(menu.date, 'dd - MMMM - yyyy')+' '}">
+                    Menu del: Lunes, 12 - Septiembre - 2018 </h6>
+                <div class="btn-toolbar mb-2 mb-md-1">
+                    <button class="btn btn-sm btn-outline-info" id="processDayBtn"
                             th:if="${!menu.processed}">Procesar Menú
                     </button>
-
                 </div>
+                <span th:if="${menu.processed}"
+                      class="badge badge-pill badge-info">
+                        <i class="fas fa-check"></i>
+                        PROCESADO
+                    </span>
             </div>
 
 
             <div class="alert alert-danger" id="errorMessage" style="display: none;"></div>
-            <div class="alert alert-secondary" id="message" style="display: none;"></div>
+            <div class="alert alert-info" id="message" style="display: none;"></div>
             <div class="row justify-content-center">
 
                 <div class="col-12 col-md-6 mb-3" th:each="cat, stat : ${categories}">
                     <div class="card">
                         <div class="card-header">
                             <div class="row justify-content-between">
-                                <div class="col-md-10 col-10">
+                                <div class="col-md-11 col-8">
                                     <h6 th:text="${cat.name}">Gofitness</h6>
                                 </div>
-                                <div class="col-md-2 col-1 text-right">
+                                <div class="col-md-1 col-2 text-left">
                                     <a href="#"
                                        data-target='#addDish'
                                        data-backdrop="static"
@@ -169,7 +169,7 @@
                                         data-menuid=''+${menu.id}"
                                        data-toggle="modal"
                                        th:if="${!menu.processed}">
-                                        <i class="fas fa-plus-circle fa-lg" style="color:green"></i>
+                                        <i class="fas fa-plus-circle fa-lg text-info"></i>
                                     </a>
                                 </div>
                             </div>
@@ -192,7 +192,7 @@
                                              <a href="#" class="deleteOptionBtn"
                                                 th:attr="data-menuoptionid=${option.id},
                                                     data-menuid=${menu.id}">
-                                             <i class="fas fa-times" style="color:red"></i>
+                                             <i class="fas fa-times text-danger"></i>
                                          </a> -
                                          </span>
                                         <span th:text="${option.menuOptionType.getSpanishName()}">Plato Fuerte
@@ -289,7 +289,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                                <button type="submit" class="btn btn-info" data-dismiss="modal"
                                         id="submitBtn">Aceptar
                                 </button>
                             </div>
@@ -326,7 +326,8 @@
                             $('#recipeId').val('')
                         }
                     },
-                    debug: false
+                    debug: false,
+                    cache:true
                 });
 
                 var $recipe = $('#recipe');

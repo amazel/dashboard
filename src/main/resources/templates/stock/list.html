@@ -18,7 +18,8 @@
             $('#recipeTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
                 "pageLength": 10,
-                "order": [[1, 'desc']]
+                "order": [[2, 'desc']],
+                pagingType: 'full'
             });
             $('[data-toggle="tooltip"]').tooltip()
         });
@@ -56,6 +57,7 @@
                                     <tbody>
                                     <tr th:each="item : ${stockItems}">
                                         <td><a href="#" th:text="${item.ingredient.name}"
+                                               class="text-info font-weight-bold"
                                                th:href="@{'/stock/'+${item.id}+'/show'}">Papaya
                                         </a></td>
                                         <td

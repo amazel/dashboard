@@ -1,4 +1,26 @@
-body { padding-top: 50px; }
+body {
+    padding-top: 50px;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #17a2b8;
+}
+
 .table-condensed {
     font-size: 13px;
+}
+
+.deleteBtn {
+    color: red;
+}
+
+/*.dataTables_wrapper .dataTables_paginate .paginate_button.current*/
+
+
+.pagination>li>a{
+    color: #17a2b8;
+}
+
+.pagination>li>a:hover{
+    color: #17a2b8;
 }

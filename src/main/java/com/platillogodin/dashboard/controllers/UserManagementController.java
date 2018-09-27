@@ -71,10 +71,19 @@ public class UserManagementController {
         User user = userService.findById(id);
         try {
             userService.delete(user);
-            ra.addFlashAttribute("deleteMessage", "El usuario " + user.getUsername() + " fue eliminado correctamente");
+            ra.addFlashAttribute("message", "El usuario " + user.getUsername() + " fue eliminado correctamente");
         } catch (DeleteException de) {
-            ra.addFlashAttribute("deleteError", de.getMessage());
+            ra.addFlashAttribute("errorMessage", de.getMessage());
         }
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/{id}/reset-password")
+    public String resetPassword(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        User user = userService.findById(id);
+        userService.updatePassword(user, null);
+        redirectAttributes.addFlashAttribute("message", "Contraseña restablecida con éxito");
+
         return "redirect:/users";
     }
 

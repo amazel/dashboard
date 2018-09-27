@@ -3,6 +3,26 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link href="../../static/css/dashboard.css"
+          th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+          crossorigin="anonymous">-->
+
     <!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
@@ -19,7 +39,8 @@
             $('#ingredientTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
                 "pageLength": 10,
-                "order": [[0, 'asc'], [1, 'asc']]
+                "order": [[0, 'asc'], [1, 'asc']],
+                pagingType: 'full'
             });
 
             $('[data-toggle="tooltip"]').tooltip();
@@ -43,10 +64,10 @@
                             <h5>Ingredientes</h5>
                         </div>
                         <div class="col-md-1 col-1">
-                            <a class="btn btn-default" href="#"
+                            <a href="#"
                                th:href="@{'/ingredients/new'}" data-toggle="tooltip" data-placement="left"
                                title="Nuevo ingrediente">
-                                <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
+                                <i class="fas fa-plus-circle fa-2x text-info"></i>
                             </a>
                         </div>
                     </div>
@@ -74,13 +95,14 @@
                                     <tbody>
                                     <tr th:each="ingredientItem : ${ingredientList}">
                                         <td><a href="#" th:text="${ingredientItem.name}"
+                                               class="text-info font-weight-bold"
                                                th:href="@{'/ingredients/'+${ingredientItem.id}+'/edit'}">Tacos
                                         </a></td>
                                         <td th:text="${ingredientItem.category.name}"></td>
                                         <td th:text="${ingredientItem.uom.name().toLowerCase()}"></td>
                                         <td th:text="${ingredientItem.expirationTime}"></td>
                                         <td style="text-align: center;">
-                                            <a href="#" class="badge badge-primary"
+                                            <a href="#" class="badge badge-info"
                                                th:href="@{'/ingredients/'+${ingredientItem.id}+'/edit'}">
                                                 <i class="fas fa-pencil-alt fa-lg" data-toggle="tooltip"
                                                    data-placement="bottom" title="Editar ingrediente"></i></a>
@@ -109,7 +131,7 @@
                                                 <button type="button" class="btn btn-danger"
                                                         data-dismiss="modal">Cancelar
                                                 </button>
-                                                <a href="#" id="deleteButton" class="btn btn-success">
+                                                <a href="#" id="deleteButton" class="btn btn-info">
                                                     Aceptar
                                                 </a>
                                             </div>

@@ -26,10 +26,10 @@
                             <h5>Gestión de Usuarios</h5>
                         </div>
                         <div class="col-md-1 col-1">
-                            <a class="btn btn-default" href="#"
+                            <a href="#"
                                th:href="@{'/users/new'}" data-toggle="tooltip" data-placement="left"
                                title="Nuevo usuario">
-                                <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
+                                <i class="fas fa-plus-circle fa-2x text-info"></i>
                             </a>
                         </div>
                     </div>
@@ -37,13 +37,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <!--/*@thymesVar id="deleteError" type="java.lang.String"*/-->
-                            <!--/*@thymesVar id="deleteMessage" type="java.lang.String"*/-->
-                            <div th:if="${deleteError}" class="alert alert-danger" id="deleteError">
-                                <div th:text="${deleteError}">...</div>
+                            <!--/*@thymesVar id="errorMessage" type="java.lang.String"*/-->
+                            <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+                            <div th:if="${errorMessage}" class="alert alert-danger" id="errorMessage">
+                                <div th:text="${errorMessage}">...</div>
                             </div>
-                            <div th:if="${deleteMessage}" class="alert alert-info" id="deleteMessage">
-                                <div th:text="${deleteMessage}">...</div>
+                            <div th:if="${message}" class="alert alert-info" id="message">
+                                <div th:text="${message}">...</div>
                             </div>
                             <div class="table-responsive table-condensed">
                                 <table class="table table-sm" id="usersTable">
@@ -51,18 +51,30 @@
                                     <tr>
                                         <th>Usuario</th>
                                         <th>Rol</th>
-                                        <th>Eliminar</th>
+                                        <th>Acciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="user : ${userList}">
                                         <td>
                                             <a href="#" th:text="${user.username}"
+                                               class="text-info font-weight-bold"
                                                th:href="@{'/users/'+${user.id}+'/edit'}">cesar
                                             </a>
                                         </td>
                                         <td th:text="${user.role}"></td>
                                         <td style="text-align: center;">
+                                            <a href="#" class="badge badge-warning"
+                                               data-toggle="modal"
+                                               data-target="#modal-reset-password"
+                                               th:attr="data-userid=${user.id},
+                                               data-username=${user.username}"
+                                               id="resetPasswordLink">
+                                                <i class="fas fa-key fa-lg" data-toggle="tooltip"
+                                                   data-placement="bottom"
+                                                   title="Restablecer Contraseña"></i>
+                                            </a>
+
                                             <a href="#" class="badge badge-danger"
                                                data-toggle="modal"
                                                data-target="#modal-delete"
@@ -76,6 +88,28 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div class="modal fade" id="modal-reset-password">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">
+                                                    Deseas restablecer la contraseña predeterminada para este
+                                                    usuario?</h4>
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    &times;
+                                                </button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger"
+                                                        data-dismiss="modal">Cancelar
+                                                </button>
+                                                <a href="#" id="resetPasswordBtn" class="btn btn-info">
+                                                    Aceptar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="modal fade" id="modal-delete">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -92,7 +126,7 @@
                                                 <button type="button" class="btn btn-danger"
                                                         data-dismiss="modal">Cancelar
                                                 </button>
-                                                <a href="#" id="deleteButton" class="btn btn-success">
+                                                <a href="#" id="deleteButton" class="btn btn-info">
                                                     Aceptar
                                                 </a>
                                             </div>
@@ -115,6 +149,13 @@
         var userName = button.data('username');
         $("#modalTitle").text('Eliminar ' + userName + '?');
         $("#deleteButton").attr("href", '/users/' + userId + '/delete');
+    });
+
+    $('#modal-reset-password').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var userId = button.data('userid');
+        var userName = button.data('username');
+        $("#resetPasswordBtn").attr("href", '/users/' + userId + '/reset-password');
     });
 
     /*]]>*/

@@ -15,7 +15,7 @@
             <h4 th:if="${recipe.id} != null">Editar receta</h4>
         </div>
         <div class="card-body">
-            <form th:object="${recipe}" th:action="@{/recipe}" method="post">
+            <form th:object="${recipe}" th:action="@{/recipe}" method="post" id="recipeForm">
 
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                     <p>Please Correct Errors Below</p>
@@ -70,12 +70,18 @@
                             Cancelar</a>
                     </div>
                     <div class="col-md-1 col-3">
-                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                        <button type="submit" class="btn btn-info">Aceptar</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script>
+    $('#recipeForm').on('submit', function (t) {
+        console.log("clearing the localStorage");
+        localStorage.clear();
+    });
+</script>
 </body>
 </html>

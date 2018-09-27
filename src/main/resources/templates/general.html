@@ -55,12 +55,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav  nav-justified w-100">
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/menus') ? 'active':''}">
                     <a class="nav-link" href="#" th:href="@{'/menus'}">
                         <i class="far fa-calendar-alt"></i> Planear Menus</a>
                 </li>
 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/recipes') ? 'active':''}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-utensils"></i> Recetas
@@ -70,7 +72,8 @@
                         <a class="dropdown-item" href="#" th:href="@{'/recipes/new'}">Nueva receta</a>
                     </div>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/ingredients') ? 'active':''}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-lemon"></i> Ingredientes
@@ -80,11 +83,13 @@
                         <a class="dropdown-item" href="#" th:href="@{'/ingredients/new'}">Nuevo ingrediente</a>
                     </div>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/stock') ? 'active':''}">
                     <a class="nav-link" href="#" th:href="@{'/stock'}">
                         <i class="fas fa-warehouse"></i> Inventario</a>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/categories') ? 'active':''}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-tags"></i> Categorias
@@ -96,7 +101,8 @@
                     </div>
                 </li>
                 <!--/*@thymesVar id="userName" type="java.lang.String"*/-->
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/users') ? 'active':''}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user"></i>

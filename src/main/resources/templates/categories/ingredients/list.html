@@ -18,7 +18,8 @@
             $('#ingredientTable').DataTable({
                 "lengthMenu": [5, 10, 25, 50],
                 "pageLength": 10,
-                "order": [[0, 'asc'], [1, 'asc']]
+                "order": [[0, 'asc'], [1, 'asc']],
+                pagingType: 'full'
             });
 
             $('[data-toggle="tooltip"]').tooltip();
@@ -41,10 +42,10 @@
                             <h5>Categorias de Ingredientes</h5>
                         </div>
                         <div class="col-md-1 col-1">
-                            <a class="btn btn-default" href="#"
+                            <a  href="#"
                                th:href="@{'/categories/ingredients/new'}" data-toggle="tooltip" data-placement="left"
                                title="Nueva Categoria de Receta">
-                                <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
+                                <i class="fas fa-plus-circle fa-2x text-info"></i>
                             </a>
                         </div>
                     </div>
@@ -74,7 +75,7 @@
                                     <tbody>
                                     <tr th:each="item : ${ingredientCategoryList}">
                                         <td>
-                                            <a href="#" th:text="${item.name}"
+                                            <a href="#" th:text="${item.name}" class="text-info font-weight-bold"
                                                th:href="@{'/categories/ingredients/'+${item.id}+'/edit'}">Tacos
                                             </a>
                                         </td>
@@ -106,7 +107,7 @@
                                                 <button type="button" class="btn btn-danger"
                                                         data-dismiss="modal">Cancelar
                                                 </button>
-                                                <a href="#" id="deleteButton" class="btn btn-success">
+                                                <a href="#" id="deleteButton" class="btn btn-info">
                                                     Aceptar
                                                 </a>
                                             </div>

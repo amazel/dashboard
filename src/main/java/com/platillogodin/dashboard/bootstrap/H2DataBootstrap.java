@@ -240,7 +240,7 @@ public class H2DataBootstrap implements CommandLineRunner {
     private void createStock(Stock stock) {
         Random r = new Random();
         StockEntry entry = new StockEntry();
-        entry.setCurrentQty(r.nextInt(100) * 10);
+        entry.setCurrentQty((r.nextInt(100) * 10)+1);
         entry.setOriginalQty(entry.getCurrentQty()+100);
         entry.setPrice(BigDecimal.valueOf(r.nextInt(1000) + 250));
         entry.setSupplyDate(LocalDate.now().minusDays(r.nextInt(8)));

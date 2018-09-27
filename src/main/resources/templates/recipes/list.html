@@ -3,7 +3,7 @@
 <head>
     <!--/*/ <th:block th:include="general.html :: headerfiles"></th:block> /*/-->
 
-  <!--  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+   <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
     <link rel="stylesheet"
@@ -26,10 +26,8 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
@@ -39,7 +37,8 @@
             $('#recipeTable').DataTable({
                 lengthChange: false,
                 pageLength: 10,
-                order: [[0, 'asc'], [1, 'asc']]
+                order: [[0, 'asc'], [1, 'asc']],
+                pagingType: 'full'
             });
             $('[data-toggle="tooltip"]').tooltip();
             $('#deleteError').delay(5000).fadeOut('slow');
@@ -47,6 +46,7 @@
         })
         /*]]>*/
     </script>
+
 </head>
 <body>
 
@@ -62,10 +62,10 @@
                             <h5>Recetas</h5>
                         </div>
                         <div class="col-2" align="right">
-                            <a class="btn btn-default" href="#"
+                            <a href="#"
                                th:href="@{'/recipes/new'}" data-toggle="tooltip" data-placement="left"
                                title="Nueva receta">
-                                <i class="fas fa-plus-circle fa-2x" style="color:green"></i>
+                                <i class="fas fa-plus-circle fa-2x text-info"></i>
                             </a>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                         <div class="col">
                             <!--/*@thymesVar id="deleteError" type="java.lang.String"*/-->
                             <!--/*@thymesVar id="deleteMessage" type="java.lang.String"*/-->
-                            <div th:if="${deleteError}" class="alert alert-danger" id="deleteError">
+                            <div th:if="${deleteError}" class="alert alert-danger page-link" id="deleteError">
                                 <div th:text="${deleteError}">...</div>
                             </div>
                             <div th:if="${deleteMessage}" class="alert alert-info" id="deleteMessage">
@@ -95,7 +95,7 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="recipeItem : ${recipeList}">
-                                        <td><a href="#" th:text="${recipeItem.name}"
+                                        <td><a href="#" th:text="${recipeItem.name}" class="text-info font-weight-bold"
                                                th:href="@{'/recipes/'+${recipeItem.id}+'/show'}">Tacos
                                         </a></td>
                                         <td th:text="${recipeItem.recipeCategory.name}"></td>
@@ -103,7 +103,7 @@
                                         <td th:text="${recipeItem.cookTime}"></td>
                                         <td th:text="${recipeItem.servings}"></td>
                                         <td style="text-align: center;">
-                                            <a href="#" class="badge badge-primary"
+                                            <a href="#" class="badge badge-info"
                                                th:href="@{'/recipes/'+${recipeItem.id}+'/edit'}">
                                                 <i class="fas fa-pencil-alt fa-lg"
                                                    data-toggle="tooltip"
@@ -135,7 +135,7 @@
                                                 <button type="button" class="btn btn-danger"
                                                         data-dismiss="modal">Cancelar
                                                 </button>
-                                                <a href="#" id="deleteButton" class="btn btn-success">
+                                                <a href="#" id="deleteButton" class="btn btn-info">
                                                     Aceptar
                                                 </a>
                                             </div>
