@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,6 @@ public class MenuServiceImpl implements MenuService {
 
     @Transactional
     public Menu save(Menu menu) {
-        log.info("Saving menu");
         if (menu.getDate() == null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
             menu.setDate(LocalDate.parse(menu.getId(), formatter));
@@ -54,13 +54,14 @@ public class MenuServiceImpl implements MenuService {
     public void processMenuDay(Menu menu) throws GenericException {
         BigDecimal totalMenuCost = BigDecimal.ZERO;
         for (MenuOption option : menu.getOptions()) {
+            log.info("{} PLATILLO: {}", option.getMenuCategory().getName(), option.getRecipe().getName());
             if (option.getActualQuantity() == null) {
                 throw new GenericException("Debes asignar la cantidad real a todos los platillos");
             }
             List<Ingredient> ingredients =
                     option.getRecipe().getIngredientList()
                             .stream()
-                            .map(recipeIngredient -> recipeIngredient.getIngredient())
+                            .map(RecipeIngredient::getIngredient)
                             .collect(Collectors.toList());
 
             List<Stock> stockList = stockRepository.findAllByIngredientIn(ingredients);
@@ -79,16 +80,19 @@ public class MenuServiceImpl implements MenuService {
                 List<StockEntry> filteredStockEntries = ingredientStock.getStockEntries()
                         .stream()
                         .filter(stockEntry -> stockEntry.getCurrentQty() > 0)
-                        .sorted((s1, s2) -> s1.getSupplyDate().compareTo(s2.getSupplyDate())).collect(Collectors.toList());
+                        .sorted(Comparator.comparing(StockEntry::getSupplyDate)).collect(Collectors.toList());
                 boolean breakFor = false;
 
                 BigDecimal ingredientCost = BigDecimal.ZERO;
+                log.info("\tINGREDIENTE {}", ri.getIngredient().getName());
                 for (StockEntry entry : filteredStockEntries) {
                     BigDecimal unitCost = entry.getPrice().divide(BigDecimal.valueOf(entry.getOriginalQty()), 2,
                             RoundingMode.HALF_UP);
-                    log.info("Unit cost for entry ID {}: {}", entry.getId(), unitCost.toString());
+                    log.info("\t\tENTRADA DE INVENTARIO {} - COSTO UNITARIO {}: ", entry.getId(),
+                            unitCost.toString());
                     if (BigDecimal.valueOf(entry.getCurrentQty()).compareTo(neededQty) < 0) {
-                        log.info("NO HAY SUFICIENTE EN LA ENTRY: {}, SE NECESITA {}", entry.getCurrentQty(), neededQty);
+                        log.info("\t\t\tNO HAY EXISTENCIA SUFICIENTE: {}, SE NECESITA {}", entry.getCurrentQty(),
+                                neededQty);
                         neededQty = neededQty.subtract(BigDecimal.valueOf(entry.getCurrentQty()));
                         ingredientStock.setTotal(ingredientStock.getTotal() - entry.getCurrentQty());
                         ingredientCost =
@@ -96,7 +100,8 @@ public class MenuServiceImpl implements MenuService {
                         entry.setCurrentQty(0);
 
                     } else {
-                        log.info("SI HAY SUFICIENTE EN LA ENTRY: {}, SE NECESITA {}", entry.getCurrentQty(), neededQty);
+                        log.info("\t\t\tOK EXISTENCIA SUFICIENTE: {}, SE NECESITA {}", entry.getCurrentQty(),
+                                neededQty);
                         BigDecimal reminderInEntry = BigDecimal.valueOf(entry.getCurrentQty()).subtract(neededQty);
                         ingredientStock.setTotal(ingredientStock.getTotal() - neededQty.intValue());
                         ingredientCost =
@@ -110,7 +115,7 @@ public class MenuServiceImpl implements MenuService {
                     stockRepository.save(ingredientStock);
                     if (breakFor) break;
                 }
-                log.info("Cost for ingredient {}: {}", ri.getIngredient().getName(), ingredientCost);
+                log.info("\t\tCOSTO DEL INGREDIENTE {}: {}", ri.getIngredient().getName(), ingredientCost);
                 menuOptionCost = menuOptionCost.add(ingredientCost);
                 if (neededQty.compareTo(BigDecimal.ZERO) != 0) {
                     throw new GenericException("No hay suficiente cantidad de " + ri.getIngredient().getName() + " en el " +
@@ -118,7 +123,7 @@ public class MenuServiceImpl implements MenuService {
                 }
             }
             option.setCost(menuOptionCost);
-            log.info("Costo total de la opcion del menu {}: {}", option.getRecipe().getName(),
+            log.info("\tCOSTO TOTAL DEL PLATILLO {}: {}", option.getRecipe().getName(),
                     menuOptionCost);
             totalMenuCost = totalMenuCost.add(menuOptionCost);
         }

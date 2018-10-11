@@ -37,19 +37,16 @@ public class MenuRestController {
 
     @GetMapping("/api/recipes_map")
     public ResponseEntity<?> getRecipesMap() {
-        log.info("REST //api/recipes_map");
         return ResponseEntity.ok(recipeService.findAllByCategory());
     }
 
     @GetMapping("/api/recipes")
     public ResponseEntity<?> getRecipes() {
-        log.info("REST //api/recipes ");
         return ResponseEntity.ok(recipeService.findAll());
     }
 
     @GetMapping("/api/categories/recipes")
     public ResponseEntity<?> getRecipeCategories() {
-        log.info("REST //api/categories/recipes ");
         return ResponseEntity.ok(recipeCategoryService.findAll());
     }
 
@@ -58,16 +55,14 @@ public class MenuRestController {
                                               @RequestParam("menuId") String menuId) {
         log.info("Deleting option: {} from Menu {}", menuOptionId, menuId);
         Menu menu = menuService.findById(menuId);
-        log.info("menu: {}", menu.getOptions().size());
         menu.getOptions().removeIf(menuOption -> menuOption.getId().equals(menuOptionId));
-        log.info("menu2: {}", menu.getOptions().size());
         menuService.save(menu);
         return ResponseEntity.ok("OK");
     }
 
     @PostMapping("/api/menu_option")
     public ResponseEntity<?> saveMenuOption(@Valid @RequestBody MenuOption menuOption) {
-        log.info("/api/menu_option");
+        log.info("/api/menu_option - Saving menuOption");
         log.info(menuOption.toString());
         Menu menu = menuService.findById(menuOption.getMenu().getId());
         Recipe recipe = recipeService.findById(menuOption.getRecipe().getId());
@@ -86,7 +81,7 @@ public class MenuRestController {
 
     @GetMapping("/api/menu/process-day")
     public ResponseEntity<?> processDay(@RequestParam("menuId") String menuId) {
-        log.info("/api/menu/process-day");
+        log.info("/api/menu/process-day - Processing day");
         log.info(menuId);
         Menu menu = menuService.findById(menuId);
         if (menu.getOptions().size() == 0) {

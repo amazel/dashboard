@@ -49,9 +49,7 @@ public class RecipeIngredientController {
 
     @GetMapping("/recipes/{recipeId}/ingredients/{riId}/delete")
     public String deleteIngredient(Model model, @PathVariable Long recipeId, @PathVariable Long riId) {
-
         recipeIngredientService.deleteById(riId);
-
         return "redirect:/recipes/" + recipeId + "/show";
 
     }

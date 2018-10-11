@@ -7,7 +7,7 @@ public enum MenuOptionType {
 
     MAIN("Plato Fuerte"), SIDE("Guarnición"), STARTER("Entrada"), BEVERAGE("Bebida"), DESSERT("Postre"), OTHER("Extra");
 
-    private String spanishName;
+    private final String spanishName;
 
     MenuOptionType(String spanishName) {
         this.spanishName = spanishName;

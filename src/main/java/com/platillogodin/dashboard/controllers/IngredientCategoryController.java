@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -51,8 +52,10 @@ public class IngredientCategoryController {
     }
 
     @GetMapping("/categories/ingredients/{id}/delete")
-    public String deleteIngredientCategory(@PathVariable Long id, RedirectAttributes ra) {
+    public String deleteIngredientCategory(@PathVariable Long id, RedirectAttributes ra, HttpServletRequest req) {
+        log.info("Deleting ingredientCategory {}, user= {}", id, req.getSession(false).getAttribute("user"));
         IngredientCategory cat = ingredientCategoryService.findById(id);
+        log.info("IngredientCategory name= {}", cat.getName());
         try {
             ingredientCategoryService.delete(cat);
             ra.addFlashAttribute("deleteMessage", "La categoría " + cat.getName() + " fue eliminada correctamente");
@@ -66,8 +69,9 @@ public class IngredientCategoryController {
     }
 
     @PostMapping("/categories/ingredient")
-    public String saveOrUpdateIngredientCategory(@ModelAttribute("ingredientCategory") IngredientCategory ingredientCategory) {
-        log.info("Saving ingredientCategory");
+    public String saveOrUpdateIngredientCategory(@ModelAttribute("ingredientCategory") IngredientCategory ingredientCategory, HttpServletRequest req) {
+        log.info("Saving ingredientCategory, user= {}", req.getSession(false).getAttribute("user"));
+        log.info("ingredientCategory= {}", ingredientCategory);
         ingredientCategoryService.saveIngredientCategory(ingredientCategory);
         return "redirect:/categories/ingredients/";
     }

@@ -5,6 +5,8 @@ import com.platillogodin.dashboard.commands.WeeklyCosts;
 import com.platillogodin.dashboard.services.DashboardService;
 import com.platillogodin.dashboard.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,8 +25,11 @@ import java.util.ArrayList;
 @Controller
 public class DashboardController {
 
-    private final DashboardService dashboardService;
+    private static final String INDEX_URL = "index";
+    private static final String LOGIN_URL = "login";
+    private static final String URL_403 = "403";
 
+    private final DashboardService dashboardService;
     public DashboardController(DashboardService dashboardService) {
         this.dashboardService = dashboardService;
     }
@@ -36,17 +41,17 @@ public class DashboardController {
         model.addAttribute("mondayDate", "");
         model.addAttribute("fridayDate", "");
         model.addAttribute("weeklyCosts", new WeeklyCosts());
-        return "index";
+        return INDEX_URL;
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return LOGIN_URL;
     }
 
     @GetMapping("/403")
     public String error403() {
-        return "403";
+        return URL_403;
     }
 
     @GetMapping("/api/ingredient-forecast")
@@ -72,4 +77,5 @@ public class DashboardController {
         model.addAttribute("fridayDate", formatter.format(nextMonday.plusDays(4)));
         return "index :: weeklyCostsFragment";
     }
+
 }

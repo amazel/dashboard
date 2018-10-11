@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,7 +37,6 @@ public class RecipeController {
 
     @GetMapping("/recipes")
     public String listRecipes(Model model) {
-
         List<Recipe> recipeList = recipeService.findAll();
         model.addAttribute("recipeList", recipeList);
         return LIST_URL;
@@ -65,9 +65,11 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/{id}/delete")
-    public String deleteRecipe(@PathVariable Long id, Model model, RedirectAttributes ra) {
-        log.info("Deleting recipe, {}",id);
+    public String deleteRecipe(@PathVariable Long id, Model model, RedirectAttributes ra, HttpServletRequest req) {
+        log.info("Deleting recipe {}, user= {}", id, req.getSession(false).getAttribute("user"));
         Recipe recipe = recipeService.findById(id);
+        log.info("Recipe name= {}", recipe.getName());
+
         try {
             recipeService.delete(recipe);
             ra.addFlashAttribute("deleteMessage", "La receta " + recipe.getName() + " fue eliminada correctamente");
@@ -78,11 +80,11 @@ public class RecipeController {
         return "redirect:/recipes";
     }
 
-    @PostMapping("recipe")
-    public String saveOrUpdateRecipe(@ModelAttribute("recipe") Recipe recipe) {
-        log.info("Saving recipe");
+    @PostMapping("recipes")
+    public String saveOrUpdateRecipe(@ModelAttribute("recipe") Recipe recipe, HttpServletRequest req) {
+        log.info("Saving recipe, user= {}", req.getSession(false).getAttribute("user"));
+        log.info("Recipe= {}", recipe);
         Recipe saved = recipeService.saveRecipe(recipe);
-        log.info(saved.toString());
         return "redirect:/recipes/" + saved.getId() + "/show";
     }
 }

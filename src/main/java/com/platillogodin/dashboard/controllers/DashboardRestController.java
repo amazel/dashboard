@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class DashboardRestController {
 
     @GetMapping("/api/daily-sales")
     public ResponseEntity<?> getDailySales() {
-        log.info("REST //api/daily-sales");
+        log.debug("REST /api/daily-sales");
 
         List<CategoryTotal> lista = dashboardService.getTotalsByCategory(15);
 
@@ -48,7 +49,7 @@ public class DashboardRestController {
 
 
         for (CategoryTotal o : lista) {
-            log.info("O {}", o);
+            log.debug("O {}", o);
             List<Integer> countValues = chartsCommand.getCountData().getOrDefault(o.getCategory(), new ArrayList<>());
             countValues.add(o.getQuantity().intValue());
             chartsCommand.getCountData().put(o.getCategory(), countValues);

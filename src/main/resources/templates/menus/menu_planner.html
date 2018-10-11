@@ -80,11 +80,23 @@
 
             var menuDate = date.getFullYear() + mm + day;
             $('#collapseExample').collapse('hide');
-            $("#contentFragment").load('/api/menus', 'menuId=' + menuDate, function () {
+            $("#contentFragment").load('/api/menus', 'menuId=' + menuDate, function (response, status, xhr) {
+                $("#content").show();
+                var errorMsgSel = $('#errorMessage');
+                if (xhr.status == 401) {
+
+                    errorMsgSel.html("Ups, se te terminó la sesión! Redireccionando automáticamente al <a href='/login'>login...</a> ").show();
+                    setTimeout(function () {
+                        $(location).attr('href', '/');
+                    }, 4000);
+                } else if (status == "error" || status == "timeout") {
+                    console.error(xhr);
+                    errorMsgSel.text("Ups, algo salio mal... ").show();
+                }
                 $('#menuIdFrame').val(menuDate);
             });
-            $("#content").show();
         }
+
     </script>
     <style>
         .table {
@@ -327,7 +339,7 @@
                         }
                     },
                     debug: false,
-                    cache:true
+                    cache: true
                 });
 
                 var $recipe = $('#recipe');
@@ -352,19 +364,21 @@
                             $("#contentFragment").load('/api/menus', 'menuId=' + $menuId, function () {
                                 var messageSel = $('#message');
                                 $('#menuIdFrame').val($menuId);
-                                messageSel.text(data);
-                                messageSel.show();
-                                messageSel.delay(10000).fadeOut('slow');
+                                messageSel.text(data).show().delay(10000).fadeOut('slow');
                             });
-
-
                         },
                         error: function (jqXHR) {
                             var errorMsgSel = $('#errorMessage');
-                            errorMsgSel.text(jqXHR.responseText);
-                            errorMsgSel.show();
-                            errorMsgSel.delay(10000).fadeOut('slow');
-                            $processDayBtn.prop("disabled", false);
+                            if (jqXHR.status == 401) {
+                                errorMsgSel.html("Ups, se te terminó la sesión! Redireccionando automáticamente al <a href='/login'>login...</a> ").show();
+                                setTimeout(function () {
+                                    $(location).attr('href', '/');
+                                }, 4000);
+                            } else {
+
+                                errorMsgSel.text(jqXHR.responseText).show().delay(10000).fadeOut('slow');
+                                $processDayBtn.prop("disabled", false);
+                            }
                         }
                     });
                 });
@@ -383,8 +397,17 @@
                                 $('#menuIdFrame').val(menuId);
                             });
                         },
-                        error: function (e) {
-                            console.log("ERROR : ", e);
+                        error: function (jqXHR) {
+                            console.error(jqXHR.status);
+                            var errorMsgSel = $('#errorMessage');
+                            if (jqXHR.status == 401) {
+                                errorMsgSel.html("Ups, se te terminó la sesión! Redireccionando automáticamente al <a href='/login'>login...</a> ").show();
+                                setTimeout(function () {
+                                    $(location).attr('href', '/');
+                                }, 4000);
+                            } else {
+                                errorMsgSel.text(jqXHR.responseText).show().delay(10000).fadeOut('slow');
+                            }
                         }
                     });
 
@@ -449,8 +472,15 @@
                             data: JSON.stringify(menuOption),
                             success: function (data) {
                                 console.log("Success ", data);
-                                $("#contentFragment").load('/api/menus', 'menuId=' + menu.id, function () {
-                                    $('#menuIdFrame').val(menu.id);
+                                $("#contentFragment").load('/api/menus', 'menuId=' + menu.id, function (response, status, xhr) {
+                                    if (xhr.status == 401) {
+                                        $('#errorMessage').html("Ups, se te terminó la sesión! Redireccionando automáticamente al <a href='/login'>login...</a> ").show();
+                                        setTimeout(function () {
+                                            $(location).attr('href', '/');
+                                        }, 4000);
+                                    } else {
+                                        $('#menuIdFrame').val(menu.id);
+                                    }
                                 });
                             },
                             error: function (e) {

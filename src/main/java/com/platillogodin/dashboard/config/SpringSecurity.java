@@ -20,10 +20,12 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     private final AccessDeniedHandler accessDeniedHandler;
     private final UserDetailsServiceImpl userDetailsService;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    public SpringSecurity(AccessDeniedHandler accessDeniedHandler, UserDetailsServiceImpl userDetailsService) {
+    public SpringSecurity(AccessDeniedHandler accessDeniedHandler, UserDetailsServiceImpl userDetailsService, CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
         this.accessDeniedHandler = accessDeniedHandler;
         this.userDetailsService = userDetailsService;
+        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
     }
 
     @Bean
@@ -40,7 +42,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/403", "/error","/api/**")
+                .antMatchers("/403", "/error")
                 .permitAll()
                 .antMatchers("/recipes",
                         "/recipes/**",
@@ -53,7 +55,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**")
                 .hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login").permitAll()
+                .and().formLogin().loginPage("/login").permitAll().successHandler(customAuthenticationSuccessHandler)
                 .and().logout().permitAll()
                 .and().rememberMe().userDetailsService(userDetailsService)
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler)

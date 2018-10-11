@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -50,8 +51,10 @@ public class MenuCategoryController {
     }
 
     @GetMapping("/categories/menus/{id}/delete")
-    public String deleteMenuCategory(@PathVariable Long id, RedirectAttributes ra) {
+    public String deleteMenuCategory(@PathVariable Long id, RedirectAttributes ra, HttpServletRequest req) {
+        log.info("Deleting menuCategory {}, user= {}", id, req.getSession(false).getAttribute("user"));
         MenuCategory cat = menuCategoryService.findById(id);
+        log.info("MenuCategory name= {}", cat.getName());
         try {
             menuCategoryService.delete(cat);
             ra.addFlashAttribute("deleteMessage", "La categoría " + cat.getName() + " fue eliminada correctamente");
@@ -59,13 +62,13 @@ public class MenuCategoryController {
             ra.addFlashAttribute("deleteError",
                     "Error al eliminar " + cat.getName() + ", existen menus asociados a esta categoría.");
         }
-
         return "redirect:/categories/menus";
     }
 
     @PostMapping("/categories/menu")
-    public String saveOrUpdateMenuCategory(@ModelAttribute("menuCategory") MenuCategory menuCategory) {
-        log.info("Saving menuCategory");
+    public String saveOrUpdateMenuCategory(@ModelAttribute("menuCategory") MenuCategory menuCategory, HttpServletRequest req) {
+        log.info("Saving menuCategory, user= {}", req.getSession(false).getAttribute("user"));
+        log.info("menuCategory= {}", menuCategory);
         menuCategoryService.saveMenuCategory(menuCategory);
         return "redirect:/categories/menus/";
     }

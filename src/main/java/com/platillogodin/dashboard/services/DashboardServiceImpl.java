@@ -74,7 +74,7 @@ public class DashboardServiceImpl implements DashboardService {
             NumberFormat nf = NumberFormat.getIntegerInstance();
             String forecastQty = nf.format(ingredientMap.get(i));
             String actualQty = nf.format(stock.getTotal());
-            Integer diff = stock.getTotal() - ingredientMap.get(i);
+            int diff = stock.getTotal() - ingredientMap.get(i);
             String difference = nf.format(diff);
 
             IngredientForecast ingredientForecast = new IngredientForecast();

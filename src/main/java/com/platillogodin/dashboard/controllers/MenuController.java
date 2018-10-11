@@ -25,17 +25,14 @@ public class MenuController {
 
     private final MenuService menuService;
     private final MenuCategoryService menuCategoryService;
-    private final RecipeService recipeService;
 
-    public MenuController(MenuService menuService, MenuCategoryService menuCategoryService, RecipeService recipeService) {
+    public MenuController(MenuService menuService, MenuCategoryService menuCategoryService) {
         this.menuService = menuService;
         this.menuCategoryService = menuCategoryService;
-        this.recipeService = recipeService;
     }
 
     @GetMapping("/menus")
     public String showMenuPlanner(Model model) {
-        log.info("Show menu planner");
         model.addAttribute("menu", new Menu());
         model.addAttribute("categories", menuCategoryService.findAll());
         return MENU_URL;
@@ -43,10 +40,10 @@ public class MenuController {
 
     @GetMapping("/menus/{menuId}")
     public String showMenuPlanner(@PathVariable String menuId, Model model) {
-        log.info("Show menu planner for day");
+        log.info("Show menu planner for day, {}", menuId);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate localDate = LocalDate.parse(menuId, formatter);
-        model.addAttribute("menu", new Menu()   );
+        model.addAttribute("menu", new Menu());
         model.addAttribute("menuId", menuId);
         model.addAttribute("categories", menuCategoryService.findAll());
         return MENU_URL;
@@ -54,7 +51,6 @@ public class MenuController {
 
     @GetMapping("/api/menus")
     public String getMenu(@RequestParam("menuId") String menuId, Model model) {
-        log.info(menuId);
         model.addAttribute("menu", menuService.findById(menuId));
         model.addAttribute("categories", menuCategoryService.findAll());
         return "menus/menu_planner :: content";

@@ -48,7 +48,7 @@
             <h4 th:if="${ingredient.id} != null">Editar ingrediente</h4>
         </div>
         <div class="card-body">
-            <form th:object="${ingredient}" th:action="@{/ingredient}" method="post" id="saveIngredientForm">
+            <form th:object="${ingredient}" th:action="@{/ingredients}" method="post" id="saveIngredientForm">
 
                 <input type="hidden" th:field="*{id}"/>
 

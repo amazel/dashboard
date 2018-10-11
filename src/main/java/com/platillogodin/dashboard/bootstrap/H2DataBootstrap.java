@@ -54,10 +54,10 @@ public class H2DataBootstrap implements CommandLineRunner {
         this.stockService = stockService;
     }
 
-    private List<RecipeCategory> recipeCategories = new ArrayList<>();
-    private List<IngredientCategory> ingredientCategories = new ArrayList<>();
-    private List<MenuCategory> menuCategories = new ArrayList<>();
-    private List<Recipe> recipes = new ArrayList<>();
+    private final List<RecipeCategory> recipeCategories = new ArrayList<>();
+    private final List<IngredientCategory> ingredientCategories = new ArrayList<>();
+    private final List<MenuCategory> menuCategories = new ArrayList<>();
+    private final List<Recipe> recipes = new ArrayList<>();
 
 
     @Transactional
@@ -240,8 +240,8 @@ public class H2DataBootstrap implements CommandLineRunner {
     private void createStock(Stock stock) {
         Random r = new Random();
         StockEntry entry = new StockEntry();
-        entry.setCurrentQty((r.nextInt(100) * 10)+1);
-        entry.setOriginalQty(entry.getCurrentQty()+100);
+        entry.setCurrentQty((r.nextInt(100) * 10) + 1);
+        entry.setOriginalQty(entry.getCurrentQty() + 100);
         entry.setPrice(BigDecimal.valueOf(r.nextInt(1000) + 250));
         entry.setSupplyDate(LocalDate.now().minusDays(r.nextInt(8)));
         stockService.saveStockEntry(stock, entry);
@@ -254,10 +254,15 @@ public class H2DataBootstrap implements CommandLineRunner {
         menu.setWeekNumber(Utils.findWeekNumber(menu.getDate()));
 
         menu = createMenuCategory(menu, menuCategories.get(0), MenuOptionType.MAIN);
+        menu = createMenuCategory(menu, menuCategories.get(0), MenuOptionType.SIDE);
+        menu = createMenuCategory(menu, menuCategories.get(0), MenuOptionType.SIDE);
         menu = createMenuCategory(menu, menuCategories.get(1), MenuOptionType.MAIN);
+        menu = createMenuCategory(menu, menuCategories.get(1), MenuOptionType.SIDE);
+        menu = createMenuCategory(menu, menuCategories.get(1), MenuOptionType.SIDE);
         menu = createMenuCategory(menu, menuCategories.get(2), MenuOptionType.MAIN);
-        menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())),
-                MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
+        menu = createMenuCategory(menu, menuCategories.get(2), MenuOptionType.SIDE);
+        menu = createMenuCategory(menu, menuCategories.get(2), MenuOptionType.SIDE);
+        menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())), MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
         menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())), MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
         menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())), MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);
         menu = createMenuCategory(menu, menuCategories.get(r.nextInt(menuCategories.size())), MenuOptionType.values()[r.nextInt(MenuOptionType.values().length - 1) + 1]);

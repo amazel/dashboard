@@ -1,7 +1,6 @@
 package com.platillogodin.dashboard.controllers;
 
 import com.platillogodin.dashboard.domain.Stock;
-import com.platillogodin.dashboard.services.IngredientService;
 import com.platillogodin.dashboard.services.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,12 +22,10 @@ public class StockController {
     private static final String SHOW_URL = "stock/show";
 
     private final StockService stockService;
-    private final IngredientService ingredientService;
 
 
-    public StockController(StockService stockService, IngredientService ingredientService) {
+    public StockController(StockService stockService) {
         this.stockService = stockService;
-        this.ingredientService = ingredientService;
     }
 
     @GetMapping("/stock")

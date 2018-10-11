@@ -22,10 +22,15 @@
           integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
           crossorigin="anonymous">-->
     <script>
-        $(function () {
-            $('#errorMsg').delay(5000).fadeOut('slow');
-            $('#infoMsg').delay(5000).fadeOut('slow');
-        });
+        // IIFE - Immediately Invoked Function Expression
+        (function ($, w, d) {
+            // The $ is now locally scoped
+            // Listen for the jQuery ready event on the document
+            $(function () {
+                $('#errorMsg').delay(5000).fadeOut('slow');
+                $('#infoMsg').delay(5000).fadeOut('slow');
+            });
+        }(window.jQuery, window, document));
     </script>
     <style>
         .jumbotron {

@@ -144,7 +144,7 @@
 <script type="text/javascript" th:inline="none" class="init">
     /*<![CDATA[*/
     $('#modal-delete').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
+        var button = $(event.relatedTarget); // Button that triggered the modal
         var userId = button.data('userid');
         var userName = button.data('username');
         $("#modalTitle").text('Eliminar ' + userName + '?');

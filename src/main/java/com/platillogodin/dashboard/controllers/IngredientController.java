@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -34,7 +35,6 @@ public class IngredientController {
 
     @GetMapping("/ingredients")
     public String listIngredients(Model model) {
-
         List<Ingredient> ingredientList = ingredientService.findAll();
         model.addAttribute("ingredientList", ingredientList);
         return LIST_URL;
@@ -49,7 +49,6 @@ public class IngredientController {
 
     @GetMapping("/ingredients/{id}/edit")
     public String updateIngredient(@PathVariable Long id, Model model) {
-        log.info("Edit ingredient");
         Ingredient ingredient = ingredientService.findById(id);
         log.info(ingredient.toString());
         model.addAttribute("ingredient", ingredient);
@@ -58,9 +57,10 @@ public class IngredientController {
     }
 
     @GetMapping("/ingredients/{id}/delete")
-    public String deleteIngredient(@PathVariable Long id, Model model, RedirectAttributes ra) {
-        log.info("Deleting ingredient");
+    public String deleteIngredient(@PathVariable Long id, Model model, RedirectAttributes ra, HttpServletRequest req) {
+        log.info("Deleting ingredient {}, user= {}", id, req.getSession(false).getAttribute("user"));
         Ingredient ingredient = ingredientService.findById(id);
+        log.info("Ingredient name= {}", ingredient.getName());
         try {
             ingredientService.delete(ingredient);
             ra.addFlashAttribute("deleteMessage", "El ingrediente " + ingredient.getName() + " fue eliminado correctamente");
@@ -71,12 +71,13 @@ public class IngredientController {
         return "redirect:/ingredients";
     }
 
-    @PostMapping("ingredient")
+    @PostMapping("ingredients")
     public String saveOrUpdateIngredient(@ModelAttribute("ingredient") Ingredient ingredient,
-                                         @RequestParam(value = "initialPrice", required = false) String price) {
-        log.info("Saving ingredient");
+                                         @RequestParam(value = "initialPrice", required = false) String price,
+                                         HttpServletRequest req) {
+        log.info("Saving ingredient, user= {}", req.getSession(false).getAttribute("user"));
+        log.info("Ingredient= {}", ingredient);
         Ingredient saved = ingredientService.saveIngredient(ingredient, price);
-        log.info("saved: {}", saved);
         return REDIRECT_LIST_URL;
     }
 }

@@ -15,7 +15,7 @@
             <h4 th:if="${recipe.id} != null">Editar receta</h4>
         </div>
         <div class="card-body">
-            <form th:object="${recipe}" th:action="@{/recipe}" method="post" id="recipeForm">
+            <form th:object="${recipe}" th:action="@{/recipes}" method="post" id="recipeForm">
 
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                     <p>Please Correct Errors Below</p>

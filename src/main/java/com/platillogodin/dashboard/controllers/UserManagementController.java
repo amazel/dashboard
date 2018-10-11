@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -67,8 +68,10 @@ public class UserManagementController {
     }
 
     @GetMapping("/users/{id}/delete")
-    public String deleteUser(@PathVariable Long id, Model model, RedirectAttributes ra) {
+    public String deleteUser(@PathVariable Long id, Model model, RedirectAttributes ra, HttpServletRequest req) {
+        log.info("Deleting user {}, user= {}", id, req.getSession(false).getAttribute("user"));
         User user = userService.findById(id);
+        log.info("Username= {}", user.getUsername());
         try {
             userService.delete(user);
             ra.addFlashAttribute("message", "El usuario " + user.getUsername() + " fue eliminado correctamente");
@@ -79,8 +82,10 @@ public class UserManagementController {
     }
 
     @GetMapping("/users/{id}/reset-password")
-    public String resetPassword(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String resetPassword(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes, HttpServletRequest req) {
+        log.info("Reset password for user {}, user= {}", id, req.getSession(false).getAttribute("user"));
         User user = userService.findById(id);
+        log.info("Username= {}", user.getUsername());
         userService.updatePassword(user, null);
         redirectAttributes.addFlashAttribute("message", "Contraseña restablecida con éxito");
 
@@ -88,8 +93,9 @@ public class UserManagementController {
     }
 
     @PostMapping("/users")
-    public String saveOrUpdateUser(@ModelAttribute("user") User user) {
-        log.info("Saving user, {}", user);
+    public String saveOrUpdateUser(@ModelAttribute("user") User user, HttpServletRequest req) {
+        log.info("Creating new user, user= {}", req.getSession(false).getAttribute("user"));
+        log.info("New User= {}", user);
         userService.saveUser(user);
         return "redirect:/users";
     }

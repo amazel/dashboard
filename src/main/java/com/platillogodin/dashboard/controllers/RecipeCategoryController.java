@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -44,29 +45,32 @@ public class RecipeCategoryController {
     }
 
     @GetMapping("/categories/recipes/{id}/edit")
-    public String updateCategoryRecipe(@PathVariable Long id, Model model) {
+    public String updateRecipeCategory(@PathVariable Long id, Model model) {
         RecipeCategory recipeCategory = recipeCategoryService.findById(id);
         model.addAttribute("recipeCategory", recipeCategory);
         return FORM_URL;
     }
 
     @GetMapping("/categories/recipes/{id}/delete")
-    public String deleteCategoryRecipe(@PathVariable Long id, RedirectAttributes ra) {
-        RecipeCategory rc = recipeCategoryService.findById(id);
+    public String deleteRecipeCategory(@PathVariable Long id, RedirectAttributes ra, HttpServletRequest req) {
+        log.info("Deleting RecipeCategory {}, user= {}", id, req.getSession(false).getAttribute("user"));
+        RecipeCategory cat = recipeCategoryService.findById(id);
+        log.info("RecipeCategory name= {}", cat.getName());
         try {
-            recipeCategoryService.delete(rc);
-            ra.addFlashAttribute("deleteMessage", "La categoría " + rc.getName() + " fue eliminada correctamente");
+            recipeCategoryService.delete(cat);
+            ra.addFlashAttribute("deleteMessage", "La categoría " + cat.getName() + " fue eliminada correctamente");
         } catch (ExistingReferencesException ere) {
             ra.addFlashAttribute("deleteError",
-                    "Error al eliminar " + rc.getName() + ", existen recetas asociadas a esta categoría.");
+                    "Error al eliminar " + cat.getName() + ", existen recetas asociadas a esta categoría.");
 
         }
         return "redirect:/categories/recipes";
     }
 
     @PostMapping("/categories/recipe")
-    public String saveOrUpdateRecipeCategory(@ModelAttribute("recipeCategory") RecipeCategory recipeCategory) {
-        log.info("Saving recipeCategory");
+    public String saveOrUpdateRecipeCategory(@ModelAttribute("recipeCategory") RecipeCategory recipeCategory, HttpServletRequest req) {
+        log.info("Saving recipeCategory, user= {}", req.getSession(false).getAttribute("user"));
+        log.info("recipeCategory= {}", recipeCategory);
         recipeCategoryService.saveRecipeCategory(recipeCategory);
         return "redirect:/categories/recipes/";
     }
